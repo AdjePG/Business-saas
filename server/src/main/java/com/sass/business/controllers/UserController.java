@@ -22,12 +22,13 @@ public class UserController {
 
     @Operation(summary = "Get all users")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "users list received correctly"),
-            @ApiResponse(responseCode = "400", description = "invalid request")
+            @ApiResponse(responseCode = "200", description = "Users list received correctly"),
+            @ApiResponse(responseCode = "400", description = "Invalid request")
     })
-    @GetMapping()
-    public List<User> getUsers() {
-        return userService.getUsers();
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> getUsers() {
+        List<UserDTO> users = userService.getUsers();
+        return ResponseEntity.ok(users);
     }
 
     /*@Operation(summary = "Create a user")

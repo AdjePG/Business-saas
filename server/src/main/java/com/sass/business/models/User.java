@@ -1,25 +1,35 @@
 package com.sass.business.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "uuid", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID uuid;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
+    @Column(name = "password", nullable = false, length = 255)
     private String password;
 
+    @Column(name = "name", length = 50)
     private String name;
 
+    @Column(name = "photo", length = 255)
     private String photo;
 
+    @Column(name = "phone", length = 15)
     private String phone;
 
     //GETTERS AND SETTERS

@@ -7,6 +7,7 @@ import com.sass.business.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -16,10 +17,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(UserMapper::toDTO)
+                .collect(Collectors.toList());
     }
-
     public UserDTO createUser(UserDTO userDTO) {
         User user = UserMapper.toModel(userDTO);
         User savedUser = userRepository.save(user);
