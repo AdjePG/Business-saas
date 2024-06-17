@@ -1,29 +1,15 @@
-package com.sass.business.models;
-
-import jakarta.persistence.*;
+package com.sass.business.dtos;
 
 import java.util.UUID;
 
-@Entity
-@Table
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+public class UserDTO {
     private UUID uuid;
-
-    @Column(unique = true, nullable = false)
     private String email;
-
-    private String password;
-
     private String name;
-
     private String photo;
-
     private String phone;
 
-    //GETTERS AND SETTERS
-
+    // Getters and Setters
     public UUID getUuid() {
         return uuid;
     }
@@ -38,14 +24,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
@@ -72,3 +50,4 @@ public class User {
         this.phone = phone;
     }
 }
+
