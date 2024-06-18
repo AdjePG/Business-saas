@@ -23,6 +23,7 @@ public class UserService {
                 .map(UserMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
     public UserDTO createUser(UserDTO userDTO) {
         User user = UserMapper.toModel(userDTO);
         User savedUser = userRepository.save(user);

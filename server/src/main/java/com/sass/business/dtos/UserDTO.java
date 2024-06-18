@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 public class UserDTO {
+    // region ATTRIBUTES
+
     private UUID uuid;
 
     @Email
@@ -27,8 +29,10 @@ public class UserDTO {
     @Size(max = 15, message = "El teléfono no puede tener más de 15 caracteres")
     private String phone;
 
+    // endregion
 
-    // Getters and Setters
+    //region GETTERS AND SETTERS
+
     public UUID getUuid() {
         return uuid;
     }
@@ -68,5 +72,7 @@ public class UserDTO {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    //endregion
 }
 

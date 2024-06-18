@@ -8,12 +8,10 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 public class User {
+    //region ATTRIBUTES
+
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "uuid", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
     private UUID uuid;
 
@@ -32,7 +30,9 @@ public class User {
     @Column(name = "phone", length = 15)
     private String phone;
 
-    //GETTERS AND SETTERS
+    //endregion
+
+    // region GETTERS AND SETTERS
 
     public UUID getUuid() {
         return uuid;
@@ -81,4 +81,6 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    //endregion
 }
