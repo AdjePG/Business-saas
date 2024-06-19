@@ -21,7 +21,7 @@ public class JWTUtil implements Serializable {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(UUID uuid, String email, String name) {
+    public String generateToken(Long uuid, String email, String name) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("uuid", uuid);
         claims.put("email", email);

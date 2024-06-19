@@ -11,7 +11,7 @@ export const routes: Routes = [
         component: AppLayout,
         children: [
             // dashboard
-            { path: '', component: IndexComponent, title: 'Sales Admin | VRISTO - Multipurpose Tailwind Dashboard Template' },
+            { path: '', component: IndexComponent, title: 'Prueba' },
 
         ],
     },
@@ -20,6 +20,7 @@ export const routes: Routes = [
         path: '',
         component: AuthLayout,
         children: [
+            { path: 'auth', loadChildren: () => import('./auth/auth.module').then((d) => d.AuthModule) },
         ],
     },
 ];
