@@ -1,7 +1,7 @@
 package com.sass.business.controllers;
 
-import com.sass.business.dtos.UserDTO;
-import com.sass.business.models.User;
+import com.sass.business.dtos.users.LogInDTO;
+import com.sass.business.dtos.users.UserDTO;
 import com.sass.business.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,14 +31,42 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    /*@Operation(summary = "Create a user")
+    @Operation(summary = "Sign up/create a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "user created successfully"),
             @ApiResponse(responseCode = "400", description = "invalid request")
     })
-    @PostMapping()
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    @PostMapping("signup")
+    public ResponseEntity<UserDTO> createUser(
+            @RequestBody UserDTO userDTO
+    ) {
         UserDTO newUser = userService.createUser(userDTO);
+        return ResponseEntity.ok(newUser);
+    }
+
+    @Operation(summary = "Log in a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "user logged in successfully"),
+            @ApiResponse(responseCode = "400", description = "invalid request")
+    })
+    @PostMapping("login")
+    public ResponseEntity<String> logInUser(
+            @RequestBody LogInDTO logInDTO
+    ) {
+        String jwt = userService.logIn(logInDTO);
+        return ResponseEntity.ok(jwt);
+    }
+
+    /*@Operation(summary = "Log out a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "user logged out successfully"),
+            @ApiResponse(responseCode = "400", description = "invalid request")
+    })
+    @PostMapping("logout")
+    public ResponseEntity<UserDTO> logOutUser(
+            @RequestBody UserDTO userDTO
+    ) {
+        UserDTO newUser = userService.logOut(userDTO);
         return ResponseEntity.ok(newUser);
     }*/
 }

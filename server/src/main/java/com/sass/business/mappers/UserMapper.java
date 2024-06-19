@@ -1,6 +1,6 @@
 package com.sass.business.mappers;
 
-import com.sass.business.dtos.UserDTO;
+import com.sass.business.dtos.users.UserDTO;
 import com.sass.business.models.User;
 
 public class UserMapper {
@@ -20,7 +20,6 @@ public class UserMapper {
         user.setName(userDTO.getName());
         user.setPhoto(userDTO.getPhoto());
         user.setPhone(userDTO.getPhone());
-        // Note: Password is intentionally not mapped here for security reasons
         return user;
     }
 }
