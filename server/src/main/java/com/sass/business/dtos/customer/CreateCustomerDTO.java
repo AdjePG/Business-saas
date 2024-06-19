@@ -1,66 +1,55 @@
-package com.sass.business.models;
+package com.sass.business.dtos.customer;
 
-
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
 
+public class CreateCustomerDTO {
 
-@Entity
-@Table(name = "customers")
-public class Customer {
+    @NotNull(message = "El UUID del negocio no puede ser nulo")
+    private Long uuidBusiness;
 
-    @Id
-    //@GeneratedValue
-    //@Column(columnDefinition = "BINARY(16)")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Usa IDENTITY para delegar la generación del ID al motor de la base de datos
-    private Long uuid;
-
-    @ManyToOne
-    @JoinColumn(name = "uuid_business", referencedColumnName = "uuid")
-    private Business business;
-
-    @Column(name = "name", length = 50)
+    @NotNull(message = "El nombre no puede ser nulo")
+    @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
     private String name;
 
-    @Column(name = "surname", length = 50)
+    @NotNull(message = "El apellido no puede ser nulo")
+    @Size(max = 50, message = "El apellido no puede tener más de 50 caracteres")
     private String surname;
 
-    @Column(name = "tax_name", length = 50)
+    @Size(max = 50, message = "El nombre fiscal no puede tener más de 50 caracteres")
     private String taxName;
 
-    @Column(name = "tax_number")
+    @NotNull(message = "El número fiscal no puede ser nulo")
     private Integer taxNumber;
 
-    @Column(name = "email", length = 255, unique = true)
+    @NotNull(message = "El correo electrónico no puede ser nulo")
+    @Email(message = "El correo electrónico debe ser válido")
+    @Size(max = 255, message = "El correo electrónico no puede tener más de 255 caracteres")
     private String email;
 
-    @Column(name = "phone", length = 15)
+    @Size(max = 15, message = "El teléfono no puede tener más de 15 caracteres")
     private String phone;
 
-    @Column(name = "type")
+    @NotNull(message = "El tipo no puede ser nulo")
     private Integer type;
 
-    @Column(name = "location", length = 200)
+    @Size(max = 200, message = "La ubicación no puede tener más de 200 caracteres")
     private String location;
 
-    @Column(name = "address", length = 200)
+    @Size(max = 200, message = "La dirección no puede tener más de 200 caracteres")
     private String address;
 
-    public Long getUuid() {
-        return uuid;
+    // Getters y Setters
+
+    public Long getUuidBusiness() {
+        return uuidBusiness;
     }
 
-    public void setUuid(Long uuid) {
-        this.uuid = uuid;
-    }
-
-    public Business getBusiness() {
-        return business;
-    }
-
-    public void setBusiness(Business business) {
-        this.business = business;
+    public void setUuidBusiness(Long uuidBusiness) {
+        this.uuidBusiness = uuidBusiness;
     }
 
     public String getName() {
@@ -135,3 +124,4 @@ public class Customer {
         this.address = address;
     }
 }
+

@@ -9,7 +9,8 @@ import java.util.UUID;
 public class UserDTO {
     // region ATTRIBUTES
 
-    private UUID uuid;
+    //private UUID uuid;
+    private Long uuid;
 
     @Email
     @NotEmpty(message = "El correo electrónico no puede estar vacío")
@@ -33,11 +34,11 @@ public class UserDTO {
 
     //region GETTERS AND SETTERS
 
-    public UUID getUuid() {
+    public Long getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(Long uuid) {
         this.uuid = uuid;
     }
 
