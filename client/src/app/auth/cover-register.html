@@ -81,44 +81,42 @@
                         <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign Up</h1>
                         <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to register</p>
                     </div>
-                    <form class="space-y-5 dark:text-white" (submit)="router.navigate(['/'])">
+                    <form class="space-y-5 dark:text-white" (submit)="signUp(form)" #form="ngForm" novalidate>
                         <div>
                             <label for="Name">Name</label>
-                            <div class="relative text-white-dark">
-                                <input id="Name" type="text" placeholder="Enter Name" class="form-input ps-10 placeholder:text-white-dark" />
-                                <span class="absolute start-4 top-1/2 -translate-y-1/2">
-                                    <icon-user [fill]="true" />
-                                </span>
+                            <input id="Name" type="text" [(ngModel)]="name" name="name" required placeholder="Enter Name" class="form-input ps-10 placeholder:text-white-dark" #nameField="ngModel">
+                            <div *ngIf="nameField.errors?.['required'] && nameField.touched" class="text-red-500">
+                                Name is required.
                             </div>
                         </div>
                         <div>
                             <label for="Email">Email</label>
-                            <div class="relative text-white-dark">
-                                <input id="Email" type="email" placeholder="Enter Email" class="form-input ps-10 placeholder:text-white-dark" />
-                                <span class="absolute start-4 top-1/2 -translate-y-1/2">
-                                    <icon-mail [fill]="true" />
-                                </span>
+                            <input id="Email" type="email" [(ngModel)]="email" name="email" required email placeholder="Enter Email" class="form-input ps-10 placeholder:text-white-dark" #emailField="ngModel">
+                            <div *ngIf="emailField.errors?.['required'] && emailField.touched" class="text-red-500">
+                                Email is required.
+                            </div>
+                            <div *ngIf="emailField.errors?.['email'] && emailField.touched" class="text-red-500">
+                                Enter a valid email.
                             </div>
                         </div>
+                        
                         <div>
                             <label for="Password">Password</label>
-                            <div class="relative text-white-dark">
-                                <input id="Password" type="password" placeholder="Enter Password" class="form-input ps-10 placeholder:text-white-dark" />
-                                <span class="absolute start-4 top-1/2 -translate-y-1/2">
-                                    <icon-lock-dots [fill]="true" />
-                                </span>
+                            <input id="Password" type="password" [(ngModel)]="password" name="password" required [pattern]="passwordPattern" minlength="8" placeholder="Enter Password" class="form-input ps-10 placeholder:text-white-dark" #passwordField="ngModel">
+                            <div *ngIf="passwordField.errors?.['required']  && passwordField.touched" class="text-red-500">
+                                Password is required.
+                            </div>
+                            <div *ngIf="passwordField.errors?.['pattern'] && passwordField.touched" class="text-red-500">
+                                Password must contain at least one uppercase, one number, and one special character.
+                            </div>
+                            <div *ngIf="passwordField.errors?.['minlength'] && passwordField.touched" class="text-red-500">
+                                Password must be at least 8 characters long.
                             </div>
                         </div>
-                        <div>
-                            <label class="flex cursor-pointer items-center">
-                                <input type="checkbox" class="form-checkbox bg-white dark:bg-black" />
-                                <span class="text-white-dark">Subscribe to weekly newsletter</span>
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                            Sign Up
-                        </button>
+                        <button type="submit" [disabled]="form.invalid" class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">Sign Up</button>
                     </form>
+                    
+                    
 
                     <div class="relative my-7 text-center md:mb-9">
                         <span class="absolute inset-x-0 top-1/2 h-px w-full -translate-y-1/2 bg-white-light dark:bg-white-dark"></span>

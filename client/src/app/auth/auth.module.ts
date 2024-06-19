@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-
+import { FormsModule } from '@angular/forms';
 // icon
 import { IconModule } from 'src/app/shared/icon/icon.module';
 
@@ -21,7 +21,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes), CommonModule, MenuModule, IconModule],
+    imports: [RouterModule.forChild(routes), CommonModule, MenuModule, IconModule,FormsModule],
     declarations: [
         CoverLockscreenComponent,
         CoverLoginComponent,

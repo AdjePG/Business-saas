@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from 'src/app/service/app.service';
+import { AuthService } from 'src/app/service/auth/auth.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
     moduleId: module.id,
@@ -16,11 +18,48 @@ import { AppService } from 'src/app/service/app.service';
     ],
 })
 export class CoverRegisterComponent {
+
+    name: string = '';
+    email: string = '';
+    password: string = '';
+    isLoading = false; 
     store: any;
     currYear: number = new Date().getFullYear();
-    constructor(public translate: TranslateService, public storeData: Store<any>, public router: Router, private appSetting: AppService) {
+
+    passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";  // 8 Caracteer , 1 Mayuscula 1 Simbolo 1 Numero
+
+
+    constructor(private authService: AuthService,public translate: TranslateService, public storeData: Store<any>, public router: Router, private appSetting: AppService) {
         this.initStore();
     }
+
+    signUp(form: NgForm) {
+        if (form.invalid) {
+            return;  // No hacer nada si el formulario es inválido
+        }
+
+        this.isLoading = true;  // Iniciar la carga
+        const userData = {
+            name: this.name,
+            email: this.email,
+            password: this.password
+        };
+
+        this.authService.signUp(userData).subscribe({
+            next: (response) => {
+                console.log('Registro exitoso', response);
+                this.isLoading = false;  // Detener la carga
+                this.router.navigate(['/']);  // Navegar al inicio o a la página de perfil
+            },
+            error: (error) => {
+                console.error('Error en el registro', error);
+                this.isLoading = false;  // Detener la carga
+            }
+        });
+    }
+
+
+
     async initStore() {
         this.storeData
             .select((d) => d.index)

@@ -124,5 +124,25 @@
     "coming_soon_boxed": "Próximamente en caja",
     "coming_soon_cover": "Próximamente Portada",
     "contact_us_boxed": "Comuníquese con nosotros",
-    "contact_us_cover": "Contáctenos Portada"
+    "contact_us_cover": "Contáctenos Portada",
+
+    "auth": {
+    "signUp": {
+      "title": "Sign Up",
+      "description": "Enter your email and password to register",
+      "fields": {
+        "name": "Name",
+        "email": "Email",
+        "password": "Password"
+      },
+      "actions": {
+        "submit": "Sign Up",
+        "signIn": "Already have an account? Sign In"
+      }
+    }
+  }
+  
 }
+
+
+
