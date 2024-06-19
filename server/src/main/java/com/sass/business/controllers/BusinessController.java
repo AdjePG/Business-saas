@@ -32,7 +32,7 @@ public class BusinessController {
     @GetMapping("/{id}")
     public ResponseEntity<BusinessDTO> getBusinessById(
             //@ApiParam(value = "Id del negoci del qual es recuperarà l'objecte negoci", required = true)
-            @PathVariable UUID id) {
+            @PathVariable Long id) {
         BusinessDTO businessDTO = businessService.getBusinessById(id);
         if (businessDTO != null) {
             return ResponseEntity.ok(businessDTO);
@@ -53,7 +53,7 @@ public class BusinessController {
     @PutMapping("/{id}")
     public ResponseEntity<BusinessDTO> updateBusiness(
             //@ApiParam(value = "Id del negoci per actualitzar l'objecte negoci", required = true)
-            @PathVariable UUID id,
+            @PathVariable Long id,
             //@ApiParam(value = "Actualitzar objecte negoci", required = true)
             @Valid @RequestBody BusinessDTO businessDTO) {
         BusinessDTO updatedBusinessDTO = businessService.updateBusiness(id, businessDTO);
@@ -68,7 +68,7 @@ public class BusinessController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBusiness(
             //@ApiParam(value = "Id del negoci del qual s'eliminarà l'objecte negoci de la taula de la base de dades", required = true)
-            @PathVariable UUID id) {
+            @PathVariable Long id) {
         businessService.deleteBusiness(id);
         return ResponseEntity.noContent().build();
     }

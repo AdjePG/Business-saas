@@ -33,7 +33,7 @@ public class BusinessService {
                 .collect(Collectors.toList());
     }
 
-    public BusinessDTO getBusinessById(UUID uuid) {
+    public BusinessDTO getBusinessById(Long uuid) {
         return businessRepository.findById(uuid)
                 .map(businessMapper::toDto)
                 .orElse(null);
@@ -47,7 +47,7 @@ public class BusinessService {
         return businessMapper.toDto(savedBusiness);
     }
 
-    public BusinessDTO updateBusiness(UUID uuid, BusinessDTO businessDTO) {
+    public BusinessDTO updateBusiness(Long uuid, BusinessDTO businessDTO) {
         return businessRepository.findById(uuid).map(existingBusiness -> {
             User user = userRepository.findById(businessDTO.getUuidUser())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid user UUID"));
@@ -58,7 +58,7 @@ public class BusinessService {
         }).orElse(null);
     }
 
-    public void deleteBusiness(UUID uuid) {
+    public void deleteBusiness(Long uuid) {
         businessRepository.deleteById(uuid);
     }
 }

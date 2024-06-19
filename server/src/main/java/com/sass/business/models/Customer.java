@@ -11,9 +11,10 @@ import java.util.UUID;
 public class Customer {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID uuid;
+    //@GeneratedValue
+    //@Column(columnDefinition = "BINARY(16)")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Usa IDENTITY para delegar la generación del ID al motor de la base de datos
+    private Long uuid;
 
     @ManyToOne
     @JoinColumn(name = "uuid_business", referencedColumnName = "uuid")
@@ -46,11 +47,11 @@ public class Customer {
     @Column(name = "address", length = 200)
     private String address;
 
-    public UUID getUuid() {
+    public Long getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(Long uuid) {
         this.uuid = uuid;
     }
 

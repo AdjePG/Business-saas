@@ -10,10 +10,16 @@ import java.util.UUID;
 public class User {
     //region ATTRIBUTES
 
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "uuid", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
-    private UUID uuid;
+    private UUID uuid;*/
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Usa IDENTITY para delegar la generación del ID al motor de la base de datos
+    @Column(name = "uuid", updatable = false, nullable = false)
+    private Long uuid; // Asumiendo que usas Long para manejar grandes rangos de enteros
+
 
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
@@ -34,11 +40,11 @@ public class User {
 
     // region GETTERS AND SETTERS
 
-    public UUID getUuid() {
+    public Long getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(Long uuid) {
         this.uuid = uuid;
     }
 

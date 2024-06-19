@@ -37,7 +37,7 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(
             //@ApiParam(value = "Id del client del qual es recuperarà l'objecte client", required = true)
-            @PathVariable UUID id) {
+            @PathVariable Long id) {
         CustomerDTO customerDTO = customerService.getCustomerById(id);
         if (customerDTO != null) {
             return ResponseEntity.ok(customerDTO);
@@ -58,7 +58,7 @@ public class CustomerController {
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDTO> updateCustomer(
             //@ApiParam(value = "Id del client per actualitzar l'objecte client", required = true)
-            @PathVariable UUID id,
+            @PathVariable Long id,
             //@ApiParam(value = "Actualitzar objecte client", required = true)
             @Valid @RequestBody CustomerDTO customerDTO) {
         CustomerDTO updatedCustomerDTO = customerService.updateCustomer(id, customerDTO);
@@ -73,7 +73,7 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(
             //@ApiParam(value = "Id del client del qual s'eliminarà l'objecte client de la taula de la base de dades", required = true)
-            @PathVariable UUID id) {
+            @PathVariable Long id) {
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
     }
