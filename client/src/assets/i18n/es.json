@@ -126,21 +126,46 @@
     "contact_us_boxed": "Comuníquese con nosotros",
     "contact_us_cover": "Contáctenos Portada",
 
-    "auth": {
+
+
+
+    
+    
+  "auth": {
     "signUp": {
-      "title": "Sign Up",
-      "description": "Enter your email and password to register",
+      "title": "Registrarse",
+      "subtitle": "Ingrese su correo electrónico y contraseña para registrarse",
+
       "fields": {
-        "name": "Name",
-        "email": "Email",
-        "password": "Password"
+        "field_1": "Nombre",
+        "field_1_error_1": "El nombre es obligatorio.",
+        "field_1_placeholder": "Introduzca el nombre",
+
+        "field_2": "Correo Electrónico",
+        "field_2_error_1": "El correo electrónico es obligatorio.",
+        "field_2_error_2": "Ingrese un correo electrónico válido.",
+        "field_2_placeholder": "Introduzca el email",
+
+        "field_3": "Contraseña",
+        "field_3_error_1": "La contraseña es obligatoria.",
+        "field_3_error_2": "La contraseña debe contener al menos una mayúscula, un número y un carácter especial.",
+        "field_3_error_3": "La contraseña debe tener al menos 8 caracteres de longitud.",
+        "field_3_placeholder": "Introduzca la constraseña"
+
       },
       "actions": {
-        "submit": "Sign Up",
-        "signIn": "Already have an account? Sign In"
+        "submit": "Registrarse"
+      },
+      "footer": {
+        "have_account": "¿Ya tienes una cuenta?",
+        "signIn": "INICIAR SESIÓN"
       }
     }
   }
+    
+    
+    
+    
   
 }
 

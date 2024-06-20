@@ -78,39 +78,40 @@
                 </div>
                 <div class="w-full max-w-[440px] lg:mt-16">
                     <div class="mb-10">
-                        <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign Up</h1>
-                        <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to register</p>
+                        <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">
+                            {{ 'auth.signUp.title' | translate }}</h1>
+                        <p class="text-base font-bold leading-normal text-white-dark">{{ 'auth.signUp.subtitle' | translate }}</p>
                     </div>
                     <form class="space-y-5 dark:text-white" (submit)="signUp(form)" #form="ngForm" novalidate>
                         <div>
-                            <label for="Name">Name</label>
-                            <input id="Name" type="text" [(ngModel)]="name" name="name" required placeholder="Enter Name" class="form-input ps-10 placeholder:text-white-dark" #nameField="ngModel">
+                            <label for="Name">{{ 'auth.signUp.fields.field_1' | translate }}</label>
+                            <input id="Name" type="text" [(ngModel)]="name" name="name" required placeholder="{{ 'auth.signUp.fields.field_1_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #nameField="ngModel">
                             <div *ngIf="nameField.errors?.['required'] && nameField.touched" class="text-red-500">
-                                Name is required.
+                                {{ 'auth.signUp.fields.field_1_error_1' | translate }}
                             </div>
                         </div>
                         <div>
-                            <label for="Email">Email</label>
-                            <input id="Email" type="email" [(ngModel)]="email" name="email" required email placeholder="Enter Email" class="form-input ps-10 placeholder:text-white-dark" #emailField="ngModel">
+                            <label for="Email">{{ 'auth.signUp.fields.field_2' | translate }}</label>
+                            <input id="Email" type="email" [(ngModel)]="email" name="email" required email placeholder="{{ 'auth.signUp.fields.field_2_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #emailField="ngModel">
                             <div *ngIf="emailField.errors?.['required'] && emailField.touched" class="text-red-500">
-                                Email is required.
+                                {{ 'auth.signUp.fields.field_2_error_1' | translate }}
                             </div>
                             <div *ngIf="emailField.errors?.['email'] && emailField.touched" class="text-red-500">
-                                Enter a valid email.
+                                {{ 'auth.signUp.fields.field_2_error_2' | translate }}
                             </div>
                         </div>
                         
                         <div>
-                            <label for="Password">Password</label>
-                            <input id="Password" type="password" [(ngModel)]="password" name="password" required [pattern]="passwordPattern" minlength="8" placeholder="Enter Password" class="form-input ps-10 placeholder:text-white-dark" #passwordField="ngModel">
+                            <label for="Password">{{ 'auth.signUp.fields.field_3' | translate }}</label>
+                            <input id="Password" type="password" [(ngModel)]="password" name="password" required [pattern]="passwordPattern" minlength="8" placeholder="{{ 'auth.signUp.fields.field_3_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #passwordField="ngModel">
                             <div *ngIf="passwordField.errors?.['required']  && passwordField.touched" class="text-red-500">
-                                Password is required.
+                                {{ 'auth.signUp.fields.field_3_error_1' | translate }}
                             </div>
                             <div *ngIf="passwordField.errors?.['pattern'] && passwordField.touched" class="text-red-500">
-                                Password must contain at least one uppercase, one number, and one special character.
+                                {{ 'auth.signUp.fields.field_3_error_2' | translate }}
                             </div>
                             <div *ngIf="passwordField.errors?.['minlength'] && passwordField.touched" class="text-red-500">
-                                Password must be at least 8 characters long.
+                                {{ 'auth.signUp.fields.field_3_error_3' | translate }}
                             </div>
                         </div>
                         <button type="submit" [disabled]="form.invalid" class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">Sign Up</button>
@@ -130,46 +131,19 @@
                                     class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
                                     style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)"
                                 >
-                                    <icon-instagram />
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="javascript:"
-                                    class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                    style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)"
-                                >
-                                    <icon-facebook-circle />
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="javascript:"
-                                    class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                    style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)"
-                                >
-                                    <icon-twitter [fill]="true" />
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="javascript:"
-                                    class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                    style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)"
-                                >
                                     <icon-google />
                                 </a>
                             </li>
                         </ul>
                     </div>
                     <div class="text-center dark:text-white">
-                        Already have an account ?
-                        <a routerLink="/auth/cover-login" class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                            SIGN IN
+                        {{ 'auth.signUp.footer.have_account' | translate }}
+                        <a routerLink="/auth/login" class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                        {{ 'auth.signUp.footer.signIn' | translate }}
                         </a>
                     </div>
                 </div>
-                <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ currYear }}.VRISTO All Rights Reserved.</p>
+                <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ currYear }}.Nose que poner.</p>
             </div>
         </div>
     </div>
