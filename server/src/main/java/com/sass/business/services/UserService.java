@@ -46,7 +46,7 @@ public class UserService {
     public UserDTO createUser(UserDTO userDTO) {
 
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+            //throw new RuntimeException("Email already exists");
         }
 
         User user = UserMapper.toModel(userDTO);
