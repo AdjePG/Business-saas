@@ -45,7 +45,6 @@ import { IconModule } from './shared/icon/icon.module';
     imports: [
         RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
         BrowserModule,
-        BrowserModule,
         BrowserAnimationsModule,
         CommonModule,
         FormsModule,
@@ -70,7 +69,7 @@ import { IconModule } from './shared/icon/icon.module';
     providers: [AppService, Title],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
 
 // AOT compilation support
 export function httpTranslateLoader(http: HttpClient) {
