@@ -45,124 +45,109 @@
                         </div>
                     </li>
 
-               
-
-                    <h2 class="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                        <icon-minus class="hidden h-5 w-4 flex-none" />
-                        <span>{{ ('user_interface' | translate) || '&nbsp;' }}</span>
-                    </h2>
-
+              
                     <li class="accordion menu nav-item">
                         <button
                             type="button"
                             class="nav-link group w-full"
-                            [ngClass]="{ active: activeDropdown.includes('components') }"
-                            (click)="toggleAccordion('components')"
+                            [ngClass]="{ active: activeDropdown.includes('users') }"
+                            (click)="toggleAccordion('users')"
                         >
                             <div class="flex items-center">
-                                <icon-menu-components class="shrink-0 group-hover:!text-primary" />
+                                <icon-menu-users class="shrink-0 group-hover:!text-primary" />
 
-                                <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark"
-                                    >{{ 'components' | translate }}</span
-                                >
+                                <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{ 'users' | translate }}</span>
                             </div>
-                            <div [ngClass]="{ 'rtl:rotate-90 -rotate-90': !activeDropdown.includes('components') }">
+                            <div [ngClass]="{ 'rtl:rotate-90 -rotate-90': !activeDropdown.includes('users') }">
                                 <icon-caret-down />
                             </div>
                         </button>
-                        <div [@slideDownUp]="!activeDropdown.includes('components')" class="accordion-content">
+                        <div [@slideDownUp]="!activeDropdown.includes('users')" class="accordion-content">
                             <ul class="sub-menu text-gray-500">
                                 <li>
-                                    <a routerLink="/components/tabs" routerLinkActive="active" (click)="toggleMobileMenu()">{{ 'tabs' | translate }}</a>
+                                    <a routerLink="/users/profile" routerLinkActive="active" (click)="toggleMobileMenu()">{{ 'profile' | translate }}</a>
                                 </li>
                                 <li>
-                                    <a routerLink="/components/accordions" routerLinkActive="active" (click)="toggleMobileMenu()"
-                                        >{{ 'accordions' | translate }}</a
+                                    <a routerLink="/users/user-account-settings" routerLinkActive="active" (click)="toggleMobileMenu()"
+                                        >{{ 'account_settings' | translate }}</a
                                     >
-                                </li>
-                                <li>
-                                    <a routerLink="/components/modals" routerLinkActive="active" (click)="toggleMobileMenu()">{{ 'modals' | translate }}</a>
-                                </li>
-                                <li>
-                                    <a routerLink="/components/cards" routerLinkActive="active" (click)="toggleMobileMenu()">{{ 'cards' | translate }}</a>
-                                </li>
-                                <li>
-                                    <a routerLink="/components/carousel" routerLinkActive="active" (click)="toggleMobileMenu()">{{ 'carousel' | translate }}</a>
-                                </li>
-                                <li>
-                                    <a routerLink="/components/countdown" routerLinkActive="active" (click)="toggleMobileMenu()"
-                                        >{{ 'countdown' | translate }}</a
-                                    >
-                                </li>
-                                <li>
-                                    <a routerLink="/components/counter" routerLinkActive="active" (click)="toggleMobileMenu()">{{ 'counter' | translate }}</a>
-                                </li>
-                                <li>
-                                    <a routerLink="/components/sweetalert" routerLinkActive="active" (click)="toggleMobileMenu()"
-                                        >{{ 'sweet_alerts' | translate }}</a
-                                    >
-                                </li>
-                                <li>
-                                    <a routerLink="/components/timeline" routerLinkActive="active" (click)="toggleMobileMenu()">{{ 'timeline' | translate }}</a>
-                                </li>
-                                <li>
-                                    <a routerLink="/components/notifications" routerLinkActive="active" (click)="toggleMobileMenu()"
-                                        >{{ 'notifications' | translate }}</a
-                                    >
-                                </li>
-                                <li>
-                                    <a routerLink="/components/media-object" routerLinkActive="active" (click)="toggleMobileMenu()"
-                                        >{{ 'media_object' | translate }}</a
-                                    >
-                                </li>
-                                <li>
-                                    <a routerLink="/components/list-group" routerLinkActive="active" (click)="toggleMobileMenu()"
-                                        >{{ 'list_group' | translate }}</a
-                                    >
-                                </li>
-                                <li>
-                                    <a routerLink="/components/pricing-table" routerLinkActive="active" (click)="toggleMobileMenu()"
-                                        >{{ 'pricing_tables' | translate }}</a
-                                    >
-                                </li>
-                                <li>
-                                    <a routerLink="/components/lightbox" routerLinkActive="active" (click)="toggleMobileMenu()">{{ 'lightbox' | translate }}</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
-                   
-
-                    <li class="menu nav-item">
-                        <a routerLink="/charts" class="nav-link group" routerLinkActive="active" (click)="toggleMobileMenu()">
+                    <li class="accordion menu nav-item">
+                        <button
+                            type="button"
+                            class="nav-link group w-full"
+                            [ngClass]="{ active: activeDropdown.includes('pages')}"
+                            (click)="toggleAccordion('pages')"
+                        >
                             <div class="flex items-center">
-                                <icon-menu-charts class="shrink-0 group-hover:!text-primary" />
+                                <icon-menu-pages class="shrink-0 group-hover:!text-primary" />
 
-                                <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark"
-                                    >{{ 'charts' | translate }}</span
-                                >
+                                <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{ 'pages' | translate }}</span>
                             </div>
-                        </a>
+                            <div [ngClass]="{ 'rtl:rotate-90 -rotate-90': !activeDropdown.includes('pages') && !activeDropdown.includes('error')}">
+                                <icon-caret-down />
+                            </div>
+                        </button>
+                        <div [@slideDownUp]="!activeDropdown.includes('pages')" class="accordion-content ancestor">
+                            <ul class="sub-menu text-gray-500">
+                                <li>
+                                    <a routerLink="/pages/knowledge-base" routerLinkActive="active" (click)="toggleMobileMenu()"
+                                        >{{ 'knowledge_base' | translate }}</a
+                                    >
+                                </li>
+                                <li routerLinkActive="active" (click)="toggleMobileMenu()">
+                                    <a routerLink="/pages/contact-us-boxed" target="_blank">{{ 'contact_us_boxed' | translate }}</a>
+                                </li>
+                                <li routerLinkActive="active" (click)="toggleMobileMenu()">
+                                    <a routerLink="/pages/contact-us-cover" target="_blank">{{ 'contact_us_cover' | translate }}</a>
+                                </li>
+                                <li>
+                                    <a routerLink="/pages/faq" routerLinkActive="active" (click)="toggleMobileMenu()">{{ 'faq' | translate }}</a>
+                                </li>
+                                <li routerLinkActive="active" (click)="toggleMobileMenu()">
+                                    <a routerLink="/pages/coming-soon-boxed" target="_blank">{{ 'coming_soon_boxed' | translate }}</a>
+                                </li>
+                                <li routerLinkActive="active" (click)="toggleMobileMenu()">
+                                    <a routerLink="/pages/coming-soon-cover" target="_blank">{{ 'coming_soon_cover' | translate }}</a>
+                                </li>
+                                <li class="accordion menu nav-item">
+                                    <button
+                                        type="button"
+                                        class="w-full before:h-[5px] before:w-[5px] before:rounded before:bg-gray-300 hover:bg-gray-100 ltr:before:mr-2 rtl:before:ml-2 dark:text-[#888ea8] dark:hover:bg-gray-900"
+                                        (click)="toggleAccordion('error', 'pages')"
+                                    >
+                                        {{ 'error' | translate }}
+                                        <div class="ltr:ml-auto rtl:mr-auto" [ngClass]="{ 'rtl:rotate-90 -rotate-90': !activeDropdown.includes('error') }">
+                                            <icon-carets-down [fill]="true" class="h-4 w-4" />
+                                        </div>
+                                    </button>
+
+                                    <div [@slideDownUp]="!activeDropdown.includes('error')" class="accordion-content">
+                                        <ul class="sub-menu text-gray-500">
+                                            <li routerLinkActive="active" (click)="toggleMobileMenu()">
+                                                <a routerLink="/pages/error404" target="_blank">{{ '404' | translate }}</a>
+                                            </li>
+                                            <li routerLinkActive="active" (click)="toggleMobileMenu()">
+                                                <a routerLink="/pages/error500" target="_blank">{{ '500' | translate }}</a>
+                                            </li>
+                                            <li routerLinkActive="active" (click)="toggleMobileMenu()">
+                                                <a routerLink="/pages/error503" target="_blank">{{ '503' | translate }}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a routerLink="/pages/maintenence" target="_blank">{{ 'maintenence' | translate }}</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
 
-                   
-                    <h2 class="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                        <icon-minus class="hidden h-5 w-4 flex-none" />
-                        <span>{{ ('tables_and_forms' | translate) || '&nbsp;' }}</span>
-                    </h2>
-
-                    <li class="menu nav-item">
-                        <a routerLink="/tables" class="nav-link group" routerLinkActive="active" (click)="toggleMobileMenu()">
-                            <div class="flex items-center">
-                                <icon-menu-tables class="shrink-0 group-hover:!text-primary" />
-
-                                <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark"
-                                    >{{ 'tables' | translate }}</span
-                                >
-                            </div>
-                        </a>
-                    </li>
+                
 
                 </ul>
             </ng-scrollbar>
