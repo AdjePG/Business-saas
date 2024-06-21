@@ -1,9 +1,11 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from 'src/app/service/app.service';
+import { AuthService } from 'src/app/service/auth/auth.service';
 
 @Component({
     moduleId: module.id,
@@ -16,9 +18,14 @@ import { AppService } from 'src/app/service/app.service';
     ],
 })
 export class CoverLoginComponent {
+    email: string = '';
+    password: string = '';
     store: any;
-    currYear: number = new Date().getFullYear() + 3;
-    constructor(public translate: TranslateService, public storeData: Store<any>, public router: Router, private appSetting: AppService) {
+    currYear: number = new Date().getFullYear();
+
+    passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+
+    constructor(private authService: AuthService, public translate: TranslateService, public storeData: Store<any>, public router: Router, private appSetting: AppService) {
         this.initStore();
     }
     async initStore() {
@@ -27,6 +34,27 @@ export class CoverLoginComponent {
             .subscribe((d) => {
                 this.store = d;
             });
+    }
+
+    signIn(form: NgForm) {
+        if (form.invalid) {
+            return;
+        }
+
+        const userData = {
+            email: this.email,
+            password: this.password
+        };
+
+        this.authService.logIn(userData).subscribe({
+            next: (response) => {
+                localStorage.setItem("user-auth", response.result)
+                this.router.navigate(['/']);
+            },
+            error: (error) => {
+                console.error('Error en el registro', error);
+            }
+        });
     }
 
     changeLanguage(item: any) {
