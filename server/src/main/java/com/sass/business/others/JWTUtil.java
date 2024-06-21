@@ -52,7 +52,7 @@ public class JWTUtil implements Serializable {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    public Date extractExpiration(String token) {
         return extractClaims(token).getExpiration();
     }
 

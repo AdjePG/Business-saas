@@ -1,12 +1,15 @@
 package com.sass.business.controllers;
 
+import com.sass.business.dtos.APIResponse;
 import com.sass.business.dtos.users.LogInDTO;
 import com.sass.business.dtos.users.UserDTO;
 import com.sass.business.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.http.HttpHeaders;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +24,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(summary = "Get all users")
+    @Operation(summary = "Get all users", security = @SecurityRequirement(name = "JWT"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Users list received correctly"),
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getUsers() {
-        List<UserDTO> users = userService.getUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<APIResponse<List<UserDTO>>> getUsers(
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @RequestHeader(value = "Content-Type", defaultValue = "application/json") String contentTypeHeader
+    ) {
+        APIResponse<List<UserDTO>> apiResponse = userService.getUsers();
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
 
     @Operation(summary = "Sign up/create a user")
@@ -38,11 +44,11 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "invalid request")
     })
     @PostMapping("signup")
-    public ResponseEntity<UserDTO> createUser(
+    public ResponseEntity<APIResponse<Void>> signUpUser(
             @RequestBody UserDTO userDTO
     ) {
-        UserDTO newUser = userService.createUser(userDTO);
-        return ResponseEntity.ok(newUser);
+        APIResponse<Void> apiResponse = userService.signUpUser(userDTO);
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
 
     @Operation(summary = "Log in a user")
@@ -51,23 +57,11 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "invalid request")
     })
     @PostMapping("login")
-    public ResponseEntity<String> logInUser(
-            @RequestBody LogInDTO logInDTO
+    public ResponseEntity<APIResponse<String>> logInUser(
+            @RequestBody LogInDTO logInDTO,
+            HttpServletResponse response
     ) {
-        String jwt = userService.logIn(logInDTO);
-        return ResponseEntity.ok(jwt);
+        APIResponse<String> apiResponse = userService.logIn(logInDTO, response);
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
-
-    /*@Operation(summary = "Log out a user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "user logged out successfully"),
-            @ApiResponse(responseCode = "400", description = "invalid request")
-    })
-    @PostMapping("logout")
-    public ResponseEntity<UserDTO> logOutUser(
-            @RequestBody UserDTO userDTO
-    ) {
-        UserDTO newUser = userService.logOut(userDTO);
-        return ResponseEntity.ok(newUser);
-    }*/
 }

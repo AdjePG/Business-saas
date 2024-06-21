@@ -63,9 +63,9 @@ import { IconModule } from './shared/icon/icon.module';
             visibility: 'hover',
             appearance: 'standard',
         }),
-        IconModule,
+        IconModule
     ],
-    declarations: [AppComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, IndexComponent, AppLayout, AuthLayout],
+    declarations: [AppComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, IndexComponent, AppLayout, AuthLayout, IndexComponent],
     providers: [AppService, Title],
     bootstrap: [AppComponent],
 })
