@@ -1,6 +1,6 @@
 package com.sass.business.controllers;
 
-import com.sass.business.dtos.BusinessDTO;
+import com.sass.business.dtos.business.BusinessDTO;
 import com.sass.business.services.BusinessService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/business")

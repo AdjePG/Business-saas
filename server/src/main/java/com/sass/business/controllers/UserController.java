@@ -18,12 +18,19 @@ import java.util.List;
 @RestController
 @RequestMapping("api/users")
 public class UserController {
+    // region INJECTED DEPENDENCIES
+
     private UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    // endregion
+
+    // region REQUEST METHODS
+
+    // region GET - GETUSERS
     @Operation(summary = "Get all users", security = @SecurityRequirement(name = "JWT"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Users list received correctly"),
@@ -37,31 +44,51 @@ public class UserController {
         APIResponse<List<UserDTO>> apiResponse = userService.getUsers();
         return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
+    // endregion
 
+    // region POST - SIGNUP
     @Operation(summary = "Sign up/create a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "user created successfully"),
             @ApiResponse(responseCode = "400", description = "invalid request")
     })
     @PostMapping("signup")
-    public ResponseEntity<APIResponse<Void>> signUpUser(
+    public ResponseEntity<APIResponse<Void>> signUp(
             @RequestBody UserDTO userDTO
     ) {
-        APIResponse<Void> apiResponse = userService.signUpUser(userDTO);
+        APIResponse<Void> apiResponse = userService.signUp(userDTO);
         return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
+    // endregion
 
+    // region POST - LOGIN
     @Operation(summary = "Log in a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "user logged in successfully"),
             @ApiResponse(responseCode = "400", description = "invalid request")
     })
     @PostMapping("login")
-    public ResponseEntity<APIResponse<String>> logInUser(
+    public ResponseEntity<APIResponse<String>> logIn(
             @RequestBody LogInDTO logInDTO,
             HttpServletResponse response
     ) {
         APIResponse<String> apiResponse = userService.logIn(logInDTO, response);
         return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
+    // endregion
+
+    // region GET - ISLOGGEDIN
+    @Operation(summary = "Gets if user is logged in")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "user is logged in"),
+            @ApiResponse(responseCode = "400", description = "invalid request")
+    })
+    @GetMapping("is-logged")
+    public ResponseEntity<APIResponse<Void>> isLoggedIn() {
+        APIResponse<Void> apiResponse = userService.isLoggedIn();
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
+    }
+    // endregion
+
+    // endregion
 }

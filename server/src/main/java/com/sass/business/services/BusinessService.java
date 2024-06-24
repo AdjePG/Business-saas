@@ -1,6 +1,6 @@
 package com.sass.business.services;
 
-import com.sass.business.dtos.BusinessDTO;
+import com.sass.business.dtos.business.BusinessDTO;
 import com.sass.business.mappers.BusinessMapper;
 import com.sass.business.models.Business;
 import com.sass.business.models.User;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service

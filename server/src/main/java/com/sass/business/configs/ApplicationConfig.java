@@ -8,11 +8,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Configuration
 public class ApplicationConfig {
+    // region INJECTED DEPENDENCIES
+
     private final UserRepository userRepository;
 
     public ApplicationConfig(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+    // endregion
 
     @Bean
     public UserDetailsService userDetailsService() {

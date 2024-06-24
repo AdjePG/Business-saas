@@ -2,9 +2,11 @@ package com.sass.business.mappers;
 
 import com.sass.business.dtos.users.UserDTO;
 import com.sass.business.models.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapper {
-    public static UserDTO toDTO(User user) {
+    public UserDTO toDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(user.getEmail());
         userDTO.setName(user.getName());
@@ -13,7 +15,7 @@ public class UserMapper {
         return userDTO;
     }
 
-    public static User toModel(UserDTO userDTO) {
+    public User toModel(UserDTO userDTO) {
         User user = new User();
         user.setUuid(userDTO.getUuid());
         user.setEmail(userDTO.getEmail());

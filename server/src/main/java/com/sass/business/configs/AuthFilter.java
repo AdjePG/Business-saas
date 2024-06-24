@@ -1,6 +1,6 @@
 package com.sass.business.configs;
 
-import com.sass.business.others.JWTUtil;
+import com.sass.business.others.AuthUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -18,21 +18,21 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-public class JWTAuthentication extends OncePerRequestFilter {
-    private final JWTUtil jwtUtil;
+public class AuthFilter extends OncePerRequestFilter {
+    // region INJECTED DEPENDENCIES
+
+    private final AuthUtil authUtil;
     private final UserDetailsService userDetailsService;
 
-    public JWTAuthentication(JWTUtil jwtUtil, UserDetailsService userDetailsService) {
-        this.jwtUtil = jwtUtil;
+    public AuthFilter(AuthUtil authUtil, UserDetailsService userDetailsService) {
+        this.authUtil = authUtil;
         this.userDetailsService = userDetailsService;
     }
 
+    // endregion
+
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String headerAuth = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (headerAuth == null || !headerAuth.startsWith("Bearer ")) {
@@ -44,12 +44,12 @@ public class JWTAuthentication extends OncePerRequestFilter {
         String jwt = headerAuth.substring(7);
 
         if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            String userEmail = jwtUtil.extractEmail(jwt);
+            String userEmail = authUtil.extractEmail(jwt);
 
             if (userEmail != null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-                if (jwtUtil.validateToken(jwt, userDetails)) {
+                if (authUtil.validateToken(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,

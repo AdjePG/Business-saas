@@ -3,10 +3,11 @@ package com.sass.business.services;
 import com.sass.business.dtos.APIResponse;
 import com.sass.business.dtos.users.LogInDTO;
 import com.sass.business.dtos.users.UserDTO;
+import com.sass.business.exceptions.APIResponseException;
 import com.sass.business.mappers.UserMapper;
 import com.sass.business.models.User;
 import com.sass.business.repositories.UserRepository;
-import com.sass.business.others.JWTUtil;
+import com.sass.business.others.AuthUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -22,17 +23,20 @@ public class UserService {
     // region INJECTED DEPENDENCIES
 
     private UserRepository userRepository;
+    private UserMapper userMapper;
     private PasswordEncoder passwordEncoder;
-    private JWTUtil jwtUtil;
+    private AuthUtil authUtil;
 
     public UserService(
             UserRepository userRepository,
+            UserMapper userMapper,
             PasswordEncoder passwordEncoder,
-            JWTUtil jwtUtil
+            AuthUtil authUtil
     ) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
+        this.authUtil = authUtil;
     }
 
     // endregion
@@ -41,41 +45,64 @@ public class UserService {
 
     public APIResponse<List<UserDTO>> getUsers() {
         APIResponse<List<UserDTO>> apiResponse;
-        List<User> users = userRepository.findAll();
-        List<UserDTO> usersDTO = users.stream()
-                .map(UserMapper::toDTO)
-                .collect(Collectors.toList());
+        List<User> users;
+        List<UserDTO> usersDTO;
 
-        apiResponse = new APIResponse<>(
-                HttpStatus.OK.value(),
-                "Success!",
-                usersDTO
-        );
+        try {
+            users = userRepository.findAll();
+            usersDTO = users.stream()
+                    .map(userMapper::toDTO)
+                    .collect(Collectors.toList());
+
+            apiResponse = new APIResponse<>(
+                    HttpStatus.OK.value(),
+                    "Success!",
+                    usersDTO
+            );
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
+        }
 
         return apiResponse;
     }
 
-    public APIResponse<Void> signUpUser(UserDTO userDTO) {
+    public APIResponse<Void> signUp(UserDTO userDTO) {
         APIResponse<Void> apiResponse;
+        User user;
 
-        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+        try {
+            if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+                throw new APIResponseException("Email already exists", HttpStatus.CONFLICT.value());
+            }
+
+            user = userMapper.toModel(userDTO);
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+            userRepository.save(user);
+
             apiResponse = new APIResponse<>(
-                    HttpStatus.FOUND.value(),
-                    "Email already exists"
+                    HttpStatus.OK.value(),
+                    "Success!"
             );
-
-            return apiResponse;
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
         }
-
-        User user = UserMapper.toModel(userDTO);
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-
-        userRepository.save(user);
-
-        apiResponse = new APIResponse<>(
-                HttpStatus.OK.value(),
-                "Success!"
-        );
 
         return apiResponse;
     }
@@ -85,46 +112,53 @@ public class UserService {
         User user;
         Optional<User> userByEmail;
         String token;
+        ResponseCookie cookie;
 
-        userByEmail = userRepository.findByEmail(logInDTO.getEmail());
+        try {
+            userByEmail = userRepository.findByEmail(logInDTO.getEmail());
 
-        if (userByEmail.isEmpty()) {
+            if (userByEmail.isEmpty()) {
+                throw new APIResponseException("User not exists", HttpStatus.NOT_FOUND.value());
+            }
+
+            user = userByEmail.get();
+
+            if (!passwordEncoder.matches(logInDTO.getPassword(), user.getPassword())) {
+                throw new APIResponseException("Invalid password", HttpStatus.UNAUTHORIZED.value());
+            }
+
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+            token = authUtil.generateToken(user.getUuid(), user.getEmail(), user.getName());
+            cookie = authUtil.generateCookie("auth_user", token);
+            response.addHeader("Set-Cookie", cookie.toString());
+
             apiResponse = new APIResponse<>(
-                    HttpStatus.NOT_FOUND.value(),
-                    "User not exists"
+                    HttpStatus.OK.value(),
+                    "Success!",
+                    token
             );
-
-            return apiResponse;
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
         }
 
-        user = userByEmail.get();
+        return apiResponse;
+    }
 
-        if (!passwordEncoder.matches(logInDTO.getPassword(), user.getPassword())) {
-            apiResponse = new APIResponse<>(
-                    HttpStatus.UNAUTHORIZED.value(),
-                    "Invalid password"
-            );
-
-            return apiResponse;
-        }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        token = jwtUtil.generateToken(user.getUuid(), user.getEmail(), user.getName());
-
-        ResponseCookie cookie = ResponseCookie.from("auth-user", token)
-                .httpOnly(true)
-                .path("/")
-                .maxAge(10000000)
-                .sameSite("None")
-                .build();
-
-        response.addHeader("Set-Cookie", cookie.toString());
+    public APIResponse<Void> isLoggedIn() {
+        APIResponse<Void> apiResponse;
 
         apiResponse = new APIResponse<>(
                 HttpStatus.OK.value(),
-                "Success!",
-                token
+                "Success!"
         );
 
         return apiResponse;

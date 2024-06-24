@@ -25,4 +25,16 @@ export class AuthService {
       }
     );
   }
+
+  isLoggedIn(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/is-logged`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem("user-auth")}`
+        },
+        withCredentials: true
+      }
+    );
+  }
 }

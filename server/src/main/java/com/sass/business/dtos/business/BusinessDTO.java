@@ -1,10 +1,8 @@
-package com.sass.business.dtos;
+package com.sass.business.dtos.business;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import java.util.UUID;
 
 public class BusinessDTO {
 

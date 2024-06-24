@@ -1,6 +1,6 @@
 package com.sass.business.mappers;
 
-import com.sass.business.dtos.BusinessDTO;
+import com.sass.business.dtos.business.BusinessDTO;
 import com.sass.business.models.Business;
 import com.sass.business.models.User;
 import org.springframework.stereotype.Component;

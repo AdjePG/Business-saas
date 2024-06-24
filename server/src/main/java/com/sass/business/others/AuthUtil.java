@@ -6,20 +6,28 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
-public class JWTUtil implements Serializable {
-    @Value("${jwt.secret}")
+public class AuthUtil {
+    // region VARIABLES
+
+    @Value("${auth.jwt.secret}")
     private String secret;
+
+    @Value("${auth.expiration:1}")
+    private int expiration;
+
+    // endregion
+
+    // region AUTH METHODS
 
     public String generateToken(Long uuid, String email, String name) {
         Map<String, Object> claims = new HashMap<>();
@@ -29,23 +37,32 @@ public class JWTUtil implements Serializable {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000L * 24 * expiration))
                 .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String extractUUID(String token) {
-        return (String) extractClaims(token).get("uuid");
+    public ResponseCookie generateCookie(String cookieName, String token) {
+        return ResponseCookie.from(cookieName, token)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(3600L * 24 * expiration)
+                .sameSite("None")
+                .build();
     }
+
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String email = extractEmail(token);
+        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    // endregion
+
+    // region JWT EXTRACTION METHODS
 
     public String extractEmail(String token) {
         return extractClaims(token).getSubject();
-    }
-
-    public String extractUsername(String token) {
-        return (String) extractClaims(token).get("username");
     }
 
     public boolean isTokenExpired(String token) {
@@ -64,8 +81,5 @@ public class JWTUtil implements Serializable {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        final String email = extractEmail(token);
-        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
-    }
+    // endregion
 }

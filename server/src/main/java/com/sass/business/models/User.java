@@ -25,7 +25,6 @@ public class User implements UserDetails {
     @Column(name = "uuid", updatable = false, nullable = false)
     private Long uuid; // Asumiendo que usas Long para manejar grandes rangos de enteros
 
-
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
@@ -44,6 +43,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "role")
     private Role role;
+
     //endregion
 
     // region GETTERS AND SETTERS
@@ -94,14 +94,6 @@ public class User implements UserDetails {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     //endregion
