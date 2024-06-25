@@ -41,6 +41,22 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
+                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(requests ->
+                        requests.requestMatchers(HttpMethod.POST, "/api/users/signup", "/api/users/login").permitAll()
+                                .requestMatchers("/api/docs/**", "/swagger-ui/**").permitAll()
+                                .anyRequest().authenticated()
+                );
+
+        return httpSecurity.build();
+    }
+
+    /*@Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfig = new org.springframework.web.cors.CorsConfiguration();
@@ -55,7 +71,7 @@ public class SecurityConfig {
                 );
 
         return httpSecurity.build();
-    }
+    }*/
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

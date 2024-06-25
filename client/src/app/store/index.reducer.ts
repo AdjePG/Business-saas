@@ -9,13 +9,13 @@ export const initialState = {
     navbar: 'navbar-sticky',
     locale: 'en',
     sidebar: false,
-    languageList: [
+    languageList:  [
+        { code: 'zh', name: 'Chinese' },
+        { code: 'es', name: 'Spanish' },
         { code: 'en', name: 'English' },
         { code: 'fr', name: 'French' },
         { code: 'de', name: 'German' },
-        { code: 'it', name: 'Italian' },
-        { code: 'es', name: 'Spanish' },
-        { code: 'zh', name: 'Chinese' },
+        { code: 'it', name: 'Italian' }
     ],
     isShowMainLoader: true,
     semidark: false,
