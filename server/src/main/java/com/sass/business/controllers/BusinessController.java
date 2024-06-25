@@ -1,9 +1,15 @@
 package com.sass.business.controllers;
 
+import com.sass.business.dtos.APIResponse;
 import com.sass.business.dtos.business.BusinessDTO;
 import com.sass.business.services.BusinessService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +27,18 @@ public class BusinessController {
         this.businessService = businessService;
     }
 
-    //@ApiOperation(value = "Veure una llista de negocis disponibles", response = List.class)
+    @Operation(summary = "Veure una llista de negocis disponibles")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @GetMapping
-    public List<BusinessDTO> getAllBusinesses() {
-        return businessService.getAllBusinesses();
+    public ResponseEntity<APIResponse<List<BusinessDTO>>> getAllBusinesses() {
+
+        APIResponse<List<BusinessDTO>> apiResponse = businessService.getAllBusinesses();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
 
     //@ApiOperation(value = "Obtenir un negoci per Id")

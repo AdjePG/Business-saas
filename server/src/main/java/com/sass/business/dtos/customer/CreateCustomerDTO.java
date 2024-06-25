@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public class CreateCustomerDTO {
 
+    // region ATTRIBUTES
+
     @NotNull(message = "El UUID del negocio no puede ser nulo")
     private Long uuidBusiness;
 
@@ -41,8 +43,9 @@ public class CreateCustomerDTO {
 
     @Size(max = 200, message = "La dirección no puede tener más de 200 caracteres")
     private String address;
+    // endregion
 
-    // Getters y Setters
+    // region Getters y Setters
 
     public Long getUuidBusiness() {
         return uuidBusiness;
@@ -123,5 +126,7 @@ public class CreateCustomerDTO {
     public void setAddress(String address) {
         this.address = address;
     }
+    // endregion
+
 }
 
