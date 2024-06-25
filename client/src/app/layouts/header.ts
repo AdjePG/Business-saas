@@ -88,6 +88,7 @@ export class HeaderComponent {
     ) {
         this.initStore();
     }
+
     async initStore() {
         this.storeData
             .select((d) => d.index)
@@ -138,10 +139,15 @@ export class HeaderComponent {
         this.translate.use(item.code);
         this.appSetting.toggleLanguage(item);
         if (this.store.locale?.toLowerCase() === 'ae') {
-            this.storeData.dispatch({type: 'toggleRTL', payload: 'rtl'});
+            this.storeData.dispatch({ type: 'toggleRTL', payload: 'rtl' });
         } else {
-            this.storeData.dispatch({type: 'toggleRTL', payload: 'ltr'});
+            this.storeData.dispatch({ type: 'toggleRTL', payload: 'ltr' });
         }
         window.location.reload();
+    }
+
+    logOut() {
+        localStorage.removeItem("user-auth")
+        this.router.navigate(['auth/login'])
     }
 }

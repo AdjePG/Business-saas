@@ -80,7 +80,7 @@ public class UserService {
 
         try {
             if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-                throw new APIResponseException("Email already exists", HttpStatus.CONFLICT.value());
+                throw new APIResponseException("A user with this email already exists", HttpStatus.CONFLICT.value());
             }
 
             user = userMapper.toModel(userDTO);
@@ -118,13 +118,13 @@ public class UserService {
             userByEmail = userRepository.findByEmail(logInDTO.getEmail());
 
             if (userByEmail.isEmpty()) {
-                throw new APIResponseException("User not exists", HttpStatus.NOT_FOUND.value());
+                throw new APIResponseException("The user doesn't exist", HttpStatus.NOT_FOUND.value());
             }
 
             user = userByEmail.get();
 
             if (!passwordEncoder.matches(logInDTO.getPassword(), user.getPassword())) {
-                throw new APIResponseException("Invalid password", HttpStatus.UNAUTHORIZED.value());
+                throw new APIResponseException("The user or the password is incorrect", HttpStatus.UNAUTHORIZED.value());
             }
 
             user.setPassword(passwordEncoder.encode(user.getPassword()));

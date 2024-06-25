@@ -23,7 +23,7 @@ export const authGuard: CanActivateFn = (
         }
       },
       error: error => {
-        if (state.url !== '/auth/login') {
+        if (state.url !== '/auth/login' && state.url !== '/auth/signup' && state.url !== '/auth/lockscreen' && state.url !== '/auth/reset-password') {
           router.navigate(['/auth/login']);
           resolve(false);
         } else {

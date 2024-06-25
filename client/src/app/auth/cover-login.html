@@ -64,8 +64,8 @@
                     <div class="mb-10">
                         <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign in
                         </h1>
-                        <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to
-                            login</p>
+                        <!-- <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to
+                            login</p> -->
                     </div>
                     <form class="space-y-5 dark:text-white" (submit)="signIn(form)" #form="ngForm">
                         <div>
@@ -78,10 +78,10 @@
                                     <icon-mail [fill]="true" />
                                 </span>
                             </div>
-                            <div *ngIf="emailField.errors?.['required']  && emailField.touched" class="text-red-500">
+                            <div *ngIf="emailField.errors?.['required'] && emailField.touched" class="text-red-500">
                                 Email is required.
                             </div>
-                            <div *ngIf="emailField.errors?.['email']  && emailField.touched" class="text-red-500">
+                            <div *ngIf="emailField.errors?.['email'] && emailField.touched" class="text-red-500">
                                 Email is not valid.
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                             <div class="relative text-white-dark">
                                 <input id="Password" type="password" placeholder="Enter Password" name="password"
                                     class=" form-input ps-10 placeholder:text-white-dark" [(ngModel)]="password"
-                                    #passwordField="ngModel" [pattern]="passwordPattern" minlength="8" required />
+                                    #passwordField="ngModel" minlength="8" required />
                                 <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                     <icon-lock-dots [fill]="true" />
                                 </span>
@@ -99,28 +99,20 @@
                                 class="text-red-500">
                                 Password is required.
                             </div>
-                            <div *ngIf="passwordField.errors?.['pattern'] && passwordField.touched"
-                                class="text-red-500">
-                                Password must contain at least one uppercase, one number, and one special character.
-                            </div>
-                            <div *ngIf="passwordField.errors?.['minlength'] && passwordField.touched"
-                                class="text-red-500">
-                                Password must be at least 8 characters long.
-                            </div>
                         </div>
                         <button type="submit" [disabled]="form.invalid"
-                            class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                            class="btn btn-gradient my-6 w-full border-1 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                             Sign in
                         </button>
                     </form>
 
-                    <div class="relative my-7 text-center md:mb-9">
+                    <!-- <div class="relative my-7 text-center md:mb-9">
                         <span
                             class="absolute inset-x-0 top-1/2 h-px w-full -translate-y-1/2 bg-white-light dark:bg-white-dark"></span>
                         <span
                             class="relative bg-white px-2 font-bold uppercase text-white-dark dark:bg-dark dark:text-white-light">or</span>
-                    </div>
-                    <div class="mb-10 md:mb-[60px]">
+                    </div> -->
+                    <!-- <div class="mb-10 md:mb-[60px]">
                         <ul class="flex justify-center gap-3.5 text-white">
                             <li>
                                 <a href="javascript:"
@@ -151,17 +143,23 @@
                                 </a>
                             </li>
                         </ul>
-                    </div>
-                    <div class="text-center dark:text-white">
+                    </div> -->
+                    <div class="text-center dark:text-white mt-6">
                         Don't have an account ?
-                        <a routerLink="/auth/cover-register"
+                        <a routerLink="/auth/signup"
                             class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                            SIGN UP
+                            Sign up
                         </a>
                     </div>
+                    <!-- <div class="text-center dark:text-white mt-6">
+                        Forgot your password ?
+                        <a routerLink="/auth/cover-register"
+                            class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                            Reset password
+                        </a>
+                    </div> -->
                 </div>
-                <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ currYear }}.VRISTO All Rights
-                    Reserved.</p>
+                <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ currYear }} - Smart Business</p>
             </div>
         </div>
     </div>

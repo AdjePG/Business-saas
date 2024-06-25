@@ -6,6 +6,8 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from 'src/app/service/app.service';
 import { AuthService } from 'src/app/service/auth/auth.service';
+import { showAlert } from '../shared/alerts';
+import { ToastType } from '../shared/types';
 
 @Component({
     moduleId: module.id,
@@ -23,17 +25,27 @@ export class CoverLoginComponent {
     store: any;
     currYear: number = new Date().getFullYear();
 
-    passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
-
     constructor(private authService: AuthService, public translate: TranslateService, public storeData: Store<any>, public router: Router, private appSetting: AppService) {
         this.initStore();
     }
+
     async initStore() {
         this.storeData
             .select((d) => d.index)
             .subscribe((d) => {
                 this.store = d;
             });
+    }
+
+    changeLanguage(item: any) {
+        this.translate.use(item.code);
+        this.appSetting.toggleLanguage(item);
+        if (this.store.locale?.toLowerCase() === 'ae') {
+            this.storeData.dispatch({ type: 'toggleRTL', payload: 'rtl' });
+        } else {
+            this.storeData.dispatch({ type: 'toggleRTL', payload: 'ltr' });
+        }
+        window.location.reload();
     }
 
     signIn(form: NgForm) {
@@ -52,19 +64,11 @@ export class CoverLoginComponent {
                 this.router.navigate(['/']);
             },
             error: (error) => {
-                console.error('Error en el registro', error);
+                showAlert({
+                    toastType: ToastType.ERROR,
+                    message: error.error.message
+                });
             }
         });
-    }
-
-    changeLanguage(item: any) {
-        this.translate.use(item.code);
-        this.appSetting.toggleLanguage(item);
-        if (this.store.locale?.toLowerCase() === 'ae') {
-            this.storeData.dispatch({ type: 'toggleRTL', payload: 'rtl' });
-        } else {
-            this.storeData.dispatch({ type: 'toggleRTL', payload: 'ltr' });
-        }
-        window.location.reload();
     }
 }

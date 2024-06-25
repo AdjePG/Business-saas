@@ -40,9 +40,9 @@ public class User implements UserDetails {
     @Column(name = "phone", length = 15)
     private String phone;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "role")
-    private Role role;
+    //@Enumerated(EnumType.ORDINAL)
+    //@Column(name = "role")
+    //private Role role;
 
     //endregion
 

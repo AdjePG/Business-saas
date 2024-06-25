@@ -43,7 +43,7 @@ public class AuthFilter extends OncePerRequestFilter {
         //String jwt = getTokenFromCookie(request);
         String jwt = headerAuth.substring(7);
 
-        if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (!jwt.equals("null") && SecurityContextHolder.getContext().getAuthentication() == null) {
             String userEmail = authUtil.extractEmail(jwt);
 
             if (userEmail != null) {
