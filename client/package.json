@@ -34,6 +34,7 @@
     "ngx-quill": "^26.0.4",
     "ngx-scrollbar": "^11.0.0",
     "ngx-tippy-wrapper": "^6.3.0",
+    "or": "^0.2.0",
     "rxjs": "~7.8.0",
     "sortablejs": "^1.15.2",
     "sweetalert2": "^11.6.13",
