@@ -8,10 +8,10 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 // icon
 import { IconModule } from 'src/app/shared/icon/icon.module';
 
-import { CoverLockscreenComponent } from './cover-lockscreen';
-import { CoverLoginComponent } from './cover-login';
-import { CoverPasswordResetComponent } from './cover-password-reset';
-import { CoverRegisterComponent } from './cover-register';
+import { CoverLockscreenComponent } from './lockscreen/cover-lockscreen';
+import { CoverLoginComponent } from './login/cover-login';
+import { CoverPasswordResetComponent } from './password-reset/cover-password-reset';
+import { CoverRegisterComponent } from './register/cover-register';
 
 // headlessui
 import { MenuModule } from 'headlessui-angular';
