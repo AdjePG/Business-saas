@@ -1,6 +1,5 @@
 import { Component, Input, ViewChild, ViewContainerRef } from '@angular/core';
 @Component({
-    moduleId: module.id,
     selector: 'icon-solana',
     template: `
         <ng-template #template>

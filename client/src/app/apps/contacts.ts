@@ -5,7 +5,6 @@ import { ModalComponent } from 'angular-custom-modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './contacts.html',
     animations: [
         trigger('toggleAnimation', [

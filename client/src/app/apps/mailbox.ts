@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './mailbox.html',
     animations: [
         trigger('toggleAnimation', [

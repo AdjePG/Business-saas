@@ -1,6 +1,5 @@
 import { Component, Input, ViewChild, ViewContainerRef } from '@angular/core';
 @Component({
-    moduleId: module.id,
     selector: 'icon-clipboard-text',
     template: `
         <ng-template #template>

@@ -6,7 +6,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { AppService } from 'src/app/service/app.service';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './cover-password-reset.html',
     animations: [
         trigger('toggleAnimation', [

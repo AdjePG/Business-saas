@@ -11,7 +11,6 @@ import { FullCalendarComponent } from '@fullcalendar/angular';
 import { Store } from '@ngrx/store';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './calendar.html',
     animations: [
         trigger('toggleAnimation', [

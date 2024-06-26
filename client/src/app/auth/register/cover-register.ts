@@ -8,7 +8,6 @@ import { AuthService } from 'src/app/service/auth/auth.service';
 import { NgForm } from '@angular/forms';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './cover-register.html',
     animations: [
         trigger('toggleAnimation', [

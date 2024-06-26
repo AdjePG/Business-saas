@@ -7,7 +7,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-    moduleId: module.id,
     selector: 'header',
     templateUrl: './header.html',
     animations: [

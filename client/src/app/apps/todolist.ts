@@ -4,7 +4,6 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ModalComponent } from 'angular-custom-modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
-    moduleId: module.id,
     templateUrl: './todolist.html',
     animations: [
         trigger('toggleAnimation', [

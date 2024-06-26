@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 
 @Component({
-    moduleId: module.id,
     selector: 'setting',
     templateUrl: './theme-customizer.html',
 })

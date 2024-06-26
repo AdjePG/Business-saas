@@ -10,7 +10,6 @@ import { showAlert } from '../../shared/alerts';
 import { ToastType } from '../../shared/types';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './cover-login.html',
     animations: [
         trigger('toggleAnimation', [

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { slideDownUp } from './shared/animations';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './index.html',
     animations: [slideDownUp]
 })

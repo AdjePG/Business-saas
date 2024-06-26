@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './list.html',
 })
 export class InvoiceListComponent {

@@ -4,7 +4,6 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ModalComponent } from 'angular-custom-modal';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './scrumboard.html',
     animations: [
         trigger('toggleAnimation', [

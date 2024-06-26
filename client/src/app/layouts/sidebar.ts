@@ -6,7 +6,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { slideDownUp } from '../shared/animations';
 
 @Component({
-    moduleId: module.id,
     selector: 'sidebar',
     templateUrl: './sidebar.html',
     animations: [slideDownUp],

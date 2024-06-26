@@ -5,7 +5,6 @@ import { NgScrollbar } from 'ngx-scrollbar';
 import { Store } from '@ngrx/store';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './chat.html',
     animations: [
         trigger('toggleAnimation', [

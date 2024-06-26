@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './preview.html',
 })
 export class InvoicePreviewComponent {
