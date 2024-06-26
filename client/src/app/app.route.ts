@@ -13,6 +13,10 @@ export const routes: Routes = [
         ],
         canActivate: [authGuard]
     },
+
+     //apps
+     { path: '', loadChildren: () => import('./apps/apps.module').then((d) => d.AppsModule) },
+     
     {
         path: '',
         component: AuthLayout,
