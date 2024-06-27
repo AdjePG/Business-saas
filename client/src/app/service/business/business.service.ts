@@ -31,24 +31,32 @@ export class BusinessService {
     );
   }
 
-  /*
+  createBusiness(business: Business): Observable<Business> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem("user-auth")}`
+    });
 
-
-getAllBusinesses(userId?: number): Observable<Business[]> {
-    let url = this.apiUrl;
-    if (userId) {
-      url += `?userId=${userId}`;
-    }
-    return this.http.get<Business[]>(url);
+    return this.http.post<Business>(this.apiUrl, business, { headers });
   }
 
   getBusinessById(uuid: number): Observable<Business> {
-    return this.http.get<Business>(`${this.apiUrl}/${uuid}`);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem("user-auth")}`
+    });
+
+    return this.http.get<Business>(`${this.apiUrl}/${uuid}`, { headers });
   }
 
-  createBusiness(business: Business): Observable<Business> {
-    return this.http.post<Business>(this.apiUrl, business);
+  deleteBusiness(id: number): Observable<void> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem("user-auth")}`
+    });
+
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
   }
 
-  */
+
 }

@@ -24,6 +24,9 @@ public class Business {
     @ManyToOne
     @JoinColumn(name = "uuid_user", referencedColumnName = "uuid")
     private User user;
+
+    @Column(name = "description", length = 250)
+    private String description;
     //endregion
 
     // region GETTERS AND SETTERS
@@ -59,6 +62,15 @@ public class Business {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     //endregion
 
 }

@@ -10,8 +10,9 @@ public class BusinessMapper {
 
     public BusinessDTO toDto(Business business) {
         BusinessDTO dto = new BusinessDTO();
-        //dto.setUuid(business.getUuid());
+        dto.setUuid(business.getUuid());
         dto.setName(business.getName());
+        dto.setDescription(business.getDescription());
         dto.setImagePath(business.getImagePath());
         dto.setUuidUser(business.getUser().getUuid());
         return dto;
@@ -19,9 +20,10 @@ public class BusinessMapper {
 
     public Business toModal(BusinessDTO dto, User user) {
         Business business = new Business();
-        //business.setUuid(dto.getUuid());
-        business.setImagePath(dto.getImagePath());
+        business.setUuid(dto.getUuid());
         business.setName(dto.getName());
+        business.setDescription(dto.getDescription());
+        business.setImagePath(dto.getImagePath());
         business.setUser(user);
         return business;
     }

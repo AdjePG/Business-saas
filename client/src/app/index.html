@@ -45,7 +45,7 @@
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <ng-container *ngFor="let business of listOwnBusiness | slice:0:4">
-                <card [title]="business.name" [image]="business.imagePath" (clickEvent)="goToBusiness(business.id)"></card>
+                <card [business]="business" (deleteEvent)="handleBusinessDeleted($event)"></card>
             </ng-container>
 
             <ng-container *ngIf="listSharedBusiness.length < 4">
@@ -60,7 +60,7 @@
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <ng-container *ngFor="let business of listSharedBusiness | slice:0:4">
-                <card [title]="business.name" [image]="business.imagePath" (clickEvent)="goToBusiness(business.id)"></card>
+                <card [business]="business" (deleteEvent)="handleBusinessDeleted($event)"></card>
             </ng-container>
 
             <ng-container *ngIf="listSharedBusiness.length < 4">
@@ -340,26 +340,39 @@
 
     <modal #addBusinessModal class="no-footer modal-top large-modal">
         <ng-template #modalHeader>
-            <div class="!font-medium">Crear empresa</div>
+          <div class="!font-medium">Crear empresa</div>
         </ng-template>
         <ng-template #modalBody>
-            <form [formGroup]="businessModalForm" class="text-sm" ngNativeValidate>
-                <div class=" mb-5">
-                    <label for="name">Nombre del negocio</label>
-                    <input id="name" type="text" placeholder="Introduce un nombre" class="form-input"
-                        formControlName="name" />
-                    <div *ngIf="businessModalForm.controls['name'].invalid && (businessModalForm.controls['name'].dirty)"
-                        class="text-red-500">
-                        Tienes que poner un nombre.
-                    </div>
-                </div>
-                <div class="mt-8 flex items-center justify-end">
-                    <button type="button" class="btn btn-outline-danger"
-                        (click)="addBusinessModal.close()">Cancelar</button>
-                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4"
-                        (click)="createBusiness()">Crear</button>
-                </div>
-            </form>
+          <form [formGroup]="businessModalForm" class="text-sm" (ngSubmit)="createBusiness()">
+            <div class="mb-5">
+              <label for="name">Nombre del negocio</label>
+              <input id="name" type="text" placeholder="Introduce un nombre" class="form-input" formControlName="name" />
+              <div *ngIf="businessModalForm.controls['name'].invalid && businessModalForm.controls['name'].dirty"
+                   class="text-red-500">
+                Tienes que poner un nombre.
+              </div>
+            </div>
+            <div class="mb-5">
+              <label for="imagePath">Ruta de la imagen</label>
+              <input id="imagePath" type="text" placeholder="Introduce la ruta de la imagen" class="form-input"
+                     formControlName="imagePath" />
+              <div *ngIf="businessModalForm.controls['imagePath'].invalid && businessModalForm.controls['imagePath'].dirty"
+                   class="text-red-500">
+                Tienes que poner una ruta de imagen.
+              </div>
+            </div>
+            <div class="mb-5">
+              <label for="description">Descripción</label>
+              <textarea id="description" placeholder="Introduce una descripción" class="form-input"
+                        formControlName="description"></textarea>
+            </div>
+            <div class="mt-8 flex items-center justify-end">
+              <button type="button" class="btn btn-outline-danger" (click)="closeModal()">Cancelar</button>
+              <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Crear</button>
+            </div>
+          </form>
         </ng-template>
-    </modal>
+      </modal>
+      
+      
 </div>
