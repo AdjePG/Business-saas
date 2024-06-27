@@ -1,6 +1,9 @@
 /* animation */
 @import 'animate.css';
 
+/* modal pop up */
+@import 'modal.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

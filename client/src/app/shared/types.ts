@@ -4,3 +4,8 @@ export enum ToastType {
   ERROR = "error",
   INFO = "info"
 }
+
+export enum CardType {
+  INFO = "info",
+  ADD = "add"
+}

@@ -61,4 +61,12 @@ export class SidebarComponent {
             this.activeDropdown.push(name);
         }
     }
+
+    isBusinessPage() {
+        if (this.router.url !== "/" && this.router.url !== "/own-business" && this.router.url !== "/shared-business") {
+            return true
+        }
+
+        return false
+    }
 }

@@ -1,13 +1,13 @@
 <div>
-
-    
-
     <div
         class="flex flex-col-reverse items-center justify-between gap-5 rounded-md bg-gradient-to-tl from-[rgba(234,241,255,0.44)] to-[rgba(234,241,255,0.96)] px-6 py-2.5 dark:from-[rgba(14,23,38,0.44)] dark:to-[#0E1726] md:flex-row lg:mt-0 xl:px-16">
         <div class="flex-1 py-3.5 text-center md:text-start">
-            <h3 class="mb-2 text-xl font-bold dark:text-white md:text-2xl">¿Listo para emprender o unirte a un negocio?</h3>
+            <h3 class="mb-2 text-xl font-bold dark:text-white md:text-2xl">¿Listo para emprender o unirte a un negocio?
+            </h3>
             <div class="text-lg font-medium text-white-dark">
-                Explora las opciones para iniciar tu propia empresa con estructura de SAS o integra tu esfuerzo a un proyecto en marcha. Encuentra todas las herramientas y apoyo necesarios para hacer realidad tu visión empresarial.
+                Explora las opciones para iniciar tu propia empresa con estructura de SAS o integra tu esfuerzo a un
+                proyecto en marcha. Encuentra todas las herramientas y apoyo necesarios para hacer realidad tu visión
+                empresarial.
             </div>
             <div class="mt-8 flex justify-center md:justify-start lg:mt-16">
                 <button type="button" class="btn btn-primary">Consultar opciones</button>
@@ -21,7 +21,7 @@
 
     <div class="mb-12 flex items-center rounded-b-md bg-[#DBE7FF] dark:bg-[#141F31]">
         <ul class="mx-auto flex items-center gap-5 overflow-auto whitespace-nowrap px-3 py-4.5 xl:gap-8">
-            
+
             <li class="group flex min-w-[120px] cursor-pointer flex-col items-center justify-center gap-4 rounded-md px-8 py-2.5 text-center text-[#506690] duration-300 hover:bg-white hover:text-primary dark:hover:bg-[#1B2E4B]"
                 [ngClass]="{ 'bg-white text-primary dark:bg-[#1B2E4B]': activeTab === 'free-updates' }"
                 (click)="activeTab = 'free-updates'">
@@ -38,180 +38,44 @@
             </li>
         </ul>
     </div>
-    
+
     <div class="mt-10">
         <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-            <h3 class="text-xl font-bold md:text-3xl">Mis Negocios</h3>
-            <div class="mt-8 md:mt-0">
-                <button type="button" class="btn btn-primary">Crear Nuevo Negocio</button>
-            </div>
+            <h3 class="text-xl font-bold md:text-3xl">Mis negocios</h3>
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <div class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black">
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <!-- Imagen de un espacio de coworking -->
-                    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Sala de Juntas" class="w-full object-cover" />
-                </div>
-                <h5 class="text-xl dark:text-white">Innovación y Colaboración</h5>
-                <div class="flex">
-                    <div class="me-4 overflow-hidden rounded-full bg-white-dark">
-                        <!-- Imagen de perfil de un joven empresario -->
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="h-11 w-11 object-cover" alt="Alma Clark" />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">Jordan Miles</h4>
-                        <p>20 April</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black">
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <!-- Imagen de una conferencia empresarial -->
-                    <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Conferencia Empresarial" class="w-full object-cover" />
-                </div>
-                <h5 class="text-xl dark:text-white">Liderazgo y Gestión</h5>
-                <div class="flex">
-                    <div class="me-4 overflow-hidden rounded-full bg-white-dark">
-                        <!-- Imagen de perfil de una líder empresarial -->
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="h-11 w-11 object-cover" alt="Alma Clark" />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">Sophia Loren</h4>
-                        <p>15 March</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black">
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <!-- Imagen de una reunión de estrategia empresarial -->
-                    <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Reunión de Estrategia" class="w-full object-cover" />
-                </div>
-                <h5 class="text-xl dark:text-white">Estrategias de Marketing</h5>
-                <div class="flex">
-                    <div class="me-4 overflow-hidden rounded-full bg-white-dark">
-                        <!-- Imagen de perfil de un estratega de marketing -->
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="h-11 w-11 object-cover" alt="Alma Clark" />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">Ethan Hunt</h4>
-                        <p>10 June</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black">
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <!-- Imagen de técnicas de negociación -->
-                    <img src="https://images.unsplash.com/photo-1573164574572-cb89e39749b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Técnicas de Negociación" class="w-full object-cover" />
-                </div>
-                <h5 class="text-xl dark:text-white">Técnicas de Negociación</h5>
-                <div class="flex">
-                    <div class="me-4 overflow-hidden rounded-full bg-white-dark">
-                        <!-- Imagen de perfil de un negociador -->
-                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="h-11 w-11 object-cover" alt="Negociador Experto" />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">Maria Gonzalez</h4>
-                        <p>22 August</p>
-                    </div>
-                </div>
-            </div>
-            
+            <ng-container *ngFor="let business of listOwnBusiness">
+                <card [title]="business.name" [image]="business.photo" (clickEvent)="goToBusiness(business.id)"></card>
+            </ng-container>
+
+            <ng-container *ngIf="listSharedBusiness.length < 4">
+                <card [cardType]="cardType.ADD" (clickEvent)="addBusinessModal.open()"></card>
+            </ng-container>
         </div>
     </div>
 
     <div class="mt-10">
         <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-            <h3 class="text-xl font-bold md:text-3xl">Negocios que colaboro</h3>
-            <div class="mt-8 md:mt-0">
-                <button type="button" class="btn btn-primary">Unirme a un Negocio</button>
-            </div>
+            <h3 class="text-xl font-bold md:text-3xl">Negocios compartidos</h3>
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <div class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black">
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <!-- Imagen de un espacio de coworking -->
-                    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Sala de Juntas" class="w-full object-cover" />
-                </div>
-                <h5 class="text-xl dark:text-white">Innovación y Colaboración</h5>
-                <div class="flex">
-                    <div class="me-4 overflow-hidden rounded-full bg-white-dark">
-                        <!-- Imagen de perfil de un joven empresario -->
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="h-11 w-11 object-cover" alt="Alma Clark" />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">Jordan Miles</h4>
-                        <p>20 April</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black">
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <!-- Imagen de una conferencia empresarial -->
-                    <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Conferencia Empresarial" class="w-full object-cover" />
-                </div>
-                <h5 class="text-xl dark:text-white">Liderazgo y Gestión</h5>
-                <div class="flex">
-                    <div class="me-4 overflow-hidden rounded-full bg-white-dark">
-                        <!-- Imagen de perfil de una líder empresarial -->
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="h-11 w-11 object-cover" alt="Alma Clark" />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">Sophia Loren</h4>
-                        <p>15 March</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black">
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <!-- Imagen de una reunión de estrategia empresarial -->
-                    <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Reunión de Estrategia" class="w-full object-cover" />
-                </div>
-                <h5 class="text-xl dark:text-white">Estrategias de Marketing</h5>
-                <div class="flex">
-                    <div class="me-4 overflow-hidden rounded-full bg-white-dark">
-                        <!-- Imagen de perfil de un estratega de marketing -->
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="h-11 w-11 object-cover" alt="Alma Clark" />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">Ethan Hunt</h4>
-                        <p>10 June</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black">
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <!-- Imagen de técnicas de negociación -->
-                    <img src="https://images.unsplash.com/photo-1573164574572-cb89e39749b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Técnicas de Negociación" class="w-full object-cover" />
-                </div>
-                <h5 class="text-xl dark:text-white">Técnicas de Negociación</h5>
-                <div class="flex">
-                    <div class="me-4 overflow-hidden rounded-full bg-white-dark">
-                        <!-- Imagen de perfil de un negociador -->
-                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="h-11 w-11 object-cover" alt="Negociador Experto" />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">Maria Gonzalez</h4>
-                        <p>22 August</p>
-                    </div>
-                </div>
-            </div>
-            
+            <ng-container *ngFor="let business of listSharedBusiness">
+                <card [title]="business.name" [image]="business.photo" (clickEvent)="goToBusiness(business.id)"></card>
+            </ng-container>
+
+            <ng-container *ngIf="listSharedBusiness.length < 4">
+                <card [cardType]="cardType.ADD" (clickEvent)="addBusinessModal.open()"></card>
+            </ng-container>
         </div>
     </div>
-
 
     <h3 class="mt-10 mb-8 text-center text-xl font-semibold md:text-2xl">
         Preguntas frecuentes sobre <span class="text-primary">emprender y colaborar</span>
     </h3>
     <div class="mb-10 grid grid-cols-1 gap-10 md:grid-cols-2">
         <div class="rounded-md bg-white dark:bg-black">
-            <div class="border-b border-white-light p-6 text-[22px] font-bold dark:border-dark dark:text-white">Crear Negocio</div>
+            <div class="border-b border-white-light p-6 text-[22px] font-bold dark:border-dark dark:text-white">Crear
+                Negocio</div>
             <div class="divide-y divide-white-light px-6 py-4.5 dark:divide-dark">
                 <div>
                     <div class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
@@ -336,7 +200,8 @@
             </div>
         </div>
         <div class="rounded-md bg-white dark:bg-black">
-            <div class="border-b border-white-light p-6 text-[22px] font-bold dark:border-dark dark:text-white">Unirme Negocio</div>
+            <div class="border-b border-white-light p-6 text-[22px] font-bold dark:border-dark dark:text-white">Unirme
+                Negocio</div>
             <div class="divide-y divide-white-light px-6 py-4.5 dark:divide-dark">
                 <div>
                     <div class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
@@ -464,12 +329,37 @@
     <div class="panel mt-10 text-center md:mt-20">
         <h3 class="mb-2 text-xl font-bold dark:text-white md:text-2xl">¿Necesitas más ayuda?</h3>
         <p class="text-lg font-medium text-white-dark">
-            Nuestros especialistas están siempre disponibles para ayudarte. Contáctanos durante el horario comercial o envíanos un correo electrónico en cualquier momento y te responderemos a la brevedad.
+            Nuestros especialistas están siempre disponibles para ayudarte. Contáctanos durante el horario comercial o
+            envíanos un correo electrónico en cualquier momento y te responderemos a la brevedad.
         </p>
         <div class="mt-8 flex flex-col items-center justify-center gap-6 sm:flex-row">
             <button type="button" class="btn btn-primary">Contáctanos</button>
             <button type="button" class="btn btn-primary">Visita nuestra comunidad</button>
         </div>
     </div>
-    
+
+    <modal #addBusinessModal class="no-footer modal-top large-modal">
+        <ng-template #modalHeader>
+            <div class="!font-medium">Crear empresa</div>
+        </ng-template>
+        <ng-template #modalBody>
+            <form [formGroup]="businessModalForm" class="text-sm" ngNativeValidate>
+                <div class=" mb-5">
+                    <label for="name">Nombre del negocio</label>
+                    <input id="name" type="text" placeholder="Introduce un nombre" class="form-input"
+                        formControlName="name" />
+                    <div *ngIf="businessModalForm.controls['name'].invalid && (businessModalForm.controls['name'].dirty)"
+                        class="text-red-500">
+                        Tienes que poner un nombre.
+                    </div>
+                </div>
+                <div class="mt-8 flex items-center justify-end">
+                    <button type="button" class="btn btn-outline-danger"
+                        (click)="addBusinessModal.close()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4"
+                        (click)="createBusiness()">Crear</button>
+                </div>
+            </form>
+        </ng-template>
+    </modal>
 </div>

@@ -1,0 +1,32 @@
+<ng-container *ngIf="getType(); then infoCard; else addCard"></ng-container>
+
+<ng-template #infoCard>
+  <div
+    class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black cursor-pointer"
+    (click)="onClick()">
+    <div class="max-h-56 overflow-hidden rounded-md">
+      <!-- Imagen de un espacio de coworking -->
+      <img draggable="false" *ngIf="image; else emptyImage" [src]='image' [alt]="'Portrait of \'' + title + '\''"
+        class="w-full object-cover h-48" />
+      <ng-template #emptyImage>
+        <div class="flex items-center justify-center w-full h-48 bg-primary-light dark:bg-[#1B2E4B]">
+          <icon-box class="h-24 w-24 stroke-[#1B2E4B] dark:stroke-primary-light"/>
+        </div>
+      </ng-template>
+    </div>
+    <h5 class="text-xl dark:text-white select-none">{{title}}</h5>
+  </div>
+</ng-template>
+
+<ng-template #addCard>
+  <div
+    class="flex items-center justify-center flex-col space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black cursor-pointer"
+    (click)="onClick()">
+    <div class="max-h-48 max-w-48 overflow-hidden rounded-full">
+      <div class="flex items-center justify-center w-48 h-48 bg-primary-light dark:bg-[#1B2E4B]">
+        <icon-plus class="h-32 w-32 stroke-[#1B2E4B] dark:stroke-primary-light"/>
+      </div>
+    </div>
+    <h5 class="text-xl dark:text-white select-none drag-none">Añadir negocio</h5>
+  </div>
+</ng-template>
