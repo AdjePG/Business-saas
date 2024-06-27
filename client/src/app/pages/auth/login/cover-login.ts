@@ -6,8 +6,8 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from 'src/app/service/app.service';
 import { AuthService } from 'src/app/service/auth/auth.service';
-import { showAlert } from '../../shared/alerts';
-import { ToastType } from '../../shared/types';
+import { showAlert } from 'src/app/shared/alerts';
+import { ToastType } from 'src/app/shared/types';
 
 @Component({
     moduleId: module.id,

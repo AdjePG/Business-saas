@@ -8,7 +8,6 @@ import { RouterModule } from '@angular/router';
 
 //Routes
 import { routes } from './app.route';
-
 import { AppComponent } from './app.component';
 
 // service
@@ -32,13 +31,13 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { IndexComponent } from './index';
 
 // Layouts
-import { AppLayout } from './layouts/app-layout';
-import { AuthLayout } from './layouts/auth-layout';
+import { AppLayout } from './layouts/app-layout/app-layout';
+import { AuthLayout } from './layouts/auth-layout/auth-layout';
 
-import { HeaderComponent } from './layouts/header';
-import { FooterComponent } from './layouts/footer';
-import { SidebarComponent } from './layouts/sidebar';
-import { ThemeCustomizerComponent } from './layouts/theme-customizer';
+import { HeaderComponent } from './layouts/header/header';
+import { FooterComponent } from './layouts/footer/footer';
+import { SidebarComponent } from './layouts/sidebar/sidebar';
+import { ThemeCustomizerComponent } from './layouts/theme-customizer/theme-customizer';
 import { IconModule } from './shared/icon/icon.module';
 import { CardComponent } from './components/card/card.component';
 import { ModalModule } from 'angular-custom-modal';

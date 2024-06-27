@@ -22,14 +22,30 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 
 const routes: Routes = [
-    { path: 'lockscreen', component: CoverLockscreenComponent, title: 'Lockscreen' },
-    { path: 'login', component: CoverLoginComponent, title: 'Log In' },
-    { path: 'reset-password', component: CoverPasswordResetComponent, title: 'Password Reset' },
-    { path: 'signup', component: CoverRegisterComponent, title: 'Sign Up' },
+    { 
+        path: 'lockscreen', 
+        component: CoverLockscreenComponent, title: 
+        'Lockscreen' 
+    },
+    { 
+        path: 'login', 
+        component: CoverLoginComponent, 
+        title: 'Log In' 
+    },
+    { 
+        path: 'reset-password', 
+        component: CoverPasswordResetComponent, 
+        title: 'Password Reset' 
+    },
+    { 
+        path: 'signup', 
+        component: CoverRegisterComponent, 
+        title: 'Sign Up' 
+    }
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes), CommonModule, MenuModule, IconModule,FormsModule,
+    imports: [RouterModule.forChild(routes), CommonModule, MenuModule, IconModule, FormsModule,
         TranslateModule.forChild({
             loader: {
                 provide: TranslateLoader,

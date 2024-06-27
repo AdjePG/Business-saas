@@ -1,13 +1,11 @@
 ﻿import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router, NavigationEnd } from '@angular/router';
-import { AppService } from '../service/app.service';
+import { AppService } from '../../service/app.service';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-    moduleId: module.id,
     selector: 'header',
     templateUrl: './header.html',
     animations: [
@@ -45,8 +43,7 @@ export class HeaderComponent {
         public translate: TranslateService,
         public storeData: Store<any>,
         public router: Router,
-        private appSetting: AppService,
-        private sanitizer: DomSanitizer
+        private appSetting: AppService
     ) {
         this.initStore();
     }

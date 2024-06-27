@@ -1,12 +1,10 @@
-﻿import { animate, style, transition, trigger } from '@angular/animations';
-import { Component } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+﻿import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { slideDownUp } from '../shared/animations';
+import { slideDownUp } from '../../shared/animations';
 
 @Component({
-    moduleId: module.id,
     selector: 'sidebar',
     templateUrl: './sidebar.html',
     animations: [slideDownUp],
