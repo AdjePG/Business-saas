@@ -5,6 +5,7 @@ import { CardType } from './shared/types';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalComponent } from 'angular-custom-modal';
+import { BusinessService } from 'src/app/service/business/business.service';
 
 @Component({
     moduleId: module.id,
@@ -25,29 +26,8 @@ export class IndexComponent implements OnInit {
 
     businessModalForm: FormGroup;
 
-    mockResponse: any = {
-        "status": 200,
-        "message": "Success!",
-        "result": [
-            {
-                "id": 1,
-                "name": "Negocio 1",
-                "photo": "/assets/images/knowledge/image-1.jpg"
-            },
-            {
-                "id": 2,
-                "name": "Negocio 2",
-                "photo": "/assets/images/knowledge/image-8.jpg"
-            },
-            {
-                "id": 3,
-                "name": "Negocio 3",
-                "photo": ""
-            }
-        ]
-    }
 
-    constructor(private formBuilder: FormBuilder, private router: Router) {
+    constructor(private formBuilder: FormBuilder, private router: Router,private businessService: BusinessService) {
         this.businessModalForm = this.formBuilder.group({
             name: ['', Validators.required]
         });
@@ -66,9 +46,16 @@ export class IndexComponent implements OnInit {
     }
 
     getBusiness() {
-        this.listOwnBusiness = this.mockResponse.result
-        this.listSharedBusiness = this.mockResponse.result
-    }
+        this.businessService.getAllBusinesses(3).subscribe(
+          (businesses: Business[]) => {
+            this.listOwnBusiness = businesses;
+            this.listSharedBusiness = businesses;
+          },
+          (error) => {
+            console.error('Error fetching businesses', error);
+          }
+        );
+      }
 
     goToBusiness(id: number) {
         //this.router.navigate([``])

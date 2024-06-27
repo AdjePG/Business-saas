@@ -39,7 +39,7 @@ public class BusinessController {
             @RequestParam Optional<Long> userId) {
 
         APIResponse<List<BusinessDTO>> apiResponse = businessService.getAllBusinesses(userId);
-        
+
         return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
 

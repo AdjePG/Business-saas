@@ -44,8 +44,8 @@
             <h3 class="text-xl font-bold md:text-3xl">Mis negocios</h3>
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <ng-container *ngFor="let business of listOwnBusiness">
-                <card [title]="business.name" [image]="business.photo" (clickEvent)="goToBusiness(business.id)"></card>
+            <ng-container *ngFor="let business of listOwnBusiness | slice:0:4">
+                <card [title]="business.name" [image]="business.imagePath" (clickEvent)="goToBusiness(business.id)"></card>
             </ng-container>
 
             <ng-container *ngIf="listSharedBusiness.length < 4">
@@ -59,8 +59,8 @@
             <h3 class="text-xl font-bold md:text-3xl">Negocios compartidos</h3>
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <ng-container *ngFor="let business of listSharedBusiness">
-                <card [title]="business.name" [image]="business.photo" (clickEvent)="goToBusiness(business.id)"></card>
+            <ng-container *ngFor="let business of listSharedBusiness | slice:0:4">
+                <card [title]="business.name" [image]="business.imagePath" (clickEvent)="goToBusiness(business.id)"></card>
             </ng-container>
 
             <ng-container *ngIf="listSharedBusiness.length < 4">
