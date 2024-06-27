@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 public class CustomerDTO {
+    // region ATTRIBUTES
 
     private Long uuid;
 
@@ -45,8 +46,9 @@ public class CustomerDTO {
 
     @Size(max = 200, message = "La dirección no puede tener más de 200 caracteres")
     private String address;
+    // endregion
 
-    // Getters and Setters
+    // region Getters and Setters
     public Long getUuid() {
         return uuid;
     }
@@ -134,4 +136,6 @@ public class CustomerDTO {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    // endregion
 }

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 
 public class BusinessDTO {
 
+
+    // region ATTRIBUTES
     @NotNull(message = "El UUID del negocio no puede ser nulo")
     //private UUID uuid;
     private Long uuid;
@@ -17,8 +19,9 @@ public class BusinessDTO {
     @NotNull(message = "El UUID del User no puede ser nulo")
     //private UUID uuidUser;
     private Long uuidUser;
+    // endregion
 
-    // Getters y Setters
+    // region Getters y Setters
     public Long getUuid() {
         return uuid;
     }
@@ -42,4 +45,5 @@ public class BusinessDTO {
     public void setUuidUser(Long uuidUser) {
         this.uuidUser = uuidUser;
     }
+    // endregion
 }

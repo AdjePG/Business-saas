@@ -9,7 +9,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "customers")
 public class Customer {
-
+    //region ATTRIBUTES
     @Id
     //@GeneratedValue
     //@Column(columnDefinition = "BINARY(16)")
@@ -46,6 +46,8 @@ public class Customer {
 
     @Column(name = "address", length = 200)
     private String address;
+    //endregion
+    // region GETTERS AND SETTERS
 
     public Long getUuid() {
         return uuid;
@@ -134,4 +136,5 @@ public class Customer {
     public void setAddress(String address) {
         this.address = address;
     }
+    //endregion
 }

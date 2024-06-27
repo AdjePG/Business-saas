@@ -1,12 +1,16 @@
 package com.sass.business.services;
 
+import com.sass.business.dtos.APIResponse;
 import com.sass.business.dtos.business.BusinessDTO;
+import com.sass.business.exceptions.APIResponseException;
 import com.sass.business.mappers.BusinessMapper;
 import com.sass.business.models.Business;
 import com.sass.business.models.User;
 import com.sass.business.repositories.BusinessRepository;
 import com.sass.business.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,10 +30,35 @@ public class BusinessService {
         this.businessMapper = businessMapper;
     }
 
-    public List<BusinessDTO> getAllBusinesses() {
-        return businessRepository.findAll().stream()
-                .map(businessMapper::toDto)
-                .collect(Collectors.toList());
+    public APIResponse<List<BusinessDTO>> getAllBusinesses() {
+
+        APIResponse<List<BusinessDTO>> apiResponse;
+        List<BusinessDTO> businessList;
+
+        try {
+
+            businessList = businessRepository.findAll().stream()
+                    .map(businessMapper::toDto)
+                    .collect(Collectors.toList());
+
+            apiResponse = new APIResponse<>(
+                    HttpStatus.OK.value(),
+                    "Success!",
+                    businessList
+            );
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
+        }
+
+        return apiResponse;
     }
 
     public BusinessDTO getBusinessById(Long uuid) {
