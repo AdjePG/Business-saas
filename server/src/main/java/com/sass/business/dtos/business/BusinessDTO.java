@@ -18,6 +18,8 @@ public class BusinessDTO {
     //private UUID uuidUser;
     private Long uuidUser;
 
+    private String imagePath;
+
     // Getters y Setters
     public Long getUuid() {
         return uuid;
@@ -41,5 +43,13 @@ public class BusinessDTO {
 
     public void setUuidUser(Long uuidUser) {
         this.uuidUser = uuidUser;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
