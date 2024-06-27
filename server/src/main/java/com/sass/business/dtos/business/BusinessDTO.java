@@ -21,6 +21,8 @@ public class BusinessDTO {
     private Long uuidUser;
     // endregion
 
+    private String imagePath;
+
     // region Getters y Setters
     public Long getUuid() {
         return uuid;
@@ -44,6 +46,14 @@ public class BusinessDTO {
 
     public void setUuidUser(Long uuidUser) {
         this.uuidUser = uuidUser;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
     // endregion
 }

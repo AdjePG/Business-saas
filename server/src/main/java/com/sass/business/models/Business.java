@@ -18,7 +18,8 @@ public class Business {
     @Column(name = "name", length = 50)
     private String name;
 
-    // Otros campos
+    @Column(name = "imagePath", length = 250)
+    private String imagePath;
 
     @ManyToOne
     @JoinColumn(name = "uuid_user", referencedColumnName = "uuid")
@@ -51,6 +52,13 @@ public class Business {
         this.user = user;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
     //endregion
 
 }
