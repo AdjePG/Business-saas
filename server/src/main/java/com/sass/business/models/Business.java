@@ -6,6 +6,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "business")
 public class Business {
+    //region ATTRIBUTES
 
     @Id
     //@GeneratedValue
@@ -23,6 +24,9 @@ public class Business {
     @ManyToOne
     @JoinColumn(name = "uuid_user", referencedColumnName = "uuid")
     private User user;
+    //endregion
+
+    // region GETTERS AND SETTERS
 
     public Long getUuid() {
         return uuid;
@@ -55,4 +59,6 @@ public class Business {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
+    //endregion
+
 }

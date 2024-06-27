@@ -62,16 +62,20 @@
                 </div>
                 <div class="w-full max-w-[440px] lg:mt-16">
                     <div class="mb-10">
-                        <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign in
+                        <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">
+                            {{ 'auth.login.title' | translate }}
+
                         </h1>
                         <!-- <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to
                             login</p> -->
                     </div>
                     <form class="space-y-5 dark:text-white" (submit)="signIn(form)" #form="ngForm">
                         <div>
-                            <label for="Email">Email</label>
+                            <label for="Email">
+                                {{ 'auth.login.fields.field_1' | translate }}
+                                </label>
                             <div class="relative text-white-dark">
-                                <input id="Email" type="email" placeholder="Enter Email" name="email"
+                                <input id="Email" type="email" placeholder="{{ 'auth.login.fields.field_1_placeholder' | translate }}" name="email"
                                     class="form-input ps-10 placeholder:text-white-dark" [(ngModel)]="email"
                                     #emailField="ngModel" required email />
                                 <span class="absolute start-4 top-1/2 -translate-y-1/2">
@@ -79,16 +83,18 @@
                                 </span>
                             </div>
                             <div *ngIf="emailField.errors?.['required'] && emailField.touched" class="text-red-500">
-                                Email is required.
+                                {{ 'auth.login.fields.field_1_error_1' | translate }}
                             </div>
                             <div *ngIf="emailField.errors?.['email'] && emailField.touched" class="text-red-500">
-                                Email is not valid.
+                                {{ 'auth.login.fields.field_1_error_2' | translate }}
                             </div>
                         </div>
                         <div>
-                            <label for="Password">Password</label>
+                            <label for="Password">
+                                {{ 'auth.login.fields.field_2' | translate }}
+                            </label>
                             <div class="relative text-white-dark">
-                                <input id="Password" type="password" placeholder="Enter Password" name="password"
+                                <input id="Password" type="password" placeholder="{{ 'auth.login.fields.field_2_placeholder' | translate }}" name="password"
                                     class=" form-input ps-10 placeholder:text-white-dark" [(ngModel)]="password"
                                     #passwordField="ngModel" minlength="8" required />
                                 <span class="absolute start-4 top-1/2 -translate-y-1/2">
@@ -97,12 +103,12 @@
                             </div>
                             <div *ngIf="passwordField.errors?.['required'] && passwordField.touched"
                                 class="text-red-500">
-                                Password is required.
+                                {{ 'auth.login.fields.field_2_error_1' | translate }}
                             </div>
                         </div>
                         <button type="submit" [disabled]="form.invalid"
                             class="btn btn-gradient my-6 w-full border-1 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                            Sign in
+                            {{ 'auth.login.actions.submit' | translate }}
                         </button>
                     </form>
 
@@ -145,10 +151,10 @@
                         </ul>
                     </div> -->
                     <div class="text-center dark:text-white mt-6">
-                        Don't have an account ?
+                        {{ 'auth.login.footer.have_account' | translate }}
                         <a routerLink="/auth/signup"
                             class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                            Sign up
+                            {{ 'auth.login.footer.signIn' | translate }}
                         </a>
                     </div>
                     <!-- <div class="text-center dark:text-white mt-6">
@@ -159,7 +165,8 @@
                         </a>
                     </div> -->
                 </div>
-                <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ currYear }} - Smart Business</p>
+                <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ currYear }} - Nose que poner
+                </p>
             </div>
         </div>
     </div>
