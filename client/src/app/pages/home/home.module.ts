@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { OwnBusinessComponent } from './own-business/own-business.component';
 import { SharedBusinessComponent } from './shared-business/shared-business.component';
 import { IndexComponent } from 'src/app';
+import { CardComponent } from '../../components/card/card.component';
 
 const routes: Routes = [
   { 
