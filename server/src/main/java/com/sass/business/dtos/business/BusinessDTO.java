@@ -1,5 +1,6 @@
 package com.sass.business.dtos.business;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -22,6 +23,8 @@ public class BusinessDTO {
     // endregion
 
     private String imagePath;
+
+    private String description;
 
     // region Getters y Setters
     public Long getUuid() {
@@ -55,5 +58,14 @@ public class BusinessDTO {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     // endregion
 }

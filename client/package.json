@@ -24,6 +24,7 @@
         "@ngx-translate/http-loader": "^7.0.0",
         "angular-custom-modal": "^1.2.0",
         "headlessui-angular": "^0.0.7",
+        "jwt-decode": "^4.0.0",
         "ngx-scrollbar": "^11.0.0",
         "rxjs": "~7.8.0",
         "sweetalert2": "^11.6.13",

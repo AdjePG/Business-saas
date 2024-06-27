@@ -6,6 +6,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalComponent } from 'angular-custom-modal';
 import { BusinessService } from 'src/app/service/business/business.service';
+import { lastValueFrom,firstValueFrom  } from 'rxjs';
+import { getUuidUserFromToken } from 'src/app/shared/token-utils';
 
 @Component({
     moduleId: module.id,
@@ -29,7 +31,10 @@ export class IndexComponent implements OnInit {
 
     constructor(private formBuilder: FormBuilder, private router: Router,private businessService: BusinessService) {
         this.businessModalForm = this.formBuilder.group({
-            name: ['', Validators.required]
+            name: ['', Validators.required],
+            imagePath: ['', Validators.required],
+            description: ['']
+
         });
     }
 
@@ -37,27 +42,61 @@ export class IndexComponent implements OnInit {
         this.getBusiness();
     }
 
-    createBusiness() {
+    async createBusiness() {
         if (this.businessModalForm.invalid) {
-            return;
+          return;
         }
-
-        this.addBusinessModal.close()
-    }
-
-    getBusiness() {
-        this.businessService.getAllBusinesses(3).subscribe(
-          (businesses: Business[]) => {
+    
+        const token = localStorage.getItem('user-auth');
+        const uuidUser = token ? getUuidUserFromToken(token) : null;
+    
+        console.log(uuidUser);
+        if (!uuidUser) {
+          console.error('No se pudo obtener el UUID del usuario');
+          return;
+        }
+    
+        const business: Business = {
+          ...this.businessModalForm.value,
+          uuidUser: uuidUser // Añadir uuidUser al objeto Business
+        };
+    
+        try {
+          const createdBusiness = await firstValueFrom(this.businessService.createBusiness(business));
+          if (createdBusiness) {
+            this.listOwnBusiness.push(createdBusiness); // Actualiza la lista de negocios
+          }
+          this.closeModal();
+        } catch (error) {
+          console.error('Error creating business', error);
+        }
+      }
+    
+    async getBusiness() {
+        try {
+            const businesses: Business[] = await lastValueFrom(this.businessService.getAllBusinesses(3));
             this.listOwnBusiness = businesses;
             this.listSharedBusiness = businesses;
-          },
-          (error) => {
+        } catch (error) {
             console.error('Error fetching businesses', error);
-          }
-        );
-      }
+        }
+    }
 
     goToBusiness(id: number) {
-        //this.router.navigate([``])
+        this.router.navigate([`/business/${id}`]);
     }
+    
+
+    closeModal() {
+        this.businessModalForm.reset();
+        this.addBusinessModal.close();
+    }
+
+    handleBusinessDeleted(id: number) {
+        this.listOwnBusiness = this.listOwnBusiness.filter(business => business.uuid !== id);
+        this.listSharedBusiness = this.listSharedBusiness.filter(business => business.uuid !== id);
+
+    } 
+
+
 }
