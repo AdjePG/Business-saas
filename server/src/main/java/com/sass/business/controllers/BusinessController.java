@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/business")
@@ -27,17 +28,18 @@ public class BusinessController {
         this.businessService = businessService;
     }
 
-    @Operation(summary = "Veure una llista de negocis disponibles")
+    @Operation(summary = "Veure una llista d'empreses, filtrades opcionalment per l'usuari")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    @GetMapping
-    public ResponseEntity<APIResponse<List<BusinessDTO>>> getAllBusinesses() {
+    @GetMapping("/businesses")
+    public ResponseEntity<APIResponse<List<BusinessDTO>>> getAllBusinesses(
+            @RequestParam Optional<Long> userId) {
 
-        APIResponse<List<BusinessDTO>> apiResponse = businessService.getAllBusinesses();
-
+        APIResponse<List<BusinessDTO>> apiResponse = businessService.getAllBusinesses(userId);
+        
         return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
 

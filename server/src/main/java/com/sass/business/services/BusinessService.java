@@ -14,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class BusinessService {
@@ -30,14 +32,19 @@ public class BusinessService {
         this.businessMapper = businessMapper;
     }
 
-    public APIResponse<List<BusinessDTO>> getAllBusinesses() {
+
+    public APIResponse<List<BusinessDTO>> getAllBusinesses(Optional<Long> userId) {
 
         APIResponse<List<BusinessDTO>> apiResponse;
         List<BusinessDTO> businessList;
 
         try {
+            // Filtrar por userId si está presente, de lo contrario, obtener todos los negocios
+            Stream<Business> businessStream = userId.isPresent() ?
+                    businessRepository.findByUserUuid(userId.get()).stream() :
+                    businessRepository.findAll().stream();
 
-            businessList = businessRepository.findAll().stream()
+            businessList = businessStream
                     .map(businessMapper::toDto)
                     .collect(Collectors.toList());
 
@@ -60,6 +67,7 @@ public class BusinessService {
 
         return apiResponse;
     }
+
 
     public BusinessDTO getBusinessById(Long uuid) {
         return businessRepository.findById(uuid)
