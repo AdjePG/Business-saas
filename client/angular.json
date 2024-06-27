@@ -28,7 +28,10 @@
                             "src/assets/css/app.css"
                         ],
                         "scripts": [],
-                        "allowedCommonJsDependencies": []
+                        "allowedCommonJsDependencies": [
+                          "bezier-easing",
+                          "sweetalert2"
+                        ]
                     },
                     "configurations": {
                         "production": {
