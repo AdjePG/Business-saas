@@ -3,7 +3,7 @@
 <ng-template #infoCard>
   <div
     class="space-y-5 rounded-md border border-gray-300 bg-white p-5 shadow-lg transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer dark:border-gray-700 dark:bg-gray-800"
-    (click)="onClick()">
+    >
     <div class="max-h-56 overflow-hidden rounded-md">
       <!-- Imagen de un espacio de coworking -->
       <img draggable="false" *ngIf="business.imagePath; else emptyImage" [src]='business.imagePath' [alt]="'Portrait of \'' + business.name + '\''"
@@ -50,7 +50,7 @@
 <ng-template #addCard>
   <div
     class="flex items-center justify-center flex-col space-y-5 rounded-lg border border-gray-200 bg-gradient-to-br from-blue-100 to-blue-300 dark:from-gray-700 dark:to-gray-900 p-6 shadow-md transform transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer h-full"
-    (click)="onClick()">
+    (click)="addBusinessModal.open()">
     <div class="flex items-center justify-center w-24 h-24 bg-white dark:bg-gray-800 rounded-full shadow-inner">
       <icon-plus class="h-12 w-12 stroke-blue-500 dark:stroke-blue-300"/>
     </div>
@@ -59,6 +59,40 @@
 </ng-template>
 
 
-
+<modal #addBusinessModal class="no-footer modal-top large-modal">
+  <ng-template #modalHeader>
+    <div class="!font-medium">Crear empresa</div>
+  </ng-template>
+  <ng-template #modalBody>
+    <form [formGroup]="businessModalForm" class="text-sm" (ngSubmit)="createBusiness()">
+      <div class="mb-5">
+        <label for="name">Nombre del negocio</label>
+        <input id="name" type="text" placeholder="Introduce un nombre" class="form-input" formControlName="name" />
+        <div *ngIf="businessModalForm.controls['name'].invalid && businessModalForm.controls['name'].dirty"
+             class="text-red-500">
+          Tienes que poner un nombre.
+        </div>
+      </div>
+      <div class="mb-5">
+        <label for="imagePath">Ruta de la imagen</label>
+        <input id="imagePath" type="text" placeholder="Introduce la ruta de la imagen" class="form-input"
+               formControlName="imagePath" />
+        <div *ngIf="businessModalForm.controls['imagePath'].invalid && businessModalForm.controls['imagePath'].dirty"
+             class="text-red-500">
+          Tienes que poner una ruta de imagen.
+        </div>
+      </div>
+      <div class="mb-5">
+        <label for="description">Descripción</label>
+        <textarea id="description" placeholder="Introduce una descripción" class="form-input"
+                  formControlName="description"></textarea>
+      </div>
+      <div class="mt-8 flex items-center justify-end">
+        <button type="button" class="btn btn-outline-danger" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Crear</button>
+      </div>
+    </form>
+  </ng-template>
+</modal>
 
 

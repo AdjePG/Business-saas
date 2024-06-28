@@ -1,1 +1,22 @@
-<p>shared-business works!</p>
+<div>
+    <!-- Sección de Negocios Colaboradores -->
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; background: linear-gradient(to top left, var(--bg-start), var(--bg-end)); padding: 40px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); transition: background 0.3s ease;" class="md:flex-row theme-dark">
+        <div style="flex: 1; text-align: center; transition: color 0.3s ease;" class="md:text-left">
+            <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 20px; transition: color 0.3s ease;">Conoce Nuestros Negocios Colaboradores</h3>
+            <p style="font-size: 16px; margin-bottom: 20px; transition: color 0.3s ease;">Descubre cómo colaboramos con diversas empresas, desde startups innovadoras hasta corporaciones establecidas. Explora sus perfiles para obtener más información.</p>
+            <button style="margin-top: 20px; padding: 10px 20px; background-color: var(--button-bg); color: var(--button-text); border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s, color 0.3s;" onmouseover="this.style.backgroundColor='var(--button-hover)'" onmouseout="this.style.backgroundColor='var(--button-bg)'">Explorar Colaboraciones</button>
+        </div>
+    </div>
+
+        
+      <!-- Sección Mis Negocios -->
+      <div class="mt-10">
+          <h3 class="text-xl md:text-3xl font-bold text-gray-800 dark:text-white">Mis negocios</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-5">
+              <ng-container *ngFor="let business of listOwnBusiness">
+                  <card [business]="business"></card>
+              </ng-container>
+          </div>
+      </div>
+    </div>
+    

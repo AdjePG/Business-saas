@@ -1,73 +1,28 @@
 <div>
-    <div
-        class="flex flex-col-reverse items-center justify-between gap-5 rounded-md bg-gradient-to-tl from-[rgba(234,241,255,0.44)] to-[rgba(234,241,255,0.96)] px-6 py-2.5 dark:from-[rgba(14,23,38,0.44)] dark:to-[#0E1726] md:flex-row xl:px-16"
-    >
-        <div class="flex-1 py-3.5 text-center md:text-start">
-            <h3 class="mb-2 text-xl font-bold dark:text-white md:text-2xl">Didn’t find any solutions?</h3>
-            <div class="text-lg font-medium text-white-dark">
-                Loaded with awesome features like documentation, knowledge base forum, domain transfer, affiliates etc.
-            </div>
-            <div class="mt-8 flex justify-center md:justify-start lg:mt-16">
-                <button type="button" class="btn btn-primary">Raise support tickets</button>
-            </div>
-        </div>
-        <div class="w-52 max-w-xs lg:w-full">
-            <img
-                src="/assets/images/knowledge/find-solution.svg"
-                alt="find-solution"
-                class="w-full object-cover rtl:rotate-y-180 dark:brightness-[2.59] dark:grayscale-[83%]"
-            />
-        </div>
-    </div>
-    
-    <div class="mt-10">
-        <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-            <h3 class="text-xl font-bold md:text-3xl">Mis negocios</h3>
-        </div>
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <ng-container *ngFor="let business of listOwnBusiness">
-                <card [business]="business" (deleteEvent)="handleBusinessDeleted($event)"></card>
-            </ng-container>
+<!-- Sección Visualización de Negocios -->
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; background: linear-gradient(to top left, var(--bg-start), var(--bg-end)); padding: 40px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); transition: background 0.3s ease;" class="md:flex-row theme-dark">
+  <div style="flex: 1; text-align: center; transition: color 0.3s ease;" class="md:text-left">
+      <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 20px; transition: color 0.3s ease;">Explora los Negocios en Nuestra Plataforma</h3>
+      <p style="font-size: 16px; margin-bottom: 20px; transition: color 0.3s ease;">Descubre la diversidad de negocios, con opciones desde startups hasta grandes corporaciones. Cada perfil ofrece una visión detallada de la empresa.</p>
+      <button style="margin-top: 20px; padding: 10px 20px; background-color: var(--button-bg); color: var(--button-text); border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s, color 0.3s;" onmouseover="this.style.backgroundColor='var(--button-hover)'" onmouseout="this.style.backgroundColor='var(--button-bg)'">Ver Negocios</button>
+  </div>
+</div>
 
-            <ng-container *ngIf="listSharedBusiness.length < 4">
-                <card [cardType]="cardType.ADD" (clickEvent)="addBusinessModal.open()"></card>
-            </ng-container>
-        </div>
-    </div>
 
-    <modal #addBusinessModal class="no-footer modal-top large-modal">
-        <ng-template #modalHeader>
-          <div class="!font-medium">Crear empresa</div>
-        </ng-template>
-        <ng-template #modalBody>
-          <form [formGroup]="businessModalForm" class="text-sm" (ngSubmit)="createBusiness()">
-            <div class="mb-5">
-              <label for="name">Nombre del negocio</label>
-              <input id="name" type="text" placeholder="Introduce un nombre" class="form-input" formControlName="name" />
-              <div *ngIf="businessModalForm.controls['name'].invalid && businessModalForm.controls['name'].dirty"
-                   class="text-red-500">
-                Tienes que poner un nombre.
-              </div>
-            </div>
-            <div class="mb-5">
-              <label for="imagePath">Ruta de la imagen</label>
-              <input id="imagePath" type="text" placeholder="Introduce la ruta de la imagen" class="form-input"
-                     formControlName="imagePath" />
-              <div *ngIf="businessModalForm.controls['imagePath'].invalid && businessModalForm.controls['imagePath'].dirty"
-                   class="text-red-500">
-                Tienes que poner una ruta de imagen.
-              </div>
-            </div>
-            <div class="mb-5">
-              <label for="description">Descripción</label>
-              <textarea id="description" placeholder="Introduce una descripción" class="form-input"
-                        formControlName="description"></textarea>
-            </div>
-            <div class="mt-8 flex items-center justify-end">
-              <button type="button" class="btn btn-outline-danger" (click)="closeModal()">Cancelar</button>
-              <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Crear</button>
-            </div>
-          </form>
-        </ng-template>
-      </modal>
+
+
+
+  <!-- Sección Mis Negocios -->
+  <div class="mt-10">
+      <h3 class="text-xl md:text-3xl font-bold text-gray-800 dark:text-white">Mis negocios</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-5">
+          <ng-container *ngFor="let business of listOwnBusiness">
+              <card [business]="business" (deleteEvent)="handleBusinessDeleted($event)"></card>
+          </ng-container>
+          <ng-container>
+              <card [cardType]="cardType.ADD"></card>
+          </ng-container>
+      </div>
+  </div>
+
 </div>

@@ -4,6 +4,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { AppService } from '../../service/app.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { TranslateService } from '@ngx-translate/core';
+import { UserService } from 'src/app/service/user/user.service';
+import { User } from 'src/app/models/user';
 
 @Component({
     selector: 'header',
@@ -16,6 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
     ],
 })
 export class HeaderComponent {
+    userData: User | null = null;
     store: any;
     search = false;
     notifications = [
@@ -43,7 +46,8 @@ export class HeaderComponent {
         public translate: TranslateService,
         public storeData: Store<any>,
         public router: Router,
-        private appSetting: AppService
+        private appSetting: AppService,
+        private userService: UserService
     ) {
         this.initStore();
     }
@@ -63,6 +67,9 @@ export class HeaderComponent {
                 this.setActiveDropdown();
             }
         });
+        this.userService.getUserData().subscribe(userData => {
+            this.userData = userData;
+          });
     }
 
     setActiveDropdown() {
