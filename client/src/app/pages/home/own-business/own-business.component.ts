@@ -83,7 +83,6 @@ export class OwnBusinessComponent implements OnInit {
       this.router.navigate([`/business/${id}`]);
   }
   
-
   closeModal() {
       this.businessModalForm.reset();
       this.addBusinessModal.close();
@@ -92,8 +91,5 @@ export class OwnBusinessComponent implements OnInit {
   handleBusinessDeleted(id: number) {
       this.listOwnBusiness = this.listOwnBusiness.filter(business => business.uuid !== id);
       this.listSharedBusiness = this.listSharedBusiness.filter(business => business.uuid !== id);
-
-  } 
-
-
+  }
 }

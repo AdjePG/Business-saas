@@ -4,7 +4,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { OwnBusinessComponent } from './own-business/own-business.component';
 import { SharedBusinessComponent } from './shared-business/shared-business.component';
 import { IndexComponent } from 'src/app';
-import { CardComponent } from '../../components/card/card.component';
+import { BusinessCardComponent } from '../../components/business-card/business-card.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { IconModule } from 'src/app/shared/icon/icon.module';
+import { ModalModule } from 'angular-custom-modal';
 
 const routes: Routes = [
   { 
@@ -27,8 +30,17 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
+    FormsModule,
+    IconModule,
+    ModalModule
   ],
-  declarations: []
+  declarations: [
+    IndexComponent,
+    OwnBusinessComponent,
+    SharedBusinessComponent,
+    BusinessCardComponent
+  ]
 })
 export class HomeModule { }

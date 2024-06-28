@@ -39,7 +39,6 @@ import { FooterComponent } from './layouts/footer/footer';
 import { SidebarComponent } from './layouts/sidebar/sidebar';
 import { ThemeCustomizerComponent } from './layouts/theme-customizer/theme-customizer';
 import { IconModule } from './shared/icon/icon.module';
-import { CardComponent } from './components/card/card.component';
 import { ModalModule } from 'angular-custom-modal';
 
 @NgModule({
@@ -67,7 +66,7 @@ import { ModalModule } from 'angular-custom-modal';
         IconModule,
         ModalModule
     ],
-    declarations: [AppComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, IndexComponent, AppLayout, AuthLayout, IndexComponent, CardComponent],
+    declarations: [AppComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, AppLayout, AuthLayout],
     providers: [AppService, Title],
     bootstrap: [AppComponent],
 })
