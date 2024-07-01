@@ -24,6 +24,10 @@ export class UserService {
     }
   }
 
+  clearUserData(): void {
+    this.userSubject.next(null);
+  }
+
   private getUserDataFromToken(token: string): User | null {
     try {
       const decoded: any = jwtDecode(token);

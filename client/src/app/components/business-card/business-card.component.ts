@@ -19,6 +19,8 @@ export class BusinessCardComponent implements OnInit {
 
   @Input() cardType: CardType = CardType.INFO
   @Input() business!: Business;
+  @Input() isOwnBusiness: boolean = false;
+
   @Output() deleteEvent: EventEmitter<number> = new EventEmitter<number>();
 
   userData: User | null = null;

@@ -109,7 +109,8 @@ export class HeaderComponent {
     }
 
     logOut() {
-        localStorage.removeItem("user-auth")
+        localStorage.removeItem("user-auth");
+        this.userService.clearUserData();
         this.router.navigate(['auth/login'])
     }
 }

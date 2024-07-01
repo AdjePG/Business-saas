@@ -45,7 +45,7 @@
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <ng-container *ngFor="let business of listOwnBusiness | slice:0:4">
-                <card [business]="business" (deleteEvent)="handleBusinessDeleted($event)"></card>
+                <card [business]="business"  [isOwnBusiness]="true" (deleteEvent)="handleBusinessDeleted($event)"></card>
             </ng-container>
 
             <ng-container *ngIf="listSharedBusiness.length < 4">
@@ -60,7 +60,7 @@
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <ng-container *ngFor="let business of listSharedBusiness | slice:0:4">
-                <card [business]="business" (deleteEvent)="handleBusinessDeleted($event)"></card>
+                <card [business]="business"  [isOwnBusiness]="false" (deleteEvent)="handleBusinessDeleted($event)"></card>
             </ng-container>
 
             <ng-container *ngIf="listSharedBusiness.length < 4">
