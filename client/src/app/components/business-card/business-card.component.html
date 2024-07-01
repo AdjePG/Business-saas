@@ -19,7 +19,7 @@
 
     <div class="mt-2 flex items-center justify-between">
       <!-- Botón de eliminar -->
-      <button type="button" class="text-red-600 hover:text-red-800" (click)="deleteBusiness()">
+      <button type="button" class="text-red-600 hover:text-red-800" (click)="deleteBusinessModal.open()">
         <svg *ngIf="isOwnBusiness" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
           <path d="M18.8334 8.5L18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
@@ -88,4 +88,49 @@
   </ng-template>
 </modal>
 
+<modal #editBusinessModal class="no-footer modal-top large-modal">
+  <ng-template #modalHeader>
+    <div class="!font-medium">Editar empresa</div>
+  </ng-template>
+  <ng-template #modalBody>
+    <form [formGroup]="businessModalForm" class="text-sm" (ngSubmit)="updateBusiness()">
+      <div class="mb-5">
+        <label for="name">Nombre del negocio</label>
+        <input id="name" type="text" placeholder="Introduce un nombre" class="form-input" formControlName="name" />
+        <div *ngIf="businessModalForm.controls['name'].invalid && businessModalForm.controls['name'].dirty"
+             class="text-red-500">
+          Tienes que poner un nombre.
+        </div>
+      </div>
+      <div class="mb-5">
+        <label for="imagePath">Ruta de la imagen</label>
+        <input id="imagePath" type="text" placeholder="Introduce la ruta de la imagen" class="form-input"
+               formControlName="imagePath" />
+      </div>
+      <div class="mb-5">
+        <label for="description">Descripción</label>
+        <textarea id="description" placeholder="Introduce una descripción" class="form-input"
+                  formControlName="description"></textarea>
+      </div>
+      <div class="mt-8 flex items-center justify-end">
+        <button type="button" class="btn btn-outline-danger" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Crear</button>
+      </div>
+    </form>
+  </ng-template>
+</modal>
 
+<modal #deleteBusinessModal class="modal-top large-modal">
+  <ng-template #modalHeader>
+    <div class="!font-medium">Eliminar empresa</div>
+  </ng-template>
+  <ng-template #modalBody>
+    <p>
+      ¿Está seguro de que quiere eliminar este negocio? Tendrá un máximo de 48 para recuperarlo contactando con soporte, si no, se eliminará de forma permanente y no se podrá recuperar.
+    </p>
+  </ng-template>
+  <ng-template #modalFooter>
+      <button type="button" (click)="deleteBusinessModal.close()" class="btn btn-outline-primary">Cancelar</button>
+      <button type="button" (click)="deleteBusiness()" class="btn btn-danger ltr:ml-4 rtl:mr-4">Eliminar</button>
+  </ng-template>
+</modal>

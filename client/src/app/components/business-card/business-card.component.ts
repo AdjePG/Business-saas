@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output,ViewChild, OnInit } from '@angular/core';
-import { CardType } from 'src/app/shared/types';
+import { CardModalType, CardType } from 'src/app/shared/types';
 import { BusinessService } from 'src/app/service/business/business.service';
 import { Business } from '../../models/business';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalComponent } from 'angular-custom-modal';
-import { firstValueFrom  } from 'rxjs';
+import { Observable, firstValueFrom  } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/service/user/user.service';
 
@@ -16,20 +16,27 @@ import { UserService } from 'src/app/service/user/user.service';
 })
 export class BusinessCardComponent implements OnInit {
   @ViewChild('addBusinessModal') addBusinessModal!: ModalComponent;
+  @ViewChild('deleteBusinessModal') deleteBusinessModal!: ModalComponent;
 
   @Input() cardType: CardType = CardType.INFO
   @Input() business!: Business;
   @Input() isOwnBusiness: boolean = false;
 
-  @Output() deleteEvent: EventEmitter<number> = new EventEmitter<number>();
+  @Output() deleteEvent: EventEmitter<string> = new EventEmitter<string>();
   @Output() addEvent: EventEmitter<Business> = new EventEmitter<Business>();
 
+  cardModalType: typeof CardModalType = CardModalType;
   userData: User | null = null;
   listOwnBusiness: Business[] = [];
   listSharedBusiness: Business[] = [];
   businessModalForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private router: Router,private businessService: BusinessService,private userService: UserService) {
+  constructor(
+    private formBuilder: FormBuilder, 
+    private router: Router,
+    private businessService: BusinessService,
+    private userService: UserService
+  ) {
     this.businessModalForm = this.formBuilder.group({
         name: ['', Validators.required],
         imagePath: [''],
@@ -47,6 +54,27 @@ export class BusinessCardComponent implements OnInit {
     return this.cardType === CardType.INFO
   }
 
+  openModal(modal : CardModalType, business? : Business) {
+    if (modal = CardModalType.ADD) {
+      this.businessModalForm = this.formBuilder.group({
+        name: ['', Validators.required],
+        imagePath: [''],
+        description: ['']
+      });
+    } else if (modal = CardModalType.UPDATE) {
+      this.businessModalForm = this.formBuilder.group({
+        name: [business?.name, Validators.required],
+        imagePath: [business?.imagePath],
+        description: [business?.description]
+      });
+    }
+  }
+
+  closeModal() {
+    this.businessModalForm.reset();
+    this.addBusinessModal.close();
+  }
+
   async createBusiness() {
     if (this.businessModalForm.invalid) {
       return;
@@ -56,16 +84,18 @@ export class BusinessCardComponent implements OnInit {
       console.error('No se pudo obtener el UUID del usuario');
       return;
     }
+
     const business: Business = {
       ...this.businessModalForm.value,
-      uuidUser: this.userData.uuid // Añadir uuidUser al objeto Business
+      uuidUser: this.userData.uuid
     };
 
     try {
-      const createdBusiness = await firstValueFrom(this.businessService.createBusiness(business));
+      let createdBusiness = (await firstValueFrom(this.businessService.createBusiness(business))).result;
+
       if (createdBusiness) {
-        this.listOwnBusiness.push(createdBusiness);
-        //this.addEvent.emit(createdBusiness);
+        createdBusiness = await this.checkImage(createdBusiness);
+        this.addEvent.emit(createdBusiness);
         this.closeModal();
       }
     } catch (error) {
@@ -73,22 +103,55 @@ export class BusinessCardComponent implements OnInit {
     }
   }
 
-  
-  goToBusiness(id: number) {
-      this.router.navigate([`/business/${id}`]);
+  async updateBusiness() {
+    if (this.businessModalForm.invalid) {
+      return;
+    }
+
+    if (!this.userData?.uuid) {
+      console.error('No se pudo obtener el UUID del usuario');
+      return;
+    }
+
+    const business: Business = {
+      ...this.businessModalForm.value,
+      uuidUser: this.userData.uuid
+    };
+
+    try {
+      let createdBusiness = (await firstValueFrom(this.businessService.createBusiness(business))).result;
+
+      if (createdBusiness) {
+        createdBusiness = await this.checkImage(createdBusiness);
+        this.addEvent.emit(createdBusiness);
+        this.closeModal();
+      }
+    } catch (error) {
+      console.error('Error creating business', error);
+    }
   }
 
   async deleteBusiness() {
     try {
       await firstValueFrom(this.businessService.deleteBusiness(this.business.uuid));
       this.deleteEvent.emit(this.business.uuid);
+      this.deleteBusinessModal.close();
     } catch (error) {
       console.error('Error deleting business', error);
     }
   }
 
-  closeModal() {
-    this.businessModalForm.reset();
-    this.addBusinessModal.close();
+  goToBusiness(id: string) {
+    this.router.navigate([`/business/${id}`]);
+}
+
+  checkImage(business: Business) {
+    const img = new Image();
+    img.src = business.imagePath;
+    img.onerror = () => {
+      business.imagePath = '';
+    };
+
+    return business
   }
 }

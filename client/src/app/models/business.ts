@@ -1,5 +1,5 @@
 export interface Business {
-  uuid: number
+  uuid: string,
   name: string,
   description: string,
   imagePath: string | ""

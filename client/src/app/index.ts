@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { slideDownUp } from './shared/animations';
 import { Business } from './models/business';
 import { CardType } from './shared/types';
-import { Router } from '@angular/router';
-import { ModalComponent } from 'angular-custom-modal';
 import { BusinessService } from 'src/app/service/business/business.service';
 import { lastValueFrom  } from 'rxjs';
 import { UserService } from 'src/app/service/user/user.service';
@@ -26,7 +24,6 @@ export class IndexComponent implements OnInit {
     listOwnBusiness: Business[] = [];
     listSharedBusiness: Business[] = [];
 
-
     constructor(private businessService: BusinessService,private userService: UserService) {
     }
 
@@ -46,15 +43,20 @@ export class IndexComponent implements OnInit {
             }
 
             const businesses: Business[] = await lastValueFrom(this.businessService.getAllBusinesses(this.userData.uuid));
-            this.listOwnBusiness = businesses;
-            this.listSharedBusiness = businesses;
+            this.listOwnBusiness = [...businesses];
+            this.listSharedBusiness = [...businesses];
         } catch (error) {
             console.error('Error fetching businesses', error);
         }
     }
   
-  handleBusinessDeleted(id: number) {
-      this.listOwnBusiness = this.listOwnBusiness.filter(business => business.uuid !== id);
-      this.listSharedBusiness = this.listSharedBusiness.filter(business => business.uuid !== id);
+  handleBusinessDeleted(uuid: string) {
+      this.listOwnBusiness = this.listOwnBusiness.filter(business => business.uuid !== uuid);
+      this.listSharedBusiness = this.listSharedBusiness.filter(business => business.uuid !== uuid);
+  }
+
+  handleBusinessAdded(business: Business) {
+    this.listOwnBusiness.push(business);
+    this.listSharedBusiness.push(business);
   }
 }

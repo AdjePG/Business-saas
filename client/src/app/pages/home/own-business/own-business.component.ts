@@ -50,7 +50,7 @@ export class OwnBusinessComponent implements OnInit {
       }
   }
 
-  handleBusinessDeleted(id: number) {
+  handleBusinessDeleted(id: string) {
       this.listOwnBusiness = this.listOwnBusiness.filter(business => business.uuid !== id);
       this.listSharedBusiness = this.listSharedBusiness.filter(business => business.uuid !== id);
   }

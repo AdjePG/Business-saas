@@ -2,11 +2,19 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { $themeConfig } from '../theme.config';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable()
 export class AppService {
     storeData: any;
-    constructor(public translate: TranslateService, public store: Store<any>) {
+    constructor(
+        public translate: TranslateService, 
+        public store: Store<any>,
+        private http: HttpClient
+    ) {
         this.initStoreData();
     }
 
