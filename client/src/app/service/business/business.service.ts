@@ -13,7 +13,7 @@ export class BusinessService {
 
   constructor(private http: HttpClient) { }
 
-  getAllBusinesses(userId?: number): Observable<Business[]> {
+  getAllBusinesses(userId?: string): Observable<Business[]> {
     let url = this.apiUrl;
     if (userId) {
       url += `?userId=${userId}`;
@@ -29,13 +29,13 @@ export class BusinessService {
     );
   }
 
-  createBusiness(business: Business): Observable<Business> {
+  createBusiness(business: Business): Observable<ApiResponse<Business>> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem("user-auth")}`
     });
 
-    return this.http.post<Business>(this.apiUrl, business, { headers });
+    return this.http.post<ApiResponse<Business>>(this.apiUrl, business, { headers });
   }
 
   getBusinessById(uuid: number): Observable<Business> {
@@ -44,15 +44,15 @@ export class BusinessService {
       'Authorization': `Bearer ${localStorage.getItem("user-auth")}`
     });
 
-    return this.http.get<Business>(`${this.apiUrl}/${uuid}`, { headers });
+    return this.http.get<Business>(`${this.apiUrl}${uuid}`, { headers });
   }
 
-  deleteBusiness(id: number): Observable<void> {
+  deleteBusiness(id: string): Observable<void> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem("user-auth")}`
     });
 
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.delete<void>(`${this.apiUrl}${id}`, { headers });
   }
 }
