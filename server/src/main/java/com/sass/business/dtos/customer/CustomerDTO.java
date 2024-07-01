@@ -11,10 +11,10 @@ import java.util.UUID;
 public class CustomerDTO {
     // region ATTRIBUTES
 
-    private Long uuid;
+    private UUID uuid;
 
     @NotNull(message = "El UUID del negocio no puede ser nulo")
-    private Long uuidBusiness;
+    private UUID uuidBusiness;
 
     @NotEmpty(message = "El nombre no puede ser nulo")
     @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
@@ -46,22 +46,24 @@ public class CustomerDTO {
 
     @Size(max = 200, message = "La dirección no puede tener más de 200 caracteres")
     private String address;
+
     // endregion
 
-    // region Getters and Setters
-    public Long getUuid() {
+    // region GETTERS AND SETTERS
+
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(Long uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
-    public Long getUuidBusiness() {
+    public UUID getUuidBusiness() {
         return uuidBusiness;
     }
 
-    public void setUuidBusiness(Long uuidBusiness) {
+    public void setUuidBusiness(UUID uuidBusiness) {
         this.uuidBusiness = uuidBusiness;
     }
 

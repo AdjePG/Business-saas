@@ -4,16 +4,28 @@ import com.sass.business.dtos.customer.CreateCustomerDTO;
 import com.sass.business.dtos.customer.CustomerDTO;
 import com.sass.business.models.Business;
 import com.sass.business.models.Customer;
+import com.sass.business.others.UuidConverterUtil;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CustomerMapper {
+    // region INJECTED DEPENDENCIES
+
+    private UuidConverterUtil uuidConverterUtil;
+
+    public CustomerMapper(
+            UuidConverterUtil uuidConverterUtil
+    ) {
+        this.uuidConverterUtil = uuidConverterUtil;
+    }
+
+    // endregion
 
     // Convierte de entidad a DTO
     public CustomerDTO toDto(Customer customer) {
         CustomerDTO dto = new CustomerDTO();
-        dto.setUuid(customer.getUuid());
-        dto.setUuidBusiness(customer.getBusiness().getUuid());
+        dto.setUuid(uuidConverterUtil.binaryToUuid(customer.getUuid()));
+        dto.setUuidBusiness(uuidConverterUtil.binaryToUuid(customer.getBusiness().getUuid()));
         dto.setName(customer.getName());
         dto.setSurname(customer.getSurname());
         dto.setTaxName(customer.getTaxName());
@@ -45,7 +57,7 @@ public class CustomerMapper {
     // Convierte de CustomerDTO a entidad
     public Customer toModel(CustomerDTO dto, Business business) {
         Customer customer = new Customer();
-        customer.setUuid(dto.getUuid());
+        customer.setUuid(uuidConverterUtil.uuidToBytes(dto.getUuid()));
         customer.setBusiness(business);
         customer.setName(dto.getName());
         customer.setSurname(dto.getSurname());

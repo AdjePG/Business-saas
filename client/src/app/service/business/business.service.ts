@@ -9,14 +9,12 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class BusinessService {
-
-  private apiUrl = 'http://127.0.0.1:8080/api/business';
+  private apiUrl = 'http://127.0.0.1:8080/api/businesses/';
 
   constructor(private http: HttpClient) { }
 
-
   getAllBusinesses(userId?: number): Observable<Business[]> {
-    let url = this.apiUrl+'/businesses';
+    let url = this.apiUrl;
     if (userId) {
       url += `?userId=${userId}`;
     }
@@ -26,7 +24,7 @@ export class BusinessService {
       'Authorization': `Bearer ${localStorage.getItem("user-auth")}`
     });
 
-    return this.http.get<ApiResponse<Business[]>>(url, { headers }).pipe(
+    return this.http.get<ApiResponse<Business[]>>(url, { headers, withCredentials: true }).pipe(
       map((response: ApiResponse<Business[]>) => response.result)
     );
   }
@@ -57,6 +55,4 @@ export class BusinessService {
 
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
   }
-
-
 }

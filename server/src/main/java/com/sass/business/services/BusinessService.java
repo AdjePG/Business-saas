@@ -6,52 +6,68 @@ import com.sass.business.exceptions.APIResponseException;
 import com.sass.business.mappers.BusinessMapper;
 import com.sass.business.models.Business;
 import com.sass.business.models.User;
+import com.sass.business.others.AuthUtil;
+import com.sass.business.others.UuidConverterUtil;
 import com.sass.business.repositories.BusinessRepository;
 import com.sass.business.repositories.UserRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class BusinessService {
+    // region INJECTED DEPENDENCIES
 
     private final BusinessRepository businessRepository;
     private final UserRepository userRepository;
     private final BusinessMapper businessMapper;
+    private final AuthUtil authUtil;
+    private final UuidConverterUtil uuidConverterUtil;
 
-    @Autowired
-    public BusinessService(BusinessRepository businessRepository, UserRepository userRepository, BusinessMapper businessMapper) {
+    public BusinessService(
+            BusinessRepository businessRepository,
+            UserRepository userRepository,
+            BusinessMapper businessMapper,
+            AuthUtil authUtil,
+            UuidConverterUtil uuidConverterUtil
+    ) {
         this.businessRepository = businessRepository;
         this.userRepository = userRepository;
         this.businessMapper = businessMapper;
+        this.authUtil = authUtil;
+        this.uuidConverterUtil = uuidConverterUtil;
     }
 
+    // endregion
 
-    public APIResponse<List<BusinessDTO>> getAllBusinesses(Optional<Long> userId) {
+    // region SERVICE METHODS
 
+    public APIResponse<List<BusinessDTO>> getBusinesses(Optional<UUID> userId) {
         APIResponse<List<BusinessDTO>> apiResponse;
-        List<BusinessDTO> businessList;
+        List<BusinessDTO> businessesDTO;
 
         try {
             // Filtrar por userId si está presente, de lo contrario, obtener todos los negocios
             Stream<Business> businessStream = userId.isPresent() ?
-                    businessRepository.findByUserUuid(userId.get()).stream() :
+                    businessRepository.findByUserUuid(uuidConverterUtil.uuidToBytes(userId.get())).stream() :
                     businessRepository.findAll().stream();
 
-            businessList = businessStream
+            businessesDTO = businessStream
                     .map(businessMapper::toDto)
                     .collect(Collectors.toList());
 
             apiResponse = new APIResponse<>(
                     HttpStatus.OK.value(),
                     "Success!",
-                    businessList
+                    businessesDTO
             );
         } catch (APIResponseException exception) {
             apiResponse = new APIResponse<>(
@@ -68,33 +84,163 @@ public class BusinessService {
         return apiResponse;
     }
 
+    public APIResponse<BusinessDTO> getBusinessById(UUID uuid) {
+        Optional<BusinessDTO> businessDTO;
+        APIResponse<BusinessDTO> apiResponse;
 
-    public BusinessDTO getBusinessById(Long uuid) {
-        return businessRepository.findById(uuid)
-                .map(businessMapper::toDto)
-                .orElse(null);
+        try {
+            businessDTO = businessRepository.findById(uuidConverterUtil.uuidToBytes(uuid))
+                    .map(businessMapper::toDto);
+
+            if (businessDTO.isEmpty()) {
+                throw new APIResponseException("Business not found", HttpStatus.NOT_FOUND.value());
+            }
+
+            apiResponse = new APIResponse<>(
+                    HttpStatus.OK.value(),
+                    "Success!",
+                    businessDTO.get()
+            );
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
+        }
+
+        return apiResponse;
     }
 
-    public BusinessDTO createBusiness(BusinessDTO businessDTO) {
-        User user = userRepository.findById(businessDTO.getUuidUser())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user UUID"));
-        Business business = businessMapper.toModal(businessDTO, user);
-        Business savedBusiness = businessRepository.save(business);
-        return businessMapper.toDto(savedBusiness);
+    public APIResponse<BusinessDTO> createBusiness(String token, BusinessDTO businessDTO) {
+        APIResponse<BusinessDTO> apiResponse;
+        UUID authUserUUID;
+        Optional<User> userById;
+        User user;
+        Business business;
+
+        try {
+            authUserUUID = UUID.fromString(authUtil.extractClaim(token, "uuid"));
+            userById = userRepository.findById(uuidConverterUtil.uuidToBytes(authUserUUID));
+
+            if (userById.isEmpty()) {
+                throw new APIResponseException("User not found", HttpStatus.NOT_FOUND.value());
+            }
+
+            user = userById.get();
+
+            business = businessMapper.toModel(businessDTO, user);
+            business = businessRepository.save(business);
+
+            apiResponse = new APIResponse<>(
+                    HttpStatus.OK.value(),
+                    "Success!",
+                    businessMapper.toDto(business)
+            );
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
+        }
+
+        return apiResponse;
     }
 
-    public BusinessDTO updateBusiness(Long uuid, BusinessDTO businessDTO) {
-        return businessRepository.findById(uuid).map(existingBusiness -> {
-            User user = userRepository.findById(businessDTO.getUuidUser())
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid user UUID"));
-            Business business = businessMapper.toModal(businessDTO, user);
-            business.setUuid(existingBusiness.getUuid()); // Preserva el UUID existente
-            Business updatedBusiness = businessRepository.save(business);
-            return businessMapper.toDto(updatedBusiness);
-        }).orElse(null);
+    public APIResponse<BusinessDTO> updateBusiness(UUID uuid, String token, BusinessDTO businessDTO) {
+        APIResponse<BusinessDTO> apiResponse;
+        Optional<Business> businessById;
+        Business business;
+        User user;
+        UUID authUserUUID;
+
+        try {
+            businessById = businessRepository.findById(uuidConverterUtil.uuidToBytes(uuid));
+
+            if (businessById.isEmpty()) {
+                throw new APIResponseException("Business not found", HttpStatus.NOT_FOUND.value());
+            }
+
+            user = businessById.get().getUser();
+            authUserUUID = UUID.fromString(authUtil.extractClaim(token, "uuid"));
+
+            if (!Arrays.equals(user.getUuid(), uuidConverterUtil.uuidToBytes(authUserUUID))) {
+                throw new APIResponseException("Invalid user", HttpStatus.UNAUTHORIZED.value());
+            }
+
+            business = businessMapper.toModel(businessDTO, user);
+            business.setUuid(businessById.get().getUuid());
+            business = businessRepository.save(business);
+
+            apiResponse = new APIResponse<>(
+                    HttpStatus.OK.value(),
+                    "Success!",
+                    businessMapper.toDto(business)
+            );
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
+        }
+
+        return apiResponse;
     }
 
-    public void deleteBusiness(Long uuid) {
-        businessRepository.deleteById(uuid);
+    public APIResponse<Void> deleteBusiness(UUID uuid, String token) {
+        APIResponse<Void> apiResponse;
+        Optional<Business> businessById;
+        User user;
+        UUID authUserUUID;
+
+        try {
+            businessById = businessRepository.findById(uuidConverterUtil.uuidToBytes(uuid));
+
+            if (businessById.isEmpty()) {
+                throw new APIResponseException("Business not found", HttpStatus.NOT_FOUND.value());
+            }
+
+            user = businessById.get().getUser();
+            authUserUUID = UUID.fromString(authUtil.extractClaim(token, "uuid"));
+
+            if (!Arrays.equals(user.getUuid(), uuidConverterUtil.uuidToBytes(authUserUUID))) {
+                throw new APIResponseException("Invalid user", HttpStatus.UNAUTHORIZED.value());
+            }
+
+            businessRepository.deleteById(uuidConverterUtil.uuidToBytes(uuid));
+
+            apiResponse = new APIResponse<>(
+                    HttpStatus.NO_CONTENT.value(),
+                    "Success!"
+            );
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
+        }
+
+        return apiResponse;
     }
+
+    // endregion
 }

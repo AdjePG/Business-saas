@@ -7,11 +7,10 @@ import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 public class CreateCustomerDTO {
-
     // region ATTRIBUTES
 
     @NotNull(message = "El UUID del negocio no puede ser nulo")
-    private Long uuidBusiness;
+    private UUID uuidBusiness;
 
     @NotNull(message = "El nombre no puede ser nulo")
     @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
@@ -43,15 +42,16 @@ public class CreateCustomerDTO {
 
     @Size(max = 200, message = "La dirección no puede tener más de 200 caracteres")
     private String address;
+
     // endregion
 
-    // region Getters y Setters
+    // region GETTERS AND SETTERS
 
-    public Long getUuidBusiness() {
+    public UUID getUuidBusiness() {
         return uuidBusiness;
     }
 
-    public void setUuidBusiness(Long uuidBusiness) {
+    public void setUuidBusiness(UUID uuidBusiness) {
         this.uuidBusiness = uuidBusiness;
     }
 
@@ -126,7 +126,7 @@ public class CreateCustomerDTO {
     public void setAddress(String address) {
         this.address = address;
     }
-    // endregion
 
+    // endregion
 }
 

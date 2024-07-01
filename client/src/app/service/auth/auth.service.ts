@@ -7,16 +7,16 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  private apiUrl = 'http://127.0.0.1:8080/api/users';
+  private apiUrl = 'http://127.0.0.1:8080/api/users/';
 
   constructor(private http: HttpClient) { }
 
   signUp(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/signup`, userData);
+    return this.http.post(`${this.apiUrl}signup`, userData);
   }
 
   logIn(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, userData,
+    return this.http.post(`${this.apiUrl}login`, userData,
       {
         headers: {
           'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   isLoggedIn(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/is-logged`,
+    return this.http.get(`${this.apiUrl}is-logged`,
       {
         headers: {
           'Content-Type': 'application/json',

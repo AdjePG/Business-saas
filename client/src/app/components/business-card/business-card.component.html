@@ -45,8 +45,6 @@
   </div>
 </ng-template>
 
-
-
 <ng-template #addCard>
   <div
     class="flex items-center justify-center flex-col space-y-5 rounded-lg border border-gray-200 bg-gradient-to-br from-blue-100 to-blue-300 dark:from-gray-700 dark:to-gray-900 p-6 shadow-md transform transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer h-full"
@@ -57,7 +55,6 @@
     <h5 class="text-lg font-semibold text-gray-800 dark:text-white select-none drag-none transition duration-300 hover:text-blue-600 dark:hover:text-blue-400">Añadir negocio</h5>
   </div>
 </ng-template>
-
 
 <modal #addBusinessModal class="no-footer modal-top large-modal">
   <ng-template #modalHeader>
@@ -77,10 +74,6 @@
         <label for="imagePath">Ruta de la imagen</label>
         <input id="imagePath" type="text" placeholder="Introduce la ruta de la imagen" class="form-input"
                formControlName="imagePath" />
-        <div *ngIf="businessModalForm.controls['imagePath'].invalid && businessModalForm.controls['imagePath'].dirty"
-             class="text-red-500">
-          Tienes que poner una ruta de imagen.
-        </div>
       </div>
       <div class="mb-5">
         <label for="description">Descripción</label>

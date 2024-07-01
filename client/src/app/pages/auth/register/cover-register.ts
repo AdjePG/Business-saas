@@ -6,6 +6,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { AppService } from 'src/app/service/app.service';
 import { AuthService } from 'src/app/service/auth/auth.service';
 import { NgForm } from '@angular/forms';
+import { showAlert } from 'src/app/shared/alerts';
+import { ToastType } from 'src/app/shared/types';
 
 @Component({
     moduleId: module.id,
@@ -18,7 +20,6 @@ import { NgForm } from '@angular/forms';
     ],
 })
 export class CoverRegisterComponent {
-
     name: string = '';
     email: string = '';
     password: string = '';
@@ -46,19 +47,18 @@ export class CoverRegisterComponent {
         };
 
         this.authService.signUp(userData).subscribe({
-            next: (response) => {
-                console.log('Registro exitoso', response);
-                this.isLoading = false;  // Detener la carga
-                this.router.navigate(['/']);  // Navegar al inicio o a la página de perfil
+            next: () => {
+                this.isLoading = false;
+                this.router.navigate(['/']);
             },
             error: (error) => {
-                console.error('Error en el registro', error);
-                this.isLoading = false;  // Detener la carga
+                showAlert({
+                    toastType: ToastType.ERROR,
+                    message: error.error.message
+                });
             }
         });
     }
-
-
 
     async initStore() {
         this.storeData
