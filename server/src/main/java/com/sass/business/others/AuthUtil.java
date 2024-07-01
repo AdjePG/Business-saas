@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -29,15 +28,10 @@ public class AuthUtil {
 
     // region AUTH METHODS
 
-    public String generateToken(Long uuid, String email, String name) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("uuid", uuid);
-        claims.put("email", email);
-        claims.put("name", name);
-
+    public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(email)
+                .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 3600000L * 24 * expiration))
                 .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)), SignatureAlgorithm.HS256)
@@ -54,7 +48,13 @@ public class AuthUtil {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String email = extractEmail(token);
+        String email;
+
+        if (userDetails == null) {
+            return false;
+        }
+
+        email = extractClaim(token, "email");
         return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
@@ -62,8 +62,8 @@ public class AuthUtil {
 
     // region JWT EXTRACTION METHODS
 
-    public String extractEmail(String token) {
-        return extractClaims(token).getSubject();
+    public String extractClaim(String token, String key) {
+        return extractClaims(token).get(key).toString();
     }
 
     public boolean isTokenExpired(String token) {
@@ -75,7 +75,11 @@ public class AuthUtil {
     }
 
     private Claims extractClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     private Key getSignInKey() {

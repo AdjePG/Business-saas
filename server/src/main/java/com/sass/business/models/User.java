@@ -12,15 +12,10 @@ import java.util.List;
 public class User implements UserDetails {
     //region ATTRIBUTES
 
-    /*@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "uuid", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
-    private UUID uuid;*/
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Usa IDENTITY para delegar la generación del ID al motor de la base de datos
-    @Column(name = "uuid", updatable = false, nullable = false)
-    private Long uuid; // Asumiendo que usas Long para manejar grandes rangos de enteros
+    private byte[] uuid;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -31,25 +26,27 @@ public class User implements UserDetails {
     @Column(name = "name", length = 50)
     private String name;
 
+    @Column(name = "first_surname", length = 50)
+    private String firstSurname;
+
+    @Column(name = "last_surname", length = 50)
+    private String lastSurname;
+
     @Column(name = "photo")
     private String photo;
 
     @Column(name = "phone", length = 15)
     private String phone;
 
-    //@Enumerated(EnumType.ORDINAL)
-    //@Column(name = "role")
-    //private Role role;
-
     //endregion
 
     // region GETTERS AND SETTERS
 
-    public Long getUuid() {
+    public byte[] getUuid() {
         return uuid;
     }
 
-    public void setUuid(Long uuid) {
+    public void setUuid(byte[] uuid) {
         this.uuid = uuid;
     }
 
@@ -75,6 +72,22 @@ public class User implements UserDetails {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFirstSurname() {
+        return firstSurname;
+    }
+
+    public void setFirstSurname(String firstSurname) {
+        this.firstSurname = firstSurname;
+    }
+
+    public String getLastSurname() {
+        return lastSurname;
+    }
+
+    public void setLastSurname(String lastSurname) {
+        this.lastSurname = lastSurname;
     }
 
     public String getPhoto() {

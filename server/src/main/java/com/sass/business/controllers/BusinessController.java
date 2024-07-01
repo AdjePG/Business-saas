@@ -6,7 +6,6 @@ import com.sass.business.services.BusinessService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,76 +14,107 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/business")
+@RequestMapping("/api/businesses")
 //@Api(value = "Sistema de Gestió de Negocis", description = "Operacions relatives als negocis en el Sistema de Gestió de Negocis")
 public class BusinessController {
+    // region INJECTED DEPENDENCIES
 
     private final BusinessService businessService;
 
     @Autowired
-    public BusinessController(BusinessService businessService) {
+    public BusinessController(
+            BusinessService businessService
+    ) {
         this.businessService = businessService;
     }
 
-    @Operation(summary = "Veure una llista d'empreses, filtrades opcionalment per l'usuari")
+    // endregion
+
+    // region REQUEST METHODS
+
+    // region GET - GETBUSINESSES
+    @Operation(summary = "Get list of businesses")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "400", description = "Bad Request"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            @ApiResponse(responseCode = "200", description = "Ok status")
     })
-    @GetMapping("/businesses")
-    public ResponseEntity<APIResponse<List<BusinessDTO>>> getAllBusinesses(
-            @RequestParam Optional<Long> userId) {
-
-        APIResponse<List<BusinessDTO>> apiResponse = businessService.getAllBusinesses(userId);
-
+    @GetMapping("/")
+    public ResponseEntity<APIResponse<List<BusinessDTO>>> getBusinesses(
+            @RequestParam Optional<UUID> userId
+    ) {
+        APIResponse<List<BusinessDTO>> apiResponse = businessService.getBusinesses(userId);
         return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
+    // endregion
 
-    //@ApiOperation(value = "Obtenir un negoci per Id")
-    @GetMapping("/{id}")
-    public ResponseEntity<BusinessDTO> getBusinessById(
+    // region GET - GETBUSINESSBYID
+    @Operation(summary = "Get business by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok status")
+    })
+    @GetMapping("/{uuid}")
+    public ResponseEntity<APIResponse<BusinessDTO>> getBusinessById(
             //@ApiParam(value = "Id del negoci del qual es recuperarà l'objecte negoci", required = true)
-            @PathVariable Long id) {
-        BusinessDTO businessDTO = businessService.getBusinessById(id);
-        if (businessDTO != null) {
-            return ResponseEntity.ok(businessDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+            @PathVariable UUID uuid
+    ) {
+        APIResponse<BusinessDTO> apiResponse = businessService.getBusinessById(uuid);
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
+    // endregion
 
-    //@ApiOperation(value = "Afegir un negoci")
-    @PostMapping
-    public BusinessDTO createBusiness(
+    // region POST - CREATEBUSINESS
+    @Operation(summary = "Create business")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Created status")
+    })
+    @PostMapping("/")
+    public ResponseEntity<APIResponse<BusinessDTO>> createBusiness(
             //@ApiParam(value = "Objecte negoci que s'emmagatzemarà a la taula de la base de dades", required = true)
-            @Valid @RequestBody BusinessDTO businessDTO) {
-        return businessService.createBusiness(businessDTO);
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody BusinessDTO businessDTO
+    ) {
+        APIResponse<BusinessDTO> apiResponse = businessService.createBusiness(authorization.substring(7), businessDTO);
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
+    // endregion
 
-    //@ApiOperation(value = "Actualitzar un negoci")
-    @PutMapping("/{id}")
-    public ResponseEntity<BusinessDTO> updateBusiness(
-            //@ApiParam(value = "Id del negoci per actualitzar l'objecte negoci", required = true)
-            @PathVariable Long id,
+    // region PUT - UPDATEBUSINESS
+    @Operation(summary = "Update business details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok status")
+    })
+    @PutMapping("/{uuid}")
+    public ResponseEntity<APIResponse<BusinessDTO>> updateBusiness(
             //@ApiParam(value = "Actualitzar objecte negoci", required = true)
-            @Valid @RequestBody BusinessDTO businessDTO) {
-        BusinessDTO updatedBusinessDTO = businessService.updateBusiness(id, businessDTO);
-        if (updatedBusinessDTO != null) {
-            return ResponseEntity.ok(updatedBusinessDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+            @PathVariable UUID uuid,
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody BusinessDTO businessDTO
+    ) {
+        APIResponse<BusinessDTO> apiResponse = businessService.updateBusiness(
+                uuid,
+                authorization.substring(7),
+                businessDTO);
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
+    // endregion
 
-    //@ApiOperation(value = "Eliminar un negoci")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBusiness(
+    // region DELETE - DELETEBUSINESS
+    @Operation(summary = "Delete business")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "No content status")
+    })
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<APIResponse<Void>> deleteBusiness(
             //@ApiParam(value = "Id del negoci del qual s'eliminarà l'objecte negoci de la taula de la base de dades", required = true)
-            @PathVariable Long id) {
-        businessService.deleteBusiness(id);
-        return ResponseEntity.noContent().build();
+            @PathVariable UUID uuid,
+            @RequestHeader("Authorization") String authorization
+    ) {
+        APIResponse<Void> apiResponse = businessService.deleteBusiness(uuid, authorization.substring(7));
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
+    // endregion
+
+    // endregion
 }

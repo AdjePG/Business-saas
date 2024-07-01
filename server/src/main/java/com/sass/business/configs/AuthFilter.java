@@ -44,7 +44,7 @@ public class AuthFilter extends OncePerRequestFilter {
         String jwt = headerAuth.substring(7);
 
         if (!jwt.equals("null") && SecurityContextHolder.getContext().getAuthentication() == null) {
-            String userEmail = authUtil.extractEmail(jwt);
+            String userEmail = authUtil.extractClaim(jwt, "email");
 
             if (userEmail != null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
