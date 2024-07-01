@@ -27,7 +27,6 @@ export class UserService {
   private getUserDataFromToken(token: string): User | null {
     try {
       const decoded: any = jwtDecode(token);
-      console.log(token);
       return {
         uuid: decoded?.uuid || null,
         email: decoded?.email || null

@@ -20,31 +20,30 @@ export class BusinessCardComponent implements OnInit {
   @Input() cardType: CardType = CardType.INFO
   @Input() business!: Business;
   @Output() deleteEvent: EventEmitter<number> = new EventEmitter<number>();
+  @Output() addEvent: EventEmitter<Business> = new EventEmitter<Business>();
 
   userData: User | null = null;
   listOwnBusiness: Business[] = [];
   listSharedBusiness: Business[] = [];
   businessModalForm: FormGroup;
 
-
   constructor(private formBuilder: FormBuilder, private router: Router,private businessService: BusinessService,private userService: UserService) {
     this.businessModalForm = this.formBuilder.group({
         name: ['', Validators.required],
-        imagePath: ['', Validators.required],
+        imagePath: [''],
         description: ['']
-
     });
-}
-    ngOnInit(): void {
-      this.userService.getUserData().subscribe(userData => {
-        this.userData = userData;
-      });
-    }
+  }
+
+  ngOnInit(): void {
+    this.userService.getUserData().subscribe(userData => {
+      this.userData = userData;
+    });
+  }
 
   getType() {
     return this.cardType === CardType.INFO
   }
-
 
   async createBusiness() {
     if (this.businessModalForm.invalid) {
@@ -63,7 +62,9 @@ export class BusinessCardComponent implements OnInit {
     try {
       const createdBusiness = await firstValueFrom(this.businessService.createBusiness(business));
       if (createdBusiness) {
-        this.listOwnBusiness.push(createdBusiness); // Actualiza la lista de negocios
+        this.listOwnBusiness.push(createdBusiness);
+        //this.addEvent.emit(createdBusiness);
+        this.closeModal();
       }
     } catch (error) {
       console.error('Error creating business', error);
@@ -87,7 +88,5 @@ export class BusinessCardComponent implements OnInit {
   closeModal() {
     this.businessModalForm.reset();
     this.addBusinessModal.close();
-}
-
-
+  }
 }
