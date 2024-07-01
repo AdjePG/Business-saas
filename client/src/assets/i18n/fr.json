@@ -23,6 +23,9 @@
       "footer": {
         "have_account": "Vous avez déjà un compte ?",
         "signIn": "SE CONNECTER"
+      },
+      "error": {
+        "email_exist": "Un utilisateur avec cette adresse e-mail existe déjà"
       }
     },
     "login": {

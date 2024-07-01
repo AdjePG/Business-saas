@@ -52,9 +52,15 @@ export class CoverRegisterComponent {
                 this.router.navigate(['/']);
             },
             error: (error) => {
+                this.isLoading = false;
+                const errorMessage = this.translate.instant('auth.signUp.error.'+error.error.message);
+
+                console.log(error.error.message);
+                console.log(errorMessage);
+
                 showAlert({
                     toastType: ToastType.ERROR,
-                    message: error.error.message
+                    message: errorMessage
                 });
             }
         });
