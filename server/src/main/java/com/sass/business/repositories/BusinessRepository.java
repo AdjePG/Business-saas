@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public interface BusinessRepository  extends JpaRepository<Business, Long> {
+public interface BusinessRepository  extends JpaRepository<Business, byte[]> {
 
-    List<Business> findByUserUuid(Long userId);
+    List<Business> findByUserUuid(byte[] userId);
 }

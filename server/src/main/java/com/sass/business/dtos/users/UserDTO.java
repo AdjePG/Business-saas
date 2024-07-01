@@ -1,16 +1,15 @@
 package com.sass.business.dtos.users;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
     // region ATTRIBUTES
-
-    //private UUID uuid;
-    private Long uuid;
 
     @Email
     @NotEmpty(message = "El correo electrónico no puede estar vacío")
@@ -24,6 +23,12 @@ public class UserDTO {
     @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
     private String name;
 
+    @Size(max = 50, message = "El primer apellido no puede tener más de 50 caracteres")
+    private String firstSurname;
+
+    @Size(max = 50, message = "El segundo apellido no puede tener más de 50 caracteres")
+    private String lastSurname;
+
     @Size(max = 255, message = "La foto no puede tener más de 255 caracteres")
     private String photo;
 
@@ -33,14 +38,6 @@ public class UserDTO {
     // endregion
 
     //region GETTERS AND SETTERS
-
-    public Long getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(Long uuid) {
-        this.uuid = uuid;
-    }
 
     public String getEmail() {
         return email;
@@ -64,6 +61,22 @@ public class UserDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFirstSurname() {
+        return firstSurname;
+    }
+
+    public void setFirstSurname(String firstSurname) {
+        this.firstSurname = firstSurname;
+    }
+
+    public String getLastSurname() {
+        return lastSurname;
+    }
+
+    public void setLastSurname(String lastSurname) {
+        this.lastSurname = lastSurname;
     }
 
     public String getPhoto() {

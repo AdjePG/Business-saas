@@ -6,6 +6,7 @@ import com.sass.business.dtos.users.UserDTO;
 import com.sass.business.exceptions.APIResponseException;
 import com.sass.business.mappers.UserMapper;
 import com.sass.business.models.User;
+import com.sass.business.others.UuidConverterUtil;
 import com.sass.business.repositories.UserRepository;
 import com.sass.business.others.AuthUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,29 +15,31 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     // region INJECTED DEPENDENCIES
 
-    private UserRepository userRepository;
-    private UserMapper userMapper;
-    private PasswordEncoder passwordEncoder;
-    private AuthUtil authUtil;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthUtil authUtil;
+    private final UuidConverterUtil uuidConverterUtil;
 
     public UserService(
             UserRepository userRepository,
             UserMapper userMapper,
             PasswordEncoder passwordEncoder,
-            AuthUtil authUtil
+            AuthUtil authUtil,
+            UuidConverterUtil uuidConverterUtil
     ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.authUtil = authUtil;
+        this.uuidConverterUtil = uuidConverterUtil;
     }
 
     // endregion
@@ -107,7 +110,81 @@ public class UserService {
         return apiResponse;
     }
 
-    public APIResponse<String> logIn(LogInDTO logInDTO, HttpServletResponse response) {
+    public APIResponse<Void> updateUser(String token, UserDTO userDTO) {
+        APIResponse<Void> apiResponse;
+        UUID uuid;
+        Optional<User> userById;
+        User user;
+
+        try {
+            uuid = UUID.fromString(authUtil.extractClaim(token, "uuid"));
+            userById = userRepository.findById(uuidConverterUtil.uuidToBytes(uuid));
+
+            if (userById.isEmpty()) {
+                throw new APIResponseException("User not found", HttpStatus.NOT_FOUND.value());
+            }
+
+            user = userMapper.toModel(userDTO);
+            user.setUuid(userById.get().getUuid());
+            user.setPassword(userById.get().getPassword());
+            userRepository.save(user);
+
+            apiResponse = new APIResponse<>(
+                    HttpStatus.OK.value(),
+                    "Success!"
+            );
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
+        }
+
+        return apiResponse;
+    }
+
+    public APIResponse<Void> deleteUser(String token) {
+        APIResponse<Void> apiResponse;
+        UUID uuid;
+        Optional<User> userById;
+
+        try {
+            uuid = UUID.fromString(authUtil.extractClaim(token, "uuid"));
+
+            userById = userRepository.findById(uuidConverterUtil.uuidToBytes(uuid));
+
+            if (userById.isEmpty()) {
+                throw new APIResponseException("User not found", HttpStatus.NOT_FOUND.value());
+            }
+
+            userRepository.deleteById(uuidConverterUtil.uuidToBytes(uuid));
+
+            apiResponse = new APIResponse<>(
+                    HttpStatus.NO_CONTENT.value(),
+                    "Success!"
+            );
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
+        }
+
+        return apiResponse;
+    }
+
+    public APIResponse<String> logIn(HttpServletResponse response, LogInDTO logInDTO) {
+        Map<String, Object> claims;
         APIResponse<String> apiResponse;
         User user;
         Optional<User> userByEmail;
@@ -129,7 +206,14 @@ public class UserService {
 
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-            token = authUtil.generateToken(user.getUuid(), user.getEmail(), user.getName());
+            claims = new HashMap<>();
+            claims.put("uuid", uuidConverterUtil.binaryToUuid(user.getUuid()));
+            claims.put("email", user.getEmail());
+            claims.put("name", user.getName());
+            claims.put("first_surname", user.getFirstSurname());
+            claims.put("last_surname", user.getLastSurname());
+
+            token = authUtil.generateToken(claims, user.getEmail());
             cookie = authUtil.generateCookie("auth_user", token);
             response.addHeader("Set-Cookie", cookie.toString());
 

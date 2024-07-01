@@ -9,16 +9,14 @@ public class Business {
     //region ATTRIBUTES
 
     @Id
-    //@GeneratedValue
-    //@Column(columnDefinition = "BINARY(16)")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Usa IDENTITY para delegar la generación del ID al motor de la base de datos
-    //private UUID uuid;
-    private Long uuid;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "uuid", updatable = false, nullable = false, columnDefinition = "BINARY(16)")
+    private byte[] uuid;
 
     @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "imagePath", length = 250)
+    @Column(name = "image_path", length = 250)
     private String imagePath;
 
     @ManyToOne
@@ -27,15 +25,16 @@ public class Business {
 
     @Column(name = "description", length = 250)
     private String description;
+
     //endregion
 
     // region GETTERS AND SETTERS
 
-    public Long getUuid() {
+    public byte[] getUuid() {
         return uuid;
     }
 
-    public void setUuid(Long uuid) {
+    public void setUuid(byte[] uuid) {
         this.uuid = uuid;
     }
 
@@ -72,5 +71,4 @@ public class Business {
     }
 
     //endregion
-
 }

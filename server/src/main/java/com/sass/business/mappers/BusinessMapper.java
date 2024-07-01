@@ -3,24 +3,35 @@ package com.sass.business.mappers;
 import com.sass.business.dtos.business.BusinessDTO;
 import com.sass.business.models.Business;
 import com.sass.business.models.User;
+import com.sass.business.others.UuidConverterUtil;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BusinessMapper {
+    // region INJECTED DEPENDENCIES
 
-    public BusinessDTO toDto(Business business) {
-        BusinessDTO dto = new BusinessDTO();
-        dto.setUuid(business.getUuid());
-        dto.setName(business.getName());
-        dto.setDescription(business.getDescription());
-        dto.setImagePath(business.getImagePath());
-        dto.setUuidUser(business.getUser().getUuid());
-        return dto;
+    private UuidConverterUtil uuidConverterUtil;
+
+    public BusinessMapper(
+            UuidConverterUtil uuidConverterUtil
+    ) {
+        this.uuidConverterUtil = uuidConverterUtil;
     }
 
-    public Business toModal(BusinessDTO dto, User user) {
+    // endregion
+
+    public BusinessDTO toDto(Business business) {
+        BusinessDTO businessDTO = new BusinessDTO();
+        businessDTO.setUuid(uuidConverterUtil.binaryToUuid(business.getUuid()));
+        businessDTO.setName(business.getName());
+        businessDTO.setDescription(business.getDescription());
+        businessDTO.setImagePath(business.getImagePath());
+        businessDTO.setUuidUser(uuidConverterUtil.binaryToUuid(business.getUser().getUuid()));
+        return businessDTO;
+    }
+
+    public Business toModel(BusinessDTO dto, User user) {
         Business business = new Business();
-        business.setUuid(dto.getUuid());
         business.setName(dto.getName());
         business.setDescription(dto.getDescription());
         business.setImagePath(dto.getImagePath());
