@@ -14,17 +14,11 @@ import { UserService } from 'src/app/service/user/user.service';
 })
 export class OwnBusinessComponent implements OnInit {
   cardType: typeof CardType = CardType;
-
-
   listOwnBusiness: Business[] = [];
-  listSharedBusiness: Business[] = [];
-
   userData: User | null = null;
 
   constructor(private router: Router,private businessService: BusinessService,private userService: UserService) {
   }
-
-
 
   ngOnInit(): void {
     this.userService.getUserData().subscribe(userData => {
@@ -44,7 +38,6 @@ export class OwnBusinessComponent implements OnInit {
         }
           const businesses: Business[] = await lastValueFrom(this.businessService.getAllBusinesses(this.userData.uuid));
           this.listOwnBusiness = businesses;
-          this.listSharedBusiness = businesses;
       } catch (error) {
           console.error('Error fetching businesses', error);
       }
@@ -52,7 +45,22 @@ export class OwnBusinessComponent implements OnInit {
 
   handleBusinessDeleted(id: string) {
       this.listOwnBusiness = this.listOwnBusiness.filter(business => business.uuid !== id);
-      this.listSharedBusiness = this.listSharedBusiness.filter(business => business.uuid !== id);
+  }
+
+  handleBusinessAdded(business: Business) {
+    this.listOwnBusiness.push(business);
+  }
+
+  handleBusinessUpdate(updatedBusiness: Business) {
+    console.log(updatedBusiness);
+    console.log(this.listOwnBusiness);
+
+    const index = this.listOwnBusiness.findIndex(b => b.uuid === updatedBusiness.uuid);
+    console.log(index);
+
+    if (index !== -1) {
+      this.listOwnBusiness[index] = updatedBusiness;
+    }
   }
 
  
