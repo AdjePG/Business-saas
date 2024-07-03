@@ -23,6 +23,9 @@
       "footer": {
         "have_account": "Already have an account?",
         "signIn": "LOG IN"
+      },
+      "error": {
+        "email_exist": "A user with this email already exists"
       }
     },
     "login": {

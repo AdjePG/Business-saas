@@ -8,14 +8,16 @@ import { ModalComponent } from 'angular-custom-modal';
 import { Observable, firstValueFrom  } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/service/user/user.service';
-
+import { showAlert } from 'src/app/shared/alerts';
+import { ToastType } from 'src/app/shared/types';
 
 @Component({
   selector: 'card',
   templateUrl: './business-card.component.html'
 })
 export class BusinessCardComponent implements OnInit {
-  @ViewChild('addBusinessModal') addBusinessModal!: ModalComponent;
+  @ViewChild('businessModal') businessModal!: ModalComponent;
+
   @ViewChild('deleteBusinessModal') deleteBusinessModal!: ModalComponent;
 
   @Input() cardType: CardType = CardType.INFO
@@ -24,11 +26,12 @@ export class BusinessCardComponent implements OnInit {
 
   @Output() deleteEvent: EventEmitter<string> = new EventEmitter<string>();
   @Output() addEvent: EventEmitter<Business> = new EventEmitter<Business>();
+  @Output() updateEvent: EventEmitter<Business> = new EventEmitter<Business>();
 
   cardModalType: typeof CardModalType = CardModalType;
+  isEditMode: boolean = false;
+
   userData: User | null = null;
-  listOwnBusiness: Business[] = [];
-  listSharedBusiness: Business[] = [];
   businessModalForm: FormGroup;
 
   constructor(
@@ -40,7 +43,8 @@ export class BusinessCardComponent implements OnInit {
     this.businessModalForm = this.formBuilder.group({
         name: ['', Validators.required],
         imagePath: [''],
-        description: ['']
+        description: [''],
+        uuid: ['']
     });
   }
 
@@ -54,28 +58,29 @@ export class BusinessCardComponent implements OnInit {
     return this.cardType === CardType.INFO
   }
 
-  openModal(modal : CardModalType, business? : Business) {
-    if (modal = CardModalType.ADD) {
-      this.businessModalForm = this.formBuilder.group({
-        name: ['', Validators.required],
-        imagePath: [''],
-        description: ['']
+  openModal(modal: CardModalType, business?: Business) {
+    if (modal === CardModalType.ADD) {
+      this.isEditMode = false;
+      this.businessModalForm.reset();
+      this.businessModal.open();
+    } else if (modal === CardModalType.UPDATE && business) {
+      this.isEditMode = true;
+      this.businessModalForm.setValue({
+        name: business.name,
+        imagePath: business.imagePath,
+        description: business.description,
+        uuid: business.uuid
       });
-    } else if (modal = CardModalType.UPDATE) {
-      this.businessModalForm = this.formBuilder.group({
-        name: [business?.name, Validators.required],
-        imagePath: [business?.imagePath],
-        description: [business?.description]
-      });
+      this.businessModal.open();
     }
   }
 
   closeModal() {
+    this.businessModal.close();
     this.businessModalForm.reset();
-    this.addBusinessModal.close();
   }
 
-  async createBusiness() {
+  async saveBusiness() {
     if (this.businessModalForm.invalid) {
       return;
     }
@@ -85,50 +90,53 @@ export class BusinessCardComponent implements OnInit {
       return;
     }
 
-    const business: Business = {
+    const businessData: Business = {
       ...this.businessModalForm.value,
       uuidUser: this.userData.uuid
     };
 
     try {
-      let createdBusiness = (await firstValueFrom(this.businessService.createBusiness(business))).result;
+      let savedBusiness;
+      if (this.isEditMode) {
+        savedBusiness = await this.updateBusiness(businessData);
+        showAlert({
+          toastType: ToastType.SUCCESS,
+          message: 'Negocio actualizado con éxito'
+        });
+      } else {
+        savedBusiness = await this.createBusiness(businessData);
+        showAlert({
+          toastType: ToastType.SUCCESS,
+          message: 'Negocio creado con éxito'
+        });
+      }
 
-      if (createdBusiness) {
-        createdBusiness = await this.checkImage(createdBusiness);
-        this.addEvent.emit(createdBusiness);
+      if (savedBusiness) {
+        savedBusiness = await this.checkImage(savedBusiness);
+        if (this.isEditMode) {
+          this.updateEvent.emit(savedBusiness);
+        } else {
+          this.addEvent.emit(savedBusiness);
+        }
         this.closeModal();
       }
     } catch (error) {
-      console.error('Error creating business', error);
+      console.error('Error saving business', error);
+      showAlert({
+        toastType: ToastType.ERROR,
+        message: 'error'
+      });
     }
   }
 
-  async updateBusiness() {
-    if (this.businessModalForm.invalid) {
-      return;
-    }
+  async createBusiness(business: Business): Promise<Business> {
+    return (await firstValueFrom(this.businessService.createBusiness(business))).result;
+  }
 
-    if (!this.userData?.uuid) {
-      console.error('No se pudo obtener el UUID del usuario');
-      return;
-    }
 
-    const business: Business = {
-      ...this.businessModalForm.value,
-      uuidUser: this.userData.uuid
-    };
-
-    try {
-      let createdBusiness = (await firstValueFrom(this.businessService.createBusiness(business))).result;
-
-      if (createdBusiness) {
-        createdBusiness = await this.checkImage(createdBusiness);
-        this.addEvent.emit(createdBusiness);
-        this.closeModal();
-      }
-    } catch (error) {
-      console.error('Error creating business', error);
-    }
+  async updateBusiness(business: Business): Promise<Business> {
+    console.log('updateBusiness'+business.uuid);
+    return (await firstValueFrom(this.businessService.updateBusiness(business.uuid,business))).result;
   }
 
   async deleteBusiness() {

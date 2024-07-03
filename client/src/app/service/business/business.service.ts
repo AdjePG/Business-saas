@@ -38,7 +38,16 @@ export class BusinessService {
     return this.http.post<ApiResponse<Business>>(this.apiUrl, business, { headers });
   }
 
-  getBusinessById(uuid: number): Observable<Business> {
+  updateBusiness(uuid: string, business: Business): Observable<ApiResponse<Business>> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem("user-auth")}`
+    });
+
+    return this.http.put<ApiResponse<Business>>(`${this.apiUrl}${uuid}`, business, { headers });
+  }
+
+  getBusinessById(uuid: string): Observable<Business> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem("user-auth")}`

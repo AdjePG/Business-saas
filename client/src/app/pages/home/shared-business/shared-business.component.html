@@ -13,7 +13,7 @@
       <div class="mt-10">
           <h3 class="text-xl md:text-3xl font-bold text-gray-800 dark:text-white">Mis negocios</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-5">
-              <ng-container *ngFor="let business of listOwnBusiness">
+              <ng-container *ngFor="let business of listSharedBusiness">
                   <card [business]="business"  [isOwnBusiness]="false"></card>
               </ng-container>
           </div>

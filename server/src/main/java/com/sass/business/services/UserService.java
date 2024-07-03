@@ -83,9 +83,9 @@ public class UserService {
 
         try {
             if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-                throw new APIResponseException("A user with this email already exists", HttpStatus.CONFLICT.value());
+                throw new APIResponseException("email_exist", HttpStatus.CONFLICT.value());
             }
-
+            
             user = userMapper.toModel(userDTO);
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 

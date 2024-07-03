@@ -23,6 +23,9 @@
       "footer": {
         "have_account": "已经有账户？",
         "signIn": "登录"
+      },
+      "error": {
+        "email_exist": "具有此電子郵件的使用者已存在"
       }
     },
     "login": {

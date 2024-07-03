@@ -1,4 +1,4 @@
-{  
+{ 
   "auth": {
     "signUp": {
       "title": "Registrati",
@@ -23,6 +23,9 @@
       "footer": {
         "have_account": "Hai già un account?",
         "signIn": "ACCEDI"
+      },
+      "error": {
+        "email_exist": "Esiste già un utente con questo indirizzo e-mail"
       }
     },
     "login": {

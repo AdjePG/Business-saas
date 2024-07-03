@@ -35,7 +35,7 @@
           </svg>
         </button>
         <!-- Botón de editar -->
-        <button *ngIf="isOwnBusiness" type="button" class="group text-blue-500 hover:text-blue-700 ml-2">
+        <button *ngIf="isOwnBusiness"  (click)="openModal(cardModalType.UPDATE, business)"  type="button" class="group text-blue-500 hover:text-blue-700 ml-2">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5">
             <path d="M4 21V17.5C4 16.6767 4 16.2651 4.15224 15.9069C4.30448 15.5487 4.58453 15.2687 5.04263 14.7106L16.4211 3.33212C17.3922 2.36103 18.9269 2.36103 19.898 3.33212C20.8691 4.30321 20.8691 5.83787 19.898 6.80896L8.51957 18.1874C7.96147 18.7455 7.68142 19.0255 7.32322 19.1778C6.96502 19.33 6.55337 19.33 5.73 19.33H2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
@@ -48,7 +48,7 @@
 <ng-template #addCard>
   <div
     class="flex items-center justify-center flex-col space-y-5 rounded-lg border border-gray-200 bg-gradient-to-br from-blue-100 to-blue-300 dark:from-gray-700 dark:to-gray-900 p-6 shadow-md transform transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer h-full"
-    (click)="addBusinessModal.open()">
+    (click)="openModal(cardModalType.ADD)">
     <div class="flex items-center justify-center w-24 h-24 bg-white dark:bg-gray-800 rounded-full shadow-inner">
       <icon-plus class="h-12 w-12 stroke-blue-500 dark:stroke-blue-300"/>
     </div>
@@ -56,65 +56,32 @@
   </div>
 </ng-template>
 
-<modal #addBusinessModal class="no-footer modal-top large-modal">
+<modal #businessModal class="no-footer modal-top large-modal">
   <ng-template #modalHeader>
-    <div class="!font-medium">Crear empresa</div>
+    <div class="!font-medium">{{ isEditMode ? 'Editar empresa' : 'Crear empresa' }}</div>
   </ng-template>
   <ng-template #modalBody>
-    <form [formGroup]="businessModalForm" class="text-sm" (ngSubmit)="createBusiness()">
+    <form [formGroup]="businessModalForm" class="text-sm" (ngSubmit)="saveBusiness()">
       <div class="mb-5">
         <label for="name">Nombre del negocio</label>
         <input id="name" type="text" placeholder="Introduce un nombre" class="form-input" formControlName="name" />
-        <div *ngIf="businessModalForm.controls['name'].invalid && businessModalForm.controls['name'].dirty"
-             class="text-red-500">
+        <div *ngIf="businessModalForm.controls['name'].invalid && businessModalForm.controls['name'].dirty" class="text-red-500">
           Tienes que poner un nombre.
         </div>
       </div>
       <div class="mb-5">
         <label for="imagePath">Ruta de la imagen</label>
-        <input id="imagePath" type="text" placeholder="Introduce la ruta de la imagen" class="form-input"
-               formControlName="imagePath" />
+        <input id="imagePath" type="text" placeholder="Introduce la ruta de la imagen" class="form-input" formControlName="imagePath" />
       </div>
       <div class="mb-5">
         <label for="description">Descripción</label>
-        <textarea id="description" placeholder="Introduce una descripción" class="form-input"
-                  formControlName="description"></textarea>
+        <textarea id="description" placeholder="Introduce una descripción" class="form-input" formControlName="description"></textarea>
       </div>
+      <!-- Campo uuid oculto -->
+      <input id="uuid" type="hidden" formControlName="uuid" />
       <div class="mt-8 flex items-center justify-end">
         <button type="button" class="btn btn-outline-danger" (click)="closeModal()">Cancelar</button>
-        <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Crear</button>
-      </div>
-    </form>
-  </ng-template>
-</modal>
-
-<modal #editBusinessModal class="no-footer modal-top large-modal">
-  <ng-template #modalHeader>
-    <div class="!font-medium">Editar empresa</div>
-  </ng-template>
-  <ng-template #modalBody>
-    <form [formGroup]="businessModalForm" class="text-sm" (ngSubmit)="updateBusiness()">
-      <div class="mb-5">
-        <label for="name">Nombre del negocio</label>
-        <input id="name" type="text" placeholder="Introduce un nombre" class="form-input" formControlName="name" />
-        <div *ngIf="businessModalForm.controls['name'].invalid && businessModalForm.controls['name'].dirty"
-             class="text-red-500">
-          Tienes que poner un nombre.
-        </div>
-      </div>
-      <div class="mb-5">
-        <label for="imagePath">Ruta de la imagen</label>
-        <input id="imagePath" type="text" placeholder="Introduce la ruta de la imagen" class="form-input"
-               formControlName="imagePath" />
-      </div>
-      <div class="mb-5">
-        <label for="description">Descripción</label>
-        <textarea id="description" placeholder="Introduce una descripción" class="form-input"
-                  formControlName="description"></textarea>
-      </div>
-      <div class="mt-8 flex items-center justify-end">
-        <button type="button" class="btn btn-outline-danger" (click)="closeModal()">Cancelar</button>
-        <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Crear</button>
+        <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">{{ isEditMode ? 'Guardar' : 'Crear' }}</button>
       </div>
     </form>
   </ng-template>

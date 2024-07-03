@@ -15,8 +15,6 @@ import { UserService } from 'src/app/service/user/user.service';
 export class SharedBusinessComponent implements OnInit {
   userData: User | null = null;
   cardType: typeof CardType = CardType;
-
-  listOwnBusiness: Business[] = [];
   listSharedBusiness: Business[] = [];
 
   constructor(private router: Router,private businessService: BusinessService,private userService: UserService) {
@@ -37,7 +35,6 @@ export class SharedBusinessComponent implements OnInit {
           return;
         }
           const businesses: Business[] = await lastValueFrom(this.businessService.getAllBusinesses(this.userData.uuid));
-          this.listOwnBusiness = businesses;
           this.listSharedBusiness = businesses;
       } catch (error) {
           console.error('Error fetching businesses', error);
