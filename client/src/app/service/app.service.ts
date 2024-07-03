@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { $themeConfig } from '../theme.config';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 @Injectable()
 export class AppService {

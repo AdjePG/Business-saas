@@ -27,9 +27,6 @@ import { MenuModule } from 'headlessui-angular';
 // perfect-scrollbar
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
-// dashboard
-import { IndexComponent } from './index';
-
 // Layouts
 import { AppLayout } from './layouts/app-layout/app-layout';
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
@@ -40,6 +37,9 @@ import { SidebarComponent } from './layouts/sidebar/sidebar';
 import { ThemeCustomizerComponent } from './layouts/theme-customizer/theme-customizer';
 import { IconModule } from './shared/icon/icon.module';
 import { ModalModule } from 'angular-custom-modal';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { SidebarNavLinkComponent } from './components/sidebar-nav-link/sidebar-nav-link.component';
+import { CalendarComponent } from './pages/calendar/calendar.component';
 
 @NgModule({
     imports: [
@@ -66,7 +66,7 @@ import { ModalModule } from 'angular-custom-modal';
         IconModule,
         ModalModule
     ],
-    declarations: [AppComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, AppLayout, AuthLayout],
+    declarations: [AppComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, AppLayout, AuthLayout, ProfileComponent, SidebarNavLinkComponent, CalendarComponent],
     providers: [AppService, Title],
     bootstrap: [AppComponent],
 })

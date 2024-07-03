@@ -142,8 +142,9 @@ export class BusinessCardComponent implements OnInit {
   }
 
   goToBusiness(id: string) {
-    this.router.navigate([`/business/${id}`]);
-}
+    console.log("AAAA")
+    this.router.navigate([`/${id}`]);
+  }
 
   checkImage(business: Business) {
     const img = new Image();

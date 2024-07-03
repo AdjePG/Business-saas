@@ -1,0 +1,12 @@
+<li class="menu nav-item">
+  <a [routerLink]="navLink.route" class="nav-link group cursor-pointer">
+    <div class="flex items-center">
+      <ng-container #icon></ng-container>
+
+      <span
+        class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark select-none">
+        {{navLink.name}}
+      </span>
+    </div>
+  </a>
+</li>

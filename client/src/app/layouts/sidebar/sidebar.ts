@@ -1,8 +1,14 @@
 ﻿import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { slideDownUp } from '../../shared/animations';
+import { IconUserComponent } from 'src/app/shared/icon/icon-user';
+import { IconMenuComponentsComponent } from 'src/app/shared/icon/menu/icon-menu-components';
+import { IconMenuNotesComponent } from 'src/app/shared/icon/menu/icon-menu-notes';
+import { IconMenuDashboardComponent } from 'src/app/shared/icon/menu/icon-menu-dashboard';
+import { IconMenuUsersComponent } from 'src/app/shared/icon/menu/icon-menu-users';
+import { IconMenuWidgetsComponent } from 'src/app/shared/icon/menu/icon-menu-widgets';
 
 @Component({
     selector: 'sidebar',
@@ -10,11 +16,19 @@ import { slideDownUp } from '../../shared/animations';
     animations: [slideDownUp],
 })
 export class SidebarComponent {
+    items : any[] = []
+    businessId : string | null = null;
+
     active = false;
     store: any;
     activeDropdown: string[] = [];
     parentDropdown: string = '';
-    constructor(public translate: TranslateService, public storeData: Store<any>, public router: Router) {
+    constructor(
+        public translate: TranslateService, 
+        public storeData: Store<any>, 
+        public router: Router,
+        private route: ActivatedRoute
+    ) {
         this.initStore();
     }
     async initStore() {
@@ -26,23 +40,12 @@ export class SidebarComponent {
     }
 
     ngOnInit() {
-        this.setActiveDropdown();
-    }
+        this.businessId = this.route.snapshot.paramMap.get('id');
 
-    setActiveDropdown() {
-        const selector = document.querySelector('.sidebar ul a[routerLink="' + window.location.pathname + '"]');
-        if (selector) {
-            selector.classList.add('active');
-            const ul: any = selector.closest('ul.sub-menu');
-            if (ul) {
-                let ele: any = ul.closest('li.menu').querySelectorAll('.nav-link') || [];
-                if (ele.length) {
-                    ele = ele[0];
-                    setTimeout(() => {
-                        ele.click();
-                    });
-                }
-            }
+        if (this.businessId) {
+            this.setDashboardNavLinks();
+        } else {
+            this.setDefaultNavLinks();
         }
     }
 
@@ -60,11 +63,84 @@ export class SidebarComponent {
         }
     }
 
-    isBusinessPage() {
-        if (this.router.url !== "/" && this.router.url !== "/own-business" && this.router.url !== "/shared-business") {
-            return true
-        }
-
-        return false
+    setDashboardNavLinks() {
+        this.items = [
+            {
+                title: undefined,
+                navLinks: [
+                    {
+                        icon: {
+                            component: IconMenuWidgetsComponent
+                        },
+                        name: "Panel principal",
+                        route: `/${this.businessId}`
+                    }
+                ]
+            },
+            {
+                title: "Datos Maestros",
+                navLinks: [
+                    {
+                        icon: {
+                            component: IconMenuComponentsComponent,
+                        },
+                        name: "Artículos y servicios",
+                        route: `/${this.businessId}/items`
+                    },
+                    {
+                        icon: {
+                            component: IconUserComponent,
+                            fill: true
+                        },
+                        name: "Clientes",
+                        route: `/${this.businessId}/customers`
+                    },
+                    
+                ]
+            },
+            {
+                title: "Documentos",
+                navLinks: [
+                    {
+                        icon: {
+                            component: IconMenuNotesComponent
+                        },
+                        name: "Facturas",
+                        route: `/${this.businessId}/invoices`
+                    }
+                ]
+            }
+        ]
+    }
+  
+    setDefaultNavLinks() {
+        this.items = [
+            {
+                title: undefined,
+                navLinks: [
+                    {
+                        icon: {
+                            component: IconMenuDashboardComponent
+                        },
+                        name: "Inicio",
+                        route: `/`
+                    },
+                    {
+                        icon: {
+                            component: IconMenuComponentsComponent
+                        },
+                        name: "Mis negocios",
+                        route: `/own-business`
+                    },
+                    {
+                        icon: {
+                            component: IconMenuUsersComponent
+                        },
+                        name: "Negocios compartidos",
+                        route: `/shared-business`
+                    }
+                ]
+            }
+        ]
     }
 }

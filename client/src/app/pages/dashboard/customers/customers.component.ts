@@ -5,7 +5,7 @@ import { ModalComponent } from 'angular-custom-modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-    templateUrl: './customers.html',
+    templateUrl: './customers.component.html',
     animations: [
         trigger('toggleAnimation', [
             transition(':enter', [style({ opacity: 0, transform: 'scale(0.95)' }), animate('100ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))]),
