@@ -1,16 +1,22 @@
 package com.sass.business.controllers;
 
 
+import com.sass.business.dtos.APIResponse;
 import com.sass.business.dtos.customer.CreateCustomerDTO;
 import com.sass.business.dtos.customer.CustomerDTO;
 import com.sass.business.mappers.CustomerMapper;
 import com.sass.business.services.CustomerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -35,10 +41,17 @@ public class CustomerController {
     // region REQUEST METHODS
 
     // region GET - GETCUSTOMERS
-    //@ApiOperation(value = "Veure una llista de clients disponibles", response = List.class)
+
+    @Operation(summary = "Veure una llista de clients disponibles")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok status")
+    })
     @GetMapping("/")
-    public List<CustomerDTO> getCustomers() {
-        return customerService.getCustomers();
+    public ResponseEntity<APIResponse<List<CustomerDTO>>> getCustomers(
+            @RequestParam UUID userId
+    ) {
+        APIResponse<List<CustomerDTO>> apiResponse = customerService.getCustomers(userId);
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
     // endregion
 

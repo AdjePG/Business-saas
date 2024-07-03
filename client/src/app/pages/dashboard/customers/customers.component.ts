@@ -3,7 +3,12 @@ import Swal from 'sweetalert2';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ModalComponent } from 'angular-custom-modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { lastValueFrom  } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from 'src/app/service/user/user.service';
+import { User } from 'src/app/models/user';
+import { CustomerService } from 'src/app/service/customer/customer.service';
+import { Customer } from 'src/app/models/customer';
 @Component({
     templateUrl: './customers.component.html',
     animations: [
@@ -15,159 +20,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class CustomersComponent {
     @ViewChild('addContactModal') addContactModal!: ModalComponent;
-    
+    userData: User | null = null;
+    businessId : string | null = null;
+
     displayType = 'list';
     params: FormGroup;
     filterdContactsList: any = [];
     searchUser = '';
-    contactList = [
-        {
-            id: 1,
-            path: 'profile-35.png',
-            name: 'Alan Green',
-            role: 'Web Developer',
-            email: 'alan@mail.com',
-            location: 'Boston, USA',
-            phone: '+1 202 555 0197',
-            posts: 25,
-            followers: '5K',
-            following: 500,
-        },
-        {
-            id: 2,
-            path: 'profile-35.png',
-            name: 'Linda Nelson',
-            role: 'Web Designer',
-            email: 'linda@mail.com',
-            location: 'Sydney, Australia',
-            phone: '+1 202 555 0170',
-            posts: 25,
-            followers: '21.5K',
-            following: 350,
-        },
-        {
-            id: 3,
-            path: 'profile-35.png',
-            name: 'Lila Perry',
-            role: 'UX/UI Designer',
-            email: 'lila@mail.com',
-            location: 'Miami, USA',
-            phone: '+1 202 555 0105',
-            posts: 20,
-            followers: '21.5K',
-            following: 350,
-        },
-        {
-            id: 4,
-            path: 'profile-35.png',
-            name: 'Andy King',
-            role: 'Project Lead',
-            email: 'andy@mail.com',
-            location: 'Tokyo, Japan',
-            phone: '+1 202 555 0194',
-            posts: 25,
-            followers: '21.5K',
-            following: 300,
-        },
-        {
-            id: 5,
-            path: 'profile-35.png',
-            name: 'Jesse Cory',
-            role: 'Web Developer',
-            email: 'jesse@mail.com',
-            location: 'Edinburgh, UK',
-            phone: '+1 202 555 0161',
-            posts: 30,
-            followers: '20K',
-            following: 350,
-        },
-        {
-            id: 6,
-            path: 'profile-35.png',
-            name: 'Xavier',
-            role: 'UX/UI Designer',
-            email: 'xavier@mail.com',
-            location: 'New York, USA',
-            phone: '+1 202 555 0155',
-            posts: 25,
-            followers: '21.5K',
-            following: 350,
-        },
-        {
-            id: 7,
-            path: 'profile-35.png',
-            name: 'Susan',
-            role: 'Project Manager',
-            email: 'susan@mail.com',
-            location: 'Miami, USA',
-            phone: '+1 202 555 0118',
-            posts: 40,
-            followers: '21.5K',
-            following: 350,
-        },
-        {
-            id: 8,
-            path: 'profile-35.png',
-            name: 'Raci Lopez',
-            role: 'Web Developer',
-            email: 'traci@mail.com',
-            location: 'Edinburgh, UK',
-            phone: '+1 202 555 0135',
-            posts: 25,
-            followers: '21.5K',
-            following: 350,
-        },
-        {
-            id: 9,
-            path: 'profile-35.png',
-            name: 'Steven Mendoza',
-            role: 'HR',
-            email: 'sokol@verizon.net',
-            location: 'Monrovia, US',
-            phone: '+1 202 555 0100',
-            posts: 40,
-            followers: '21.8K',
-            following: 300,
-        },
-        {
-            id: 10,
-            path: 'profile-35.png',
-            name: 'James Cantrell',
-            role: 'Web Developer',
-            email: 'sravani@comcast.net',
-            location: 'Michigan, US',
-            phone: '+1 202 555 0134',
-            posts: 100,
-            followers: '28K',
-            following: 520,
-        },
-        {
-            id: 11,
-            path: 'profile-35.png',
-            name: 'Reginald Brown',
-            role: 'Web Designer',
-            email: 'drhyde@gmail.com',
-            location: 'Entrimo, Spain',
-            phone: '+1 202 555 0153',
-            posts: 35,
-            followers: '25K',
-            following: 500,
-        },
-        {
-            id: 12,
-            path: 'profile-35.png',
-            name: 'Stacey Smith',
-            role: 'Chief technology officer',
-            email: 'maikelnai@optonline.net',
-            location: 'Lublin, Poland',
-            phone: '+1 202 555 0115',
-            posts: 21,
-            followers: '5K',
-            following: 200,
-        },
-    ];
+    contactList: any  = [];
 
-    constructor(public formBuilder: FormBuilder) {
+    constructor(public route: ActivatedRoute,public formBuilder: FormBuilder,private userService: UserService,private customerService: CustomerService,) {
         this.params = this.formBuilder.group({
             id: [0],
             name: ['', Validators.required],
@@ -190,11 +52,31 @@ export class CustomersComponent {
     }
 
     ngOnInit() {
+        this.userService.getUserData().subscribe(userData => {
+            this.userData = userData;
+          });
+        this.getCustomers();
         this.searchContacts();
+
+    }
+
+    async getCustomers() {
+        try {
+
+            this.businessId = this.route.snapshot.paramMap.get('id');
+
+            const customers: Customer[] = await lastValueFrom(this.customerService.getAllCustomers(this.businessId? this.businessId : ''));//this.userData.uuid
+            this.filterdContactsList = [...customers];
+
+            console.log(customers);
+
+        } catch (error) {
+            console.error('Error fetching customers', error);
+        }
     }
 
     searchContacts() {
-        this.filterdContactsList = this.contactList.filter((d) => d.name.toLowerCase().includes(this.searchUser.toLowerCase()));
+        this.filterdContactsList = this.contactList.filter((d:any) => d.name.toLowerCase().includes(this.searchUser.toLowerCase()));
     }
 
     editUser(user: any = null) {
@@ -231,7 +113,7 @@ export class CustomersComponent {
 
         if (this.params.value.id) {
             //update user
-            let user: any = this.contactList.find((d) => d.id === this.params.value.id);
+            let user: any = this.contactList.find((d:any) => d.id === this.params.value.id);
             user.name = this.params.value.name;
             user.email = this.params.value.email;
             user.role = this.params.value.role;
@@ -240,7 +122,7 @@ export class CustomersComponent {
         } else {
             //add user
             let maxUserId = this.contactList.length
-                ? this.contactList.reduce((max, character) => (character.id > max ? character.id : max), this.contactList[0].id)
+                ? this.contactList.reduce((max:any, character:any) => (character.id > max ? character.id : max), this.contactList[0].id)
                 : 0;
 
             let user = {
@@ -264,7 +146,7 @@ export class CustomersComponent {
     }
 
     deleteUser(user: any = null) {
-        this.contactList = this.contactList.filter((d) => d.id != user.id);
+        this.contactList = this.contactList.filter((d:any) => d.id != user.id);
         this.searchContacts();
         this.showMessage('User has been deleted successfully.');
     }
