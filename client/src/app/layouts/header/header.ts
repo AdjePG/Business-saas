@@ -69,7 +69,7 @@ export class HeaderComponent {
         });
         this.userService.getUserData().subscribe(userData => {
             this.userData = userData;
-          });
+        });
     }
 
     setActiveDropdown() {

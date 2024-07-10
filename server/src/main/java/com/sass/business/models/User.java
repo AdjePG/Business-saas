@@ -6,11 +6,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-    //region ATTRIBUTES
+    // region ATTRIBUTES
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,10 +36,30 @@ public class User implements UserDetails {
     @Column(name = "photo")
     private String photo;
 
+    @Column(name = "country", length = 2)
+    private String country;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "phone", length = 15)
     private String phone;
 
-    //endregion
+    @Column(name = "contact_email")
+    private String contactEmail;
+
+    // region RELATED TABLES
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Business> businesses;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SharedBusiness> sharedBusinesses;
+    // endregion
+
+    // endregion
 
     // region GETTERS AND SETTERS
 
@@ -98,6 +119,30 @@ public class User implements UserDetails {
         this.photo = photo;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -106,9 +151,17 @@ public class User implements UserDetails {
         this.phone = phone;
     }
 
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
     //endregion
 
-    //region AUTHENTICATION
+    // region AUTHENTICATION
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -140,5 +193,5 @@ public class User implements UserDetails {
         return true;
     }
 
-    //endregion
+    // endregion
 }

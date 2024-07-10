@@ -1,60 +1,174 @@
-<form class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
-  <h6 class="mb-5 text-lg font-bold">General Information</h6>
-  <div class="flex flex-col sm:flex-row">
-      <div class="mb-5 w-full sm:w-2/12 ltr:sm:mr-4 rtl:sm:ml-4">
-          <img src="/assets//images/profile-34.jpeg" alt="" class="mx-auto h-20 w-20 rounded-full object-cover md:h-32 md:w-32" />
-      </div>
-      <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
-          <div>
-              <label for="name">Full Name</label>
-              <input id="name" type="text" placeholder="Jimmy Turner" class="form-input" />
-          </div>
-          <div>
-              <label for="profession">Profession</label>
-              <input id="profession" type="text" placeholder="Web Developer" class="form-input" />
-          </div>
-          <div>
-              <label for="country">Country</label>
-              <select id="country" class="form-select text-white-dark">
-                  <option>All Countries</option>
-                  <option selected>United States</option>
-                  <option>India</option>
-                  <option>Japan</option>
-                  <option>China</option>
-                  <option>Brazil</option>
-                  <option>Norway</option>
-                  <option>Canada</option>
-              </select>
-          </div>
-          <div>
-              <label for="address">Address</label>
-              <input id="address" type="text" placeholder="New York" class="form-input" />
-          </div>
-          <div>
-              <label for="location">Location</label>
-              <input id="location" type="text" placeholder="Location" class="form-input" />
-          </div>
-          <div>
-              <label for="phone">Phone</label>
-              <input id="phone" type="text" placeholder="+1 (530) 555-12121" class="form-input" />
-          </div>
-          <div>
-              <label for="email">Email</label>
-              <input id="email" type="email" placeholder="Jimmy@gmail.com" class="form-input" />
-          </div>
-          <div>
-              <label for="web">Website</label>
-              <input id="web" type="text" placeholder="Enter URL" class="form-input" />
-          </div>
-          <div>
-              <label class="inline-flex cursor-pointer">
-                  <input type="checkbox" class="form-checkbox" />
-                  <span class="relative text-white-dark checked:bg-none">Make this my default address</span>
-              </label>
-          </div>
-          <div class="mt-3 sm:col-span-2">
-              <button type="button" class="btn btn-primary">Save</button>
-          </div>
-      </div>
-  </div>
-</form>
+<div>
+    <div class="mb-5 flex overflow-y-auto whitespace-nowrap border-b border-[#ebedf2] font-semibold dark:border-[#191e3a]">
+        <a
+            href="javascript:;"
+            class="flex gap-2 border-b border-transparent p-4 !outline-none hover:border-primary hover:text-primary"
+            [ngClass]="{ '!border-primary text-primary':  activeTab.toLowerCase() === 'general'}"
+            (click)="activeTab = 'general'"
+        >
+            <icon-home />
+            General
+        </a>
+        <a
+            href="javascript:;"
+            class="flex gap-2 border-b border-transparent p-4 !outline-none hover:border-primary hover:text-primary"
+            [ngClass]="{ '!border-primary text-primary':  activeTab.toLowerCase() === 'privacy-and-security'}"
+            (click)="activeTab = 'privacy-and-security'"
+        >
+            <icon-settings />
+            Privacidad y seguridad
+        </a>
+    </div>
+    
+    <div *ngIf="activeTab.toLowerCase() === 'general'">
+        <form [formGroup]="profileDetailsForm" (ngSubmit)="updateUser()" class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+            <h6 class="mb-5 text-lg font-bold">Detalles del perfil</h6>
+            <div class="flex flex-col sm:flex-row">
+                <div class="mb-5 w-full sm:w-2/12 ltr:sm:mr-4 rtl:sm:ml-4">
+                    <img (click)="profilePhotoModal.open()" src="/assets//images/profile-34.jpeg" alt="" class="mx-auto h-20 w-20 rounded-full object-cover md:h-32 md:w-32 cursor-pointer" />
+                    <button (click)="profilePhotoModal.open()" type="button" class="btn btn-primary mx-auto mt-5">Cambiar imagen</button>
+                </div>
+                <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
+                    <div class="sm:col-span-2">
+                        <label for="name">Nombre</label>
+                        <input id="name" type="text" placeholder="Introduce tu nombre" class="form-input" formControlName="name"/>
+                        <div *ngIf="profileDetailsForm.controls['name'].invalid && profileDetailsForm.controls['name'].dirty" class="text-red-500">
+                            Debes introducir un nombre
+                        </div>
+                    </div>
+                    <div>
+                        <label for="firstSurname">Primer apellido</label>
+                        <input id="firstSurname" type="text" placeholder="Introduce tu primer apellido" class="form-input" formControlName="firstSurname"/>
+                    </div>
+                    <div>
+                        <label for="lastSurname">Segundo apellido</label>
+                        <input id="lastSurname" type="text" placeholder="Introduce tu segundo apellido" class="form-input" formControlName="lastSurname"/>
+                    </div>
+                    <div>
+                        <label for="country">País</label>
+                        <select id="country" class="form-select text-white-dark" formControlName="country">
+                            <option>Selecciona un país</option>
+                            <option>España</option>
+                            <option>Reino Unido</option>
+                            <option>Italia</option>
+                            <option>Francia</option>
+                            <option>Alemania</option>
+                            <option>China</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="location">Localidad</label>
+                        <input id="location" type="text" placeholder="Introduce tu localidad" class="form-input" formControlName="location"/>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label for="address">Dirección</label>
+                        <input id="address" type="text" placeholder="Introduce una dirección" class="form-input" formControlName="address"/>
+                    </div>
+                    <div>
+                        <label for="phone">Móvil o teléfono de contacto</label>
+                        <input id="phone" type="text" placeholder="Introduce tu número de móvil/teléfono" class="form-input" formControlName="phone"/>
+                    </div>
+                    <div>
+                        <label for="contactEmail">Email de contacto</label>
+                        <input id="contactEmail" type="text" placeholder="Introduce tu email de contacto" class="form-input" formControlName="contactEmail"/>
+                    </div>
+                    <div class="mt-3 sm:col-span-2">
+                        <button type="submit" class="btn btn-primary">Actualizar registros</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div *ngIf="activeTab.toLowerCase() === 'privacy-and-security'">
+        <form [formGroup]="profileNewEmailForm" (ngSubmit)="updateUser()" class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+            <h6 class="mb-5 text-lg font-bold">Cambiar email</h6>
+            <div class="flex flex-col sm:flex-row">
+                <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
+                    <div class="sm:col-span-2">
+                        <label for="email">Introduce el nuevo email</label>
+                        <input id="email" type="email" placeholder="Introduce tu nuevo email" class="form-input" formControlName="email"/>
+                    </div>
+                    
+                    <div class="mt-3 sm:col-span-2">
+                        <button type="button" class="btn btn-primary">Cambiar email</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form [formGroup]="profileNewPassForm" (ngSubmit)="updateUser()" class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+            <h6 class="mb-5 text-lg font-bold">Cambiar contraseña</h6>
+            <div class="flex flex-col sm:flex-row">
+                <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
+                    <div class="sm:col-span-2">
+                        <label for="currentPass">Contraseña actual</label>
+                        <input id="currentPass" type="password" placeholder="Introduce tu contraseña actual" class="form-input" formControlName="currentPass"/>
+                    </div>
+                    <hr class="hidden sm:col-span-2 sm:block my-6 border-[#e0e6ed] dark:border-[#1b2e4b]"/>
+                    <div>
+                        <label for="newPass">Nueva contraseña</label>
+                        <input id="newPass" type="password" placeholder="Introduce una nueva contraseña" class="form-input" formControlName="newPass"/>
+                    </div>
+                    <div>
+                        <label for="validateNewPass">Validar nueva contraseña</label>
+                        <input id="validateNewPass" type="password" placeholder="Introduce de nuevo tu nueva contraseña" class="form-input" formControlName="validateNewPass"/>
+                    </div>
+                    <div class="mt-3 sm:col-span-2">
+                        <button type="button" class="btn btn-primary">Cambiar contraseña</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726] space-y-5">
+            <h6 class="mb-5 text-lg font-bold">Eliminar cuenta</h6>
+            <p>Una vez que quieras borrar la cuenta, no la podrás recuperar.</p>
+            <button class="btn btn-danger btn-delete-account" (click)="openModal(profileDeleteModal)">Eliminar</button>
+        </div>
+    </div>
+
+    <modal #profilePhotoModal class="no-footer modal-top large-modal">
+        <ng-template #modalHeader>
+          <div class="!font-medium">Asignar foto de perfil</div>
+        </ng-template>
+        <ng-template #modalBody>
+            <form [formGroup]="profilePhotoForm" class="text-sm">
+                <div class="mb-5">
+                    <label for="photo">URL del perfil</label>
+                    <input id="name" type="text" placeholder="Subir imagen" class="form-input" formControlName="photo" />
+                </div>
+                <div class="mt-8 flex items-center justify-end">
+                    <button type="button" class="btn btn-outline-danger" (click)="closeModal(profilePhotoModal, profilePhotoForm)">Cancelar</button>
+                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Subir imagen</button>
+                </div>
+            </form>
+        </ng-template>
+    </modal>
+
+    <modal #profileDeleteModal class="no-footer modal-top large-modal">
+        <ng-template #modalHeader>
+          <div class="!font-medium">Eliminar perfil</div>
+        </ng-template>
+        <ng-template #modalBody>
+            <p class="mb-5"> Para borrar tu perfil, escribe <b>{{this.email}}</b> como palabra clave para proceder con la eliminación de tu perfil</p>
+    
+            <form [formGroup]="profileDeleteForm" class="text-sm" (ngSubmit)="deleteUser()">
+                <div class="mb-5">
+                    <input id="word" type="text" placeholder="Introduce la palabra clave" class="form-input" formControlName="word"/>
+                    <ng-container *ngIf="profileDeleteForm.controls['word'].invalid && submitted">
+                        <div *ngIf="profileDeleteForm.controls['word'].errors?.['required']" class="text-red-500">
+                            Debes introducir la palabra clave.
+                        </div>
+                        <div *ngIf="!profileDeleteForm.controls['word'].errors?.['required'] && profileDeleteForm.controls['word'].errors?.['isEqual']" class="text-red-500">
+                            No coincide la palabra clave.
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="mt-8 flex items-center justify-end">
+                    <button type="submit" class="btn btn-danger ltr:ml-4 rtl:mr-4">Eliminar</button>
+                </div>
+            </form>
+        </ng-template>
+    </modal>
+</div>

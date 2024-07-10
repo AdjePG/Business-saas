@@ -13,7 +13,12 @@ public class UserMapper {
         userDTO.setFirstSurname(user.getFirstSurname());
         userDTO.setLastSurname(user.getLastSurname());
         userDTO.setPhoto(user.getPhoto());
+        userDTO.setCountry(user.getCountry());
+        userDTO.setLocation(user.getLocation());
+        userDTO.setAddress(user.getAddress());
         userDTO.setPhone(user.getPhone());
+        userDTO.setContactEmail(user.getContactEmail());
+
         return userDTO;
     }
 
@@ -24,7 +29,12 @@ public class UserMapper {
         user.setFirstSurname(userDTO.getFirstSurname());
         user.setLastSurname(userDTO.getLastSurname());
         user.setPhoto(userDTO.getPhoto());
+        user.setCountry(userDTO.getCountry());
+        user.setLocation(userDTO.getLocation());
+        user.setAddress(userDTO.getAddress());
         user.setPhone(userDTO.getPhone());
+        user.setContactEmail(userDTO.getContactEmail());
+
         return user;
     }
 }

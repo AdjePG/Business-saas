@@ -50,14 +50,14 @@ public class BusinessService {
 
     // region SERVICE METHODS
 
-    public APIResponse<List<BusinessDTO>> getBusinesses(Optional<UUID> userId) {
+    public APIResponse<List<BusinessDTO>> getBusinesses(UUID userId) {
         APIResponse<List<BusinessDTO>> apiResponse;
         List<BusinessDTO> businessesDTO;
 
         try {
             // Filtrar por userId si está presente, de lo contrario, obtener todos los negocios
-            Stream<Business> businessStream = userId.isPresent() ?
-                    businessRepository.findByUserUuid(uuidConverterUtil.uuidToBytes(userId.get())).stream() :
+            Stream<Business> businessStream = userId != null ?
+                    businessRepository.findByUserUuid(uuidConverterUtil.uuidToBytes(userId)).stream() :
                     businessRepository.findAll().stream();
 
             businessesDTO = businessStream

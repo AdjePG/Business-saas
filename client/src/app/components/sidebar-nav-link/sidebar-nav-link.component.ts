@@ -26,7 +26,6 @@ export class SidebarNavLinkComponent implements OnInit {
 
   setActiveDropdown() {
     const selector = document.querySelector('.sidebar ul a[routerLink="' + window.location.pathname + '"]');
-    console.log(selector)
     if (selector) {
       selector.classList.add('active');
       const ul: any = selector.closest('ul.sub-menu');

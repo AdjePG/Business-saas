@@ -85,14 +85,24 @@
                     <form class="space-y-5 dark:text-white" (submit)="signUp(form)" #form="ngForm" novalidate>
                         <div>
                             <label for="Name">{{ 'auth.signUp.fields.field_1' | translate }}</label>
-                            <input id="Name" type="text" [(ngModel)]="name" name="name" required placeholder="{{ 'auth.signUp.fields.field_1_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #nameField="ngModel">
+                            <div class="relative text-white-dark">
+                                <input id="Name" type="text" [(ngModel)]="name" name="name" required placeholder="{{ 'auth.signUp.fields.field_1_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #nameField="ngModel">
+                                <span class="absolute start-4 top-1/2 -translate-y-1/2">
+                                    <icon-user [fill]="true" />
+                                </span>
+                            </div>
                             <div *ngIf="nameField.errors?.['required'] && nameField.touched" class="text-red-500">
                                 {{ 'auth.signUp.fields.field_1_error_1' | translate }}
                             </div>
                         </div>
                         <div>
                             <label for="Email">{{ 'auth.signUp.fields.field_2' | translate }}</label>
-                            <input id="Email" type="email" [(ngModel)]="email" name="email" required email placeholder="{{ 'auth.signUp.fields.field_2_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #emailField="ngModel">
+                            <div class="relative text-white-dark">
+                                <input id="Email" type="email" [(ngModel)]="email" name="email" required email placeholder="{{ 'auth.signUp.fields.field_2_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #emailField="ngModel">
+                                <span class="absolute start-4 top-1/2 -translate-y-1/2">
+                                    <icon-mail [fill]="true" />
+                                </span>
+                            </div>
                             <div *ngIf="emailField.errors?.['required'] && emailField.touched" class="text-red-500">
                                 {{ 'auth.signUp.fields.field_2_error_1' | translate }}
                             </div>
@@ -103,7 +113,12 @@
                         
                         <div>
                             <label for="Password">{{ 'auth.signUp.fields.field_3' | translate }}</label>
-                            <input id="Password" type="password" [(ngModel)]="password" name="password" required [pattern]="passwordPattern" minlength="8" placeholder="{{ 'auth.signUp.fields.field_3_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #passwordField="ngModel">
+                            <div class="relative text-white-dark">
+                                <input id="Password" type="password" [(ngModel)]="password" name="password" required [pattern]="passwordPattern" minlength="8" placeholder="{{ 'auth.signUp.fields.field_3_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #passwordField="ngModel">
+                                <span class="absolute start-4 top-1/2 -translate-y-1/2">
+                                    <icon-lock-dots [fill]="true" />
+                                </span>
+                            </div>
                             <div *ngIf="passwordField.errors?.['required']  && passwordField.touched" class="text-red-500">
                                 {{ 'auth.signUp.fields.field_3_error_1' | translate }}
                             </div>

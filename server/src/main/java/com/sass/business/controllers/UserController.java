@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/users")
@@ -37,6 +38,20 @@ public class UserController {
     @GetMapping("/")
     public ResponseEntity<APIResponse<List<UserDTO>>> getUsers() {
         APIResponse<List<UserDTO>> apiResponse = userService.getUsers();
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
+    }
+    // endregion
+
+    // region GET - GETUSER
+    @Operation(summary = "Get user's details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok status")
+    })
+    @GetMapping("/{uuid}")
+    public ResponseEntity<APIResponse<UserDTO>> getUser(
+            @PathVariable UUID uuid
+    ) {
+        APIResponse<UserDTO> apiResponse = userService.getUser(uuid);
         return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
     // endregion

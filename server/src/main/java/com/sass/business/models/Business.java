@@ -2,7 +2,8 @@ package com.sass.business.models;
 
 import jakarta.persistence.*;
 
-import java.util.UUID;
+import java.util.Set;
+
 @Entity
 @Table(name = "business")
 public class Business {
@@ -26,7 +27,12 @@ public class Business {
     @Column(name = "description", length = 250)
     private String description;
 
-    //endregion
+    // region RELATED TABLES
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SharedBusiness> sharedBusinesses;
+    // endregion
+
+    // endregion
 
     // region GETTERS AND SETTERS
 
@@ -70,5 +76,5 @@ public class Business {
         this.description = description;
     }
 
-    //endregion
+    // endregion
 }

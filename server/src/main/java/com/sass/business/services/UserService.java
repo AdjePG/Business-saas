@@ -77,6 +77,40 @@ public class UserService {
         return apiResponse;
     }
 
+    public APIResponse<UserDTO> getUser(UUID uuid) {
+        APIResponse<UserDTO> apiResponse;
+        Optional<User> userById;
+        UserDTO userDTO;
+
+        try {
+            userById = userRepository.findById(uuidConverterUtil.uuidToBytes(uuid));
+
+            if (userById.isEmpty()) {
+                throw new APIResponseException("User not found", HttpStatus.NOT_FOUND.value());
+            }
+
+            userDTO = userMapper.toDTO(userById.get());
+
+            apiResponse = new APIResponse<>(
+                    HttpStatus.OK.value(),
+                    "Success!",
+                    userDTO
+            );
+        } catch (APIResponseException exception) {
+            apiResponse = new APIResponse<>(
+                    exception.getHttpStatus(),
+                    exception.getMessage()
+            );
+        } catch (Exception exception) {
+            apiResponse = new APIResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "There's a server error"
+            );
+        }
+
+        return apiResponse;
+    }
+
     public APIResponse<Void> signUp(UserDTO userDTO) {
         APIResponse<Void> apiResponse;
         User user;
@@ -124,8 +158,11 @@ public class UserService {
                 throw new APIResponseException("User not found", HttpStatus.NOT_FOUND.value());
             }
 
+            System.out.println(userDTO);
+
             user = userMapper.toModel(userDTO);
             user.setUuid(userById.get().getUuid());
+            user.setEmail(userById.get().getEmail());
             user.setPassword(userById.get().getPassword());
             userRepository.save(user);
 

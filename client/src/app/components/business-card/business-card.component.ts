@@ -150,7 +150,6 @@ export class BusinessCardComponent implements OnInit {
   }
 
   goToBusiness(id: string) {
-    console.log("AAAA")
     this.router.navigate([`/${id}`]);
   }
 

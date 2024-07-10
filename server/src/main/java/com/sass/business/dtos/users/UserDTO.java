@@ -5,8 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-import java.util.UUID;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
     // region ATTRIBUTES
@@ -32,8 +30,20 @@ public class UserDTO {
     @Size(max = 255, message = "La foto no puede tener más de 255 caracteres")
     private String photo;
 
+    @Size(max = 2, message = "El país no puede tener más de 255 caracteres")
+    private String country;
+
+    @Size(max = 255, message = "La ciudad no puede tener más de 255 caracteres")
+    private String location;
+
+    @Size(max = 255, message = "La dirección no puede tener más de 255 caracteres")
+    private String address;
+
     @Size(max = 15, message = "El teléfono no puede tener más de 15 caracteres")
     private String phone;
+
+    @Size(max = 255, message = "El correo electrónico de contacto no puede tener más de 255 caracteres")
+    private String contactEmail;
 
     // endregion
 
@@ -87,6 +97,30 @@ public class UserDTO {
         this.photo = photo;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -95,6 +129,13 @@ public class UserDTO {
         this.phone = phone;
     }
 
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
     //endregion
 }
-

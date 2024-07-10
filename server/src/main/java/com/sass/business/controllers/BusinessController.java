@@ -42,7 +42,7 @@ public class BusinessController {
     })
     @GetMapping("/")
     public ResponseEntity<APIResponse<List<BusinessDTO>>> getBusinesses(
-            @RequestParam Optional<UUID> userId
+            @RequestParam(required = false) UUID userId
     ) {
         APIResponse<List<BusinessDTO>> apiResponse = businessService.getBusinesses(userId);
         return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
