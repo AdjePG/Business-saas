@@ -1,62 +1,78 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { slideDownUp } from './shared/animations';
 import { Business } from './models/business';
 import { CardType } from './shared/types';
 import { BusinessService } from 'src/app/service/business/business.service';
-import { lastValueFrom  } from 'rxjs';
 import { UserService } from 'src/app/service/user/user.service';
 import { User } from 'src/app/models/user';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './index.html',
     animations: [slideDownUp],
-
 })
 export class IndexComponent implements OnInit {
-    userData: User | null = null;
     cardType: typeof CardType = CardType;
+	
+    listOwnBusinesses: Business[] = [];
+    listSharedBusinesses: Business[] = [];
+    userData: User | null = null;
 
     activeTab: any = 'general';
     active1: any = 1;
     active2: any = 1;
 
-    listOwnBusiness: Business[] = [];
-    listSharedBusiness: Business[] = [];
+    constructor(
+		private businessService: BusinessService,
+		private userService: UserService
+	) {
 
-    constructor(private businessService: BusinessService,private userService: UserService) {
     }
 
     ngOnInit(): void {
-      this.userService.getUserData().subscribe(userData => {
-        this.userData = userData;
-      });
-      this.getBusiness();
+		this.userService.getUserData().subscribe(userData => {
+			this.userData = userData;
+		});
+
+		this.getBusiness();
     }
 
     async getBusiness() {
-        try {
+		let response;
 
+        try {
             if (!this.userData?.uuid) {
-              console.error('No se pudo obtener el UUID del usuario');
-              return;
+				console.error('No se pudo obtener el UUID del usuario');
+				return;
             }
 
-            const businesses: Business[] = await lastValueFrom(this.businessService.getAllBusinesses(this.userData.uuid));
-            this.listOwnBusiness = [...businesses];
-            this.listSharedBusiness = [...businesses];
+			response = await lastValueFrom(this.businessService.getBusinesses(this.userData.uuid))
+
+			if (response.status !== 200) {
+				console.error(response.message);
+				return;
+			}
+
+            this.listOwnBusinesses = response.result;
+
+			response = await lastValueFrom(this.businessService.getBusinesses(this.userData.uuid, true))
+
+			if (response.status !== 200) {
+				console.error(response.message);
+				return;
+			}
+
+            this.listSharedBusinesses = response.result;
         } catch (error) {
             console.error('Error fetching businesses', error);
         }
     }
-  
-  handleBusinessDeleted(uuid: string) {
-      this.listOwnBusiness = this.listOwnBusiness.filter(business => business.uuid !== uuid);
-      this.listSharedBusiness = this.listSharedBusiness.filter(business => business.uuid !== uuid);
-  }
+	
+	handleBusinessDeleted(uuid: string) {
+		this.listOwnBusinesses = this.listOwnBusinesses.filter(business => business.uuid !== uuid);
+	}
 
-  handleBusinessAdded(business: Business) {
-    this.listOwnBusiness.push(business);
-    this.listSharedBusiness.push(business);
-  }
+	handleBusinessAdded(business: Business) {
+		this.listOwnBusinesses.push(business);
+	}
 }

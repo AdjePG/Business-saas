@@ -21,7 +21,7 @@
     </div>
     
     <div *ngIf="activeTab.toLowerCase() === 'general'">
-        <form [formGroup]="profileDetailsForm" (ngSubmit)="updateUser()" class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+        <form [formGroup]="profileDetailsForm" (ngSubmit)="updateUser()" class="mb-5 rounded-md bg-white p-4 dark:bg-[#0e1726]">
             <h6 class="mb-5 text-lg font-bold">Detalles del perfil</h6>
             <div class="flex flex-col sm:flex-row">
                 <div class="mb-5 w-full sm:w-2/12 ltr:sm:mr-4 rtl:sm:ml-4">
@@ -81,7 +81,7 @@
     </div>
 
     <div *ngIf="activeTab.toLowerCase() === 'privacy-and-security'">
-        <form [formGroup]="profileNewEmailForm" (ngSubmit)="updateUser()" class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+        <form [formGroup]="profileNewEmailForm" (ngSubmit)="updateUser()" class="mb-5 rounded-md bg-white p-4 dark:bg-[#0e1726]">
             <h6 class="mb-5 text-lg font-bold">Cambiar email</h6>
             <div class="flex flex-col sm:flex-row">
                 <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
@@ -97,7 +97,7 @@
             </div>
         </form>
 
-        <form [formGroup]="profileNewPassForm" (ngSubmit)="updateUser()" class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726]">
+        <form [formGroup]="profileNewPassForm" (ngSubmit)="updateUser()" class="mb-5 rounded-md bg-white p-4 dark:bg-[#0e1726]">
             <h6 class="mb-5 text-lg font-bold">Cambiar contraseña</h6>
             <div class="flex flex-col sm:flex-row">
                 <div class="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
@@ -121,7 +121,7 @@
             </div>
         </form>
 
-        <div class="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-[#0e1726] space-y-5">
+        <div class="mb-5 rounded-md bg-white p-4 dark:bg-[#0e1726] space-y-5">
             <h6 class="mb-5 text-lg font-bold">Eliminar cuenta</h6>
             <p>Una vez que quieras borrar la cuenta, no la podrás recuperar.</p>
             <button class="btn btn-danger btn-delete-account" (click)="openModal(profileDeleteModal)">Eliminar</button>
@@ -156,7 +156,7 @@
             <form [formGroup]="profileDeleteForm" class="text-sm" (ngSubmit)="deleteUser()">
                 <div class="mb-5">
                     <input id="word" type="text" placeholder="Introduce la palabra clave" class="form-input" formControlName="word"/>
-                    <ng-container *ngIf="profileDeleteForm.controls['word'].invalid && submitted">
+                    <ng-container *ngIf="profileDeleteForm.controls['word'].invalid && isSubmitted">
                         <div *ngIf="profileDeleteForm.controls['word'].errors?.['required']" class="text-red-500">
                             Debes introducir la palabra clave.
                         </div>

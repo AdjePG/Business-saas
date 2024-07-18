@@ -13,5 +13,6 @@ export enum CardType {
 export enum CardModalType {
   ADD = "add",
   UPDATE = "update",
+  SHARE = "share",
   DELETE = "delete"
 }

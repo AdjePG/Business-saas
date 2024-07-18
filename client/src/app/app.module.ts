@@ -40,6 +40,7 @@ import { ModalModule } from 'angular-custom-modal';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SidebarNavLinkComponent } from './components/sidebar-nav-link/sidebar-nav-link.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
+import { InvitationComponent } from './pages/invitation/invitation.component';
 
 @NgModule({
     imports: [
@@ -66,7 +67,7 @@ import { CalendarComponent } from './pages/calendar/calendar.component';
         IconModule,
         ModalModule
     ],
-    declarations: [AppComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, AppLayout, AuthLayout, ProfileComponent, SidebarNavLinkComponent, CalendarComponent],
+    declarations: [AppComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, AppLayout, AuthLayout, ProfileComponent, SidebarNavLinkComponent, CalendarComponent, InvitationComponent],
     providers: [AppService, Title],
     bootstrap: [AppComponent],
 })

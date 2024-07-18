@@ -1,6 +1,8 @@
 package com.sass.business.configs;
 
+import com.sass.business.models.User;
 import com.sass.business.others.AuthUtil;
+import com.sass.business.others.UuidConverterUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 public class AuthFilter extends OncePerRequestFilter {
@@ -24,7 +27,9 @@ public class AuthFilter extends OncePerRequestFilter {
     private final AuthUtil authUtil;
     private final UserDetailsService userDetailsService;
 
-    public AuthFilter(AuthUtil authUtil, UserDetailsService userDetailsService) {
+    public AuthFilter(
+            AuthUtil authUtil,
+            UserDetailsService userDetailsService) {
         this.authUtil = authUtil;
         this.userDetailsService = userDetailsService;
     }
@@ -33,21 +38,25 @@ public class AuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String headerAuth = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String headerAuth;
+        String jwt;
+        String email;
+
+        headerAuth = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (headerAuth == null || !headerAuth.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        //String jwt = getTokenFromCookie(request);
-        String jwt = headerAuth.substring(7);
+        //jwt = getTokenFromCookie(request);
+        jwt = headerAuth.substring(7);
 
         if (!jwt.equals("null") && SecurityContextHolder.getContext().getAuthentication() == null) {
-            String userEmail = authUtil.extractClaim(jwt, "email");
+            email = authUtil.extractClaim(jwt, "email");
 
-            if (userEmail != null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            if (email != null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 
                 if (authUtil.validateToken(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -55,9 +64,7 @@ public class AuthFilter extends OncePerRequestFilter {
                             null,
                             userDetails.getAuthorities()
                     );
-                    authToken.setDetails(
-                            new WebAuthenticationDetailsSource().buildDetails(request)
-                    );
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }

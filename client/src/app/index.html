@@ -44,14 +44,15 @@
             <h3 class="text-xl font-bold md:text-3xl">Mis negocios</h3>
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <ng-container *ngFor="let business of listOwnBusiness | slice:0:4">
+            <ng-container *ngFor="let business of listOwnBusinesses | slice:0:4">
                 <card 
                     [business]="business"
                     [isOwnBusiness]="true" 
-                    (deleteEvent)="handleBusinessDeleted($event)"></card>
+                    (deleteEvent)="handleBusinessDeleted($event)"
+                ></card>
             </ng-container>
 
-            <ng-container *ngIf="listSharedBusiness.length < 4">
+            <ng-container *ngIf="listSharedBusinesses.length < 4">
                 <card 
                     [cardType]="cardType.ADD"
                     (addEvent)="handleBusinessAdded($event)"
@@ -60,23 +61,16 @@
         </div>
     </div>
 
-    <div class="mt-10">
+    <div *ngIf="listSharedBusinesses.length > 0" class="mt-10">
         <div class="flex flex-col md:flex-row justify-between items-center mb-6">
             <h3 class="text-xl font-bold md:text-3xl">Negocios compartidos</h3>
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <ng-container *ngFor="let business of listSharedBusiness | slice:0:4">
+            <ng-container *ngFor="let business of listSharedBusinesses | slice:0:4">
                 <card 
                     [business]="business" 
                     [isOwnBusiness]="false" 
                     (deleteEvent)="handleBusinessDeleted($event)"
-                ></card>
-            </ng-container>
-
-            <ng-container *ngIf="listSharedBusiness.length < 4">
-                <card 
-                    [cardType]="cardType.ADD"
-                    (addEvent)="handleBusinessAdded($event)"
                 ></card>
             </ng-container>
         </div>
@@ -85,6 +79,7 @@
     <h3 class="mt-10 mb-8 text-center text-xl font-semibold md:text-2xl">
         Preguntas frecuentes sobre <span class="text-primary">emprender y colaborar</span>
     </h3>
+
     <div class="mb-10 grid grid-cols-1 gap-10 md:grid-cols-2">
         <div class="rounded-md bg-white dark:bg-black">
             <div class="border-b border-white-light p-6 text-[22px] font-bold dark:border-dark dark:text-white">Crear
@@ -339,6 +334,7 @@
             </div>
         </div>
     </div>
+    
     <div class="panel mt-10 text-center md:mt-20">
         <h3 class="mb-2 text-xl font-bold dark:text-white md:text-2xl">¿Necesitas más ayuda?</h3>
         <p class="text-lg font-medium text-white-dark">

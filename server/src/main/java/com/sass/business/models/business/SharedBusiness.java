@@ -1,5 +1,6 @@
-package com.sass.business.models;
+package com.sass.business.models.business;
 
+import com.sass.business.models.User;
 import com.sass.business.models.pks.UserBusinessPK;
 import jakarta.persistence.*;
 
@@ -19,9 +20,8 @@ public class SharedBusiness {
     @JoinColumn(name = "business_uuid", referencedColumnName = "uuid", nullable = false)
     private Business business;
 
+    @Column(name = "permissions")
     private String permissions;
-
-    private boolean accepted;
 
     // endregion
 
@@ -49,14 +49,6 @@ public class SharedBusiness {
 
     public void setPermissions(String permissions) {
         this.permissions = permissions;
-    }
-
-    public boolean isAccepted() {
-        return accepted;
-    }
-
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
     }
 
     // endregion

@@ -1,5 +1,6 @@
-package com.sass.business.models;
+package com.sass.business.models.business;
 
+import com.sass.business.models.User;
 import jakarta.persistence.*;
 
 import java.util.Set;

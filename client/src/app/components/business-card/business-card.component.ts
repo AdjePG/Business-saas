@@ -5,161 +5,244 @@ import { Business } from '../../models/business';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalComponent } from 'angular-custom-modal';
-import { Observable, firstValueFrom  } from 'rxjs';
+import { firstValueFrom  } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/service/user/user.service';
 import { showAlert } from 'src/app/shared/alerts';
 import { ToastType } from 'src/app/shared/types';
+import { BusinessInvitation } from 'src/app/models/business-invitation';
+import { InvitationService } from 'src/app/service/invitation/invitation.service';
 
 @Component({
-  selector: 'card',
-  templateUrl: './business-card.component.html'
+  	selector: 'card',
+  	templateUrl: './business-card.component.html'
 })
 export class BusinessCardComponent implements OnInit {
-  @ViewChild('businessModal') businessModal!: ModalComponent;
+	@ViewChild('businessModal') businessModal!: ModalComponent;
+	@ViewChild('deleteBusinessModal') deleteBusinessModal!: ModalComponent;
+	@ViewChild('shareBusinessModal') shareBusinessModal!: ModalComponent;
 
-  @ViewChild('deleteBusinessModal') deleteBusinessModal!: ModalComponent;
+	@Input() cardType: CardType = CardType.INFO
+	@Input() business!: Business;
+	@Input() isOwnBusiness: boolean = false;
 
-  @Input() cardType: CardType = CardType.INFO
-  @Input() business!: Business;
-  @Input() isOwnBusiness: boolean = false;
+	@Output() deleteEvent: EventEmitter<string> = new EventEmitter<string>();
+	@Output() addEvent: EventEmitter<Business> = new EventEmitter<Business>();
+	@Output() updateEvent: EventEmitter<Business> = new EventEmitter<Business>();
 
-  @Output() deleteEvent: EventEmitter<string> = new EventEmitter<string>();
-  @Output() addEvent: EventEmitter<Business> = new EventEmitter<Business>();
-  @Output() updateEvent: EventEmitter<Business> = new EventEmitter<Business>();
+	businessModalForm: FormGroup;
+	shareBusinessForm: FormGroup;
 
-  cardModalType: typeof CardModalType = CardModalType;
-  isEditMode: boolean = false;
+	cardModalType: typeof CardModalType = CardModalType;
 
-  userData: User | null = null;
-  businessModalForm: FormGroup;
+	userData: User | null = null;
 
-  constructor(
-    private formBuilder: FormBuilder, 
-    private router: Router,
-    private businessService: BusinessService,
-    private userService: UserService
-  ) {
-    this.businessModalForm = this.formBuilder.group({
-        name: ['', Validators.required],
-        imagePath: [''],
-        description: [''],
-        uuid: ['']
-    });
-  }
+	isEditMode: boolean = false;
+	isSubmitted: boolean = false
 
-  ngOnInit(): void {
-    this.userService.getUserData().subscribe(userData => {
-      this.userData = userData;
-    });
-  }
+	constructor(
+		private formBuilder: FormBuilder, 
+		private router: Router,
+		private businessService: BusinessService,
+		private invitationService: InvitationService,
+		private userService: UserService
+	) {
+		this.businessModalForm = this.formBuilder.group({
+			name: ['', Validators.required],
+			imagePath: [''],
+			description: [''],
+			uuid: ['']
+		});
 
-  getType() {
-    return this.cardType === CardType.INFO
-  }
+		this.shareBusinessForm = this.formBuilder.group({
+			email: ['', [Validators.required, Validators.email]]
+		}, {updateOn: 'submit'});
+	}
 
-  openModal(modal: CardModalType, business?: Business) {
-    if (modal === CardModalType.ADD) {
-      this.isEditMode = false;
-      this.businessModalForm.reset();
-      this.businessModal.open();
-    } else if (modal === CardModalType.UPDATE && business) {
-      this.isEditMode = true;
-      this.businessModalForm.setValue({
-        name: business.name,
-        imagePath: business.imagePath,
-        description: business.description,
-        uuid: business.uuid
-      });
-      this.businessModal.open();
-    }
-  }
+	ngOnInit(): void {
+		this.userService.getUserData().subscribe(userData => {
+			this.userData = userData;
+		});
+	}
 
-  closeModal() {
-    this.businessModal.close();
-    this.businessModalForm.reset();
-  }
+  	getType() {
+    	return this.cardType === CardType.INFO
+  	}
+	
+	goToBusiness(uuid: string) {
+		this.router.navigate([`/${uuid}`]);
+	}
 
-  async saveBusiness() {
-    if (this.businessModalForm.invalid) {
-      return;
-    }
+	openModal(event: Event, modal: CardModalType, business?: Business) {
+		this.isSubmitted = false
 
-    if (!this.userData?.uuid) {
-      console.error('No se pudo obtener el UUID del usuario');
-      return;
-    }
+		if (modal === CardModalType.ADD) {
+			this.isEditMode = false;
+			this.businessModalForm.reset();
+			this.businessModal.open();
+		} else if (modal === CardModalType.UPDATE && business) {
+			this.isEditMode = true;
+			this.businessModalForm.setValue({
+				name: business.name,
+				imagePath: business.imagePath,
+				description: business.description,
+				uuid: business.uuid
+			});
+			this.businessModal.open();
+		} else if (modal === CardModalType.DELETE) {
+			this.deleteBusinessModal.open();
+		} else if (modal === CardModalType.SHARE) {
+			this.shareBusinessForm.reset();
+			this.shareBusinessModal.open();
+		}
 
-    const businessData: Business = {
-      ...this.businessModalForm.value,
-      uuidUser: this.userData.uuid
-    };
+		event.stopPropagation();
+	}
 
-    try {
-      let savedBusiness;
-      if (this.isEditMode) {
-        savedBusiness = await this.updateBusiness(businessData);
-        showAlert({
-          toastType: ToastType.SUCCESS,
-          message: 'Negocio actualizado con éxito'
-        });
-      } else {
-        savedBusiness = await this.createBusiness(businessData);
-        showAlert({
-          toastType: ToastType.SUCCESS,
-          message: 'Negocio creado con éxito'
-        });
-      }
+	closeModal(modal: ModalComponent, form?: FormGroup) {
+		modal.close();
+		if (form) {
+			form.reset();
+		}
+	}
 
-      if (savedBusiness) {
-        savedBusiness = await this.checkImage(savedBusiness);
-        if (this.isEditMode) {
-          this.updateEvent.emit(savedBusiness);
-        } else {
-          this.addEvent.emit(savedBusiness);
-        }
-        this.closeModal();
-      }
-    } catch (error) {
-      console.error('Error saving business', error);
-      showAlert({
-        toastType: ToastType.ERROR,
-        message: 'error'
-      });
-    }
-  }
+	saveBusinessData() {
+		this.isSubmitted = true
 
-  async createBusiness(business: Business): Promise<Business> {
-    return (await firstValueFrom(this.businessService.createBusiness(business))).result;
-  }
+		if (this.businessModalForm.invalid) {
+			return;
+		}
 
+		if (!this.userData?.uuid) {
+			console.error('No se pudo obtener el UUID del usuario');
+			return;
+		}
 
-  async updateBusiness(business: Business): Promise<Business> {
-    console.log('updateBusiness'+business.uuid);
-    return (await firstValueFrom(this.businessService.updateBusiness(business.uuid,business))).result;
-  }
+		let businessData: Business = {
+			...this.businessModalForm.value,
+			uuidUser: this.userData.uuid
+		};
 
-  async deleteBusiness() {
-    try {
-      await firstValueFrom(this.businessService.deleteBusiness(this.business.uuid));
-      this.deleteEvent.emit(this.business.uuid);
-      this.deleteBusinessModal.close();
-    } catch (error) {
-      console.error('Error deleting business', error);
-    }
-  }
+		try {
+			if (this.isEditMode) {
+				this.updateBusiness(businessData)
+			} else {
+				this.createBusiness(businessData);
+			}
 
-  goToBusiness(id: string) {
-    this.router.navigate([`/${id}`]);
-  }
+			this.closeModal(this.businessModal, this.businessModalForm);
+		} catch (error) {
+			showAlert({
+				toastType: ToastType.ERROR,
+				message: (error as Error).message
+			});
+		}
+	}
 
-  checkImage(business: Business) {
-    const img = new Image();
-    img.src = business.imagePath;
-    img.onerror = () => {
-      business.imagePath = '';
-    };
+	async createBusiness(businessData: Business) {
+		businessData = await this.checkImage(businessData);
 
-    return business
-  }
+		const response = await firstValueFrom(this.businessService.createBusiness(businessData))
+
+		if (response.status !== 201) {
+			throw new Error(response.message);
+		}
+
+		showAlert({
+			toastType: ToastType.SUCCESS,
+			message: 'Negocio creado con éxito'
+		});
+
+		response.result = await this.checkImage(response.result);
+		this.addEvent.emit(response.result);
+	}
+
+	async updateBusiness(businessData: Business) {
+		businessData = await this.checkImage(businessData);
+
+		const response = (await firstValueFrom(this.businessService.updateBusiness(businessData)))
+
+		if (response.status !== 200) {
+			throw new Error(response.message);
+		}
+
+		showAlert({
+			toastType: ToastType.SUCCESS,
+			message: 'Negocio actualizado con éxito'
+		});
+
+		response.result = await this.checkImage(response.result);
+		this.updateEvent.emit(response.result);
+	}
+
+	async deleteBusiness() {
+		try {
+			const response = await firstValueFrom(this.businessService.deleteBusiness(this.business.uuid))
+
+			if (response.status !== 200) {
+				throw new Error(response.message);
+			}
+
+			showAlert({
+				toastType: ToastType.SUCCESS,
+				message: 'Negocio eliminado con éxito'
+			});
+
+			this.deleteEvent.emit(this.business.uuid);
+			this.closeModal(this.deleteBusinessModal);
+		} catch (error) {
+			showAlert({
+				toastType: ToastType.ERROR,
+				message: (error as Error).message
+			});
+		}
+	}
+
+	async shareBusiness() {
+		this.isSubmitted = true
+
+		if (this.shareBusinessForm.invalid) {
+			return;
+		}
+		
+		this.isSubmitted = false
+		
+		const businessInvitation: BusinessInvitation = {
+			...this.shareBusinessForm.value,
+		};
+
+		try {
+			const response = await firstValueFrom(this.invitationService.shareBusiness(this.business.uuid, businessInvitation))
+
+			if (response.status !== 200) {
+				throw new Error(response.message);
+			}
+
+			showAlert({
+				toastType: ToastType.INFO,
+				message: 'Se ha enviado una invitación'
+			});
+
+			this.closeModal(this.shareBusinessModal, this.shareBusinessForm);
+		} catch (error) {
+			showAlert({
+				toastType: ToastType.ERROR,
+				message: (error as Error).message
+			});
+		}
+	}
+
+	checkImage(business: Business): Promise<Business> {
+		return new Promise((resolve) => {
+			const img = new Image();
+			img.src = business.imagePath;
+			img.onerror = () => {
+				business.imagePath = '';
+				resolve(business);
+			};
+			img.onload = () => {
+				resolve(business);
+			};
+		})
+	}
 }

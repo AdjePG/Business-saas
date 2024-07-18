@@ -3,14 +3,13 @@ package com.sass.business.services;
 import com.sass.business.dtos.customer.CreateCustomerDTO;
 import com.sass.business.dtos.customer.CustomerDTO;
 import com.sass.business.mappers.CustomerMapper;
-import com.sass.business.models.Business;
+import com.sass.business.models.business.Business;
 import com.sass.business.models.Customer;
 import com.sass.business.others.UuidConverterUtil;
 import com.sass.business.repositories.BusinessRepository;
 import com.sass.business.repositories.CustomerRepository;
 import com.sass.exception.common.CustomServiceException;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

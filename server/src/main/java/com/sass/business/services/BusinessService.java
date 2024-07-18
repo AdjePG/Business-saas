@@ -4,21 +4,18 @@ import com.sass.business.dtos.APIResponse;
 import com.sass.business.dtos.business.BusinessDTO;
 import com.sass.business.exceptions.APIResponseException;
 import com.sass.business.mappers.BusinessMapper;
-import com.sass.business.models.Business;
+import com.sass.business.models.business.Business;
+import com.sass.business.models.business.SharedBusiness;
 import com.sass.business.models.User;
 import com.sass.business.others.AuthUtil;
 import com.sass.business.others.UuidConverterUtil;
 import com.sass.business.repositories.BusinessRepository;
+import com.sass.business.repositories.SharedBusinessRepository;
 import com.sass.business.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,6 +25,7 @@ public class BusinessService {
 
     private final BusinessRepository businessRepository;
     private final UserRepository userRepository;
+    private final SharedBusinessRepository sharedBusinessRepository;
     private final BusinessMapper businessMapper;
     private final AuthUtil authUtil;
     private final UuidConverterUtil uuidConverterUtil;
@@ -35,12 +33,14 @@ public class BusinessService {
     public BusinessService(
             BusinessRepository businessRepository,
             UserRepository userRepository,
+            SharedBusinessRepository sharedBusinessRepository,
             BusinessMapper businessMapper,
             AuthUtil authUtil,
             UuidConverterUtil uuidConverterUtil
     ) {
         this.businessRepository = businessRepository;
         this.userRepository = userRepository;
+        this.sharedBusinessRepository = sharedBusinessRepository;
         this.businessMapper = businessMapper;
         this.authUtil = authUtil;
         this.uuidConverterUtil = uuidConverterUtil;
@@ -50,17 +50,24 @@ public class BusinessService {
 
     // region SERVICE METHODS
 
-    public APIResponse<List<BusinessDTO>> getBusinesses(UUID userId) {
+    public APIResponse<List<BusinessDTO>> getBusinesses(UUID userUuid, boolean shared) {
         APIResponse<List<BusinessDTO>> apiResponse;
         List<BusinessDTO> businessesDTO;
+        Stream<Business> businessesStream;
 
         try {
-            // Filtrar por userId si está presente, de lo contrario, obtener todos los negocios
-            Stream<Business> businessStream = userId != null ?
-                    businessRepository.findByUserUuid(uuidConverterUtil.uuidToBytes(userId)).stream() :
-                    businessRepository.findAll().stream();
+            if (userUuid == null) {
+                businessesStream = businessRepository.findAll().stream();
+            } else {
+                if (shared) {
+                    businessesStream = sharedBusinessRepository.findByUserUuid(uuidConverterUtil.uuidToBytes(userUuid)).stream()
+                            .map(SharedBusiness::getBusiness);;
+                } else {
+                    businessesStream = businessRepository.findByUserUuid(uuidConverterUtil.uuidToBytes(userUuid)).stream();
+                }
+            }
 
-            businessesDTO = businessStream
+            businessesDTO = businessesStream
                     .map(businessMapper::toDto)
                     .collect(Collectors.toList());
 
@@ -126,18 +133,13 @@ public class BusinessService {
         try {
             authUserUUID = UUID.fromString(authUtil.extractClaim(token, "uuid"));
             userById = userRepository.findById(uuidConverterUtil.uuidToBytes(authUserUUID));
-
-            if (userById.isEmpty()) {
-                throw new APIResponseException("User not found", HttpStatus.NOT_FOUND.value());
-            }
-
             user = userById.get();
 
             business = businessMapper.toModel(businessDTO, user);
             business = businessRepository.save(business);
 
             apiResponse = new APIResponse<>(
-                    HttpStatus.OK.value(),
+                    HttpStatus.CREATED.value(),
                     "Success!",
                     businessMapper.toDto(business)
             );
@@ -224,7 +226,7 @@ public class BusinessService {
             businessRepository.deleteById(uuidConverterUtil.uuidToBytes(uuid));
 
             apiResponse = new APIResponse<>(
-                    HttpStatus.NO_CONTENT.value(),
+                    HttpStatus.OK.value(),
                     "Success!"
             );
         } catch (APIResponseException exception) {

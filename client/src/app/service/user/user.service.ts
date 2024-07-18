@@ -44,6 +44,7 @@ export class UserService {
   }
 
   getUserData(): Observable<User | null> {
+		console.log("Mirar getUserData")
     return this.userSubject.asObservable();
   }
 

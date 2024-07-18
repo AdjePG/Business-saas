@@ -126,7 +126,7 @@ public class UserService {
             userRepository.save(user);
 
             apiResponse = new APIResponse<>(
-                    HttpStatus.OK.value(),
+                    HttpStatus.CREATED.value(),
                     "Success!"
             );
         } catch (APIResponseException exception) {
@@ -153,12 +153,6 @@ public class UserService {
         try {
             uuid = UUID.fromString(authUtil.extractClaim(token, "uuid"));
             userById = userRepository.findById(uuidConverterUtil.uuidToBytes(uuid));
-
-            if (userById.isEmpty()) {
-                throw new APIResponseException("User not found", HttpStatus.NOT_FOUND.value());
-            }
-
-            System.out.println(userDTO);
 
             user = userMapper.toModel(userDTO);
             user.setUuid(userById.get().getUuid());
@@ -192,17 +186,10 @@ public class UserService {
 
         try {
             uuid = UUID.fromString(authUtil.extractClaim(token, "uuid"));
-
-            userById = userRepository.findById(uuidConverterUtil.uuidToBytes(uuid));
-
-            if (userById.isEmpty()) {
-                throw new APIResponseException("User not found", HttpStatus.NOT_FOUND.value());
-            }
-
             userRepository.deleteById(uuidConverterUtil.uuidToBytes(uuid));
 
             apiResponse = new APIResponse<>(
-                    HttpStatus.NO_CONTENT.value(),
+                    HttpStatus.OK.value(),
                     "Success!"
             );
         } catch (APIResponseException exception) {

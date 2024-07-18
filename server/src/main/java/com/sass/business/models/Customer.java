@@ -1,9 +1,8 @@
 package com.sass.business.models;
 
 
+import com.sass.business.models.business.Business;
 import jakarta.persistence.*;
-
-import java.util.UUID;
 
 
 @Entity

@@ -1,6 +1,5 @@
 package com.sass.business.dtos.business;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -18,7 +17,7 @@ public class BusinessDTO {
     private String name;
 
     @NotNull(message = "El UUID del User no puede ser nulo")
-    private UUID uuidUser;
+    private UUID userUuid;
 
     private String imagePath;
 
@@ -44,12 +43,12 @@ public class BusinessDTO {
         this.name = name;
     }
 
-    public UUID getUuidUser() {
-        return uuidUser;
+    public UUID getUserUuid() {
+        return userUuid;
     }
 
-    public void setUuidUser(UUID uuidUser) {
-        this.uuidUser = uuidUser;
+    public void setUserUuid(UUID userUuid) {
+        this.userUuid = userUuid;
     }
 
     public String getImagePath() {

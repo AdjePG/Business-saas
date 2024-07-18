@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
   activeTab : string = "general"
   uuid : string = ""
   email : string = ""
-  submitted: boolean = false
+  isSubmitted: boolean = false
 
   constructor(
     private formBuilder: FormBuilder,
@@ -72,6 +72,18 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  openModal(modal: ModalComponent) {
+    this.isSubmitted = false
+    modal.open()
+  }
+
+  closeModal(modal: ModalComponent, form?: FormGroup) {
+    modal.close();
+		if (form) {
+			form.reset();
+		}
+  }
+
   updateUser() {
     if (this.profileDetailsForm.invalid) {
       return;
@@ -99,16 +111,17 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteUser() {
-    this.submitted = true
+    this.isSubmitted = true
 
     if (this.profileDeleteForm.invalid) {
       return;
     }
+		
+		this.isSubmitted = false
 
     const user: User = {
       uuid: this.uuid
     };
-    
 
     this.userService.deleteUser().subscribe({
       next: (response) => {
@@ -122,15 +135,5 @@ export class ProfileComponent implements OnInit {
         });
       }
     })
-  }
-
-  openModal(modal: ModalComponent) {
-    this.submitted = false
-    modal.open()
-  }
-
-  closeModal(modal: ModalComponent, form: FormGroup) {
-    modal.close();
-    form.reset();
   }
 }

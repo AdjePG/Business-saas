@@ -23,6 +23,7 @@ export class SidebarComponent {
     store: any;
     activeDropdown: string[] = [];
     parentDropdown: string = '';
+    
     constructor(
         public translate: TranslateService, 
         public storeData: Store<any>, 

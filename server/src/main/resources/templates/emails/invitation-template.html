@@ -1,0 +1,67 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Nunito, Arial, sans-serif;
+            background-color: #f6f6f6;
+        }
+        .email {
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        .header {
+            background-color: #66666625;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            padding: 16px;
+        }
+        .body {
+            background-color: #55555510;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            padding: 16px;
+            text-align: justify;
+        }
+        .footer {
+            display: block;
+            margin: 20px 0 0;
+        }
+        .title {
+            line-height: 5px;
+        }
+        .button {
+            background-color: #1cb0f6;
+            border-radius: 6px;
+            display: inline-block;
+            line-height: 42px;
+            padding: 0 20px;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+<div class="email">
+    <div class="container">
+        <div class="header">
+            <h3 class="title">Invitación a negocio</h3>
+        </div>
+        <div class="body">
+            <h2 class="title">¡Hola! 👋</h2>
+            <br/>
+            <p>Un usuario de la plataforma FactuLink te ha enviado una invitación para entrar a su negocio <b><span th:text="${business}"></span></b>. Tienes <b>1 hora</b> como máximo para aceptar la invitación, si no, tendrás que recibir otra invitación.</p>
+
+            <a th:href="@{'http://localhost:4200/invitation/' + ${token}}" class="button">
+                <b style="color:white;">Aceptar invitación</b>
+            </a>
+
+            <p>En el caso de que este correo se haya enviado por error, puede ignorarlo y/o borrarlo.</p>
+        </div>
+    </div>
+    <small class="footer">2024 - FactuLink</small>
+</div>
+</body>
+</html>

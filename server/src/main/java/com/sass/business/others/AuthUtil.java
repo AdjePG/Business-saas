@@ -1,5 +1,7 @@
 package com.sass.business.others;
 
+import com.sass.business.models.User;
+import com.sass.business.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -8,21 +10,33 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthUtil {
-    // region VARIABLES
+    // region INJECTED DEPENDENCIES
 
     @Value("${auth.jwt.secret}")
     private String secret;
-
     @Value("${auth.expiration:1}")
     private int expiration;
+    private final UuidConverterUtil uuidConverterUtil;
+    private final UserRepository userRepository;
+
+    public AuthUtil(
+            UuidConverterUtil uuidConverterUtil,
+            UserRepository userRepository
+    ) {
+        this.uuidConverterUtil = uuidConverterUtil;
+        this.userRepository = userRepository;
+    }
 
     // endregion
 
@@ -48,14 +62,28 @@ public class AuthUtil {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        String email;
+        User userToken;
+        Optional<User> userById;
 
         if (userDetails == null) {
             return false;
         }
 
-        email = extractClaim(token, "email");
-        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        userToken = new User();
+        userToken.setUuid(uuidConverterUtil.uuidToBytes(UUID.fromString(extractClaim(token, "uuid"))));
+        userToken.setEmail(extractClaim(token, "email"));
+
+        userById = userRepository.findById(userToken.getUuid());
+
+        if (userById.isEmpty()) {
+            return false;
+        }
+
+        if (!userById.get().getEmail().equals(userToken.getEmail())) {
+            return false;
+        }
+
+        return (userToken.getEmail().equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     // endregion

@@ -1,7 +1,7 @@
 package com.sass.business.mappers;
 
 import com.sass.business.dtos.business.BusinessDTO;
-import com.sass.business.models.Business;
+import com.sass.business.models.business.Business;
 import com.sass.business.models.User;
 import com.sass.business.others.UuidConverterUtil;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class BusinessMapper {
         businessDTO.setName(business.getName());
         businessDTO.setDescription(business.getDescription());
         businessDTO.setImagePath(business.getImagePath());
-        businessDTO.setUuidUser(uuidConverterUtil.binaryToUuid(business.getUser().getUuid()));
+        businessDTO.setUserUuid(uuidConverterUtil.binaryToUuid(business.getUser().getUuid()));
         return businessDTO;
     }
 

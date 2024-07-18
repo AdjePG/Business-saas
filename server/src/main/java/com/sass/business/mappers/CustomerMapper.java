@@ -2,7 +2,7 @@ package com.sass.business.mappers;
 
 import com.sass.business.dtos.customer.CreateCustomerDTO;
 import com.sass.business.dtos.customer.CustomerDTO;
-import com.sass.business.models.Business;
+import com.sass.business.models.business.Business;
 import com.sass.business.models.Customer;
 import com.sass.business.others.UuidConverterUtil;
 import org.springframework.stereotype.Component;

@@ -1,5 +1,7 @@
 package com.sass.business.models;
 
+import com.sass.business.models.business.Business;
+import com.sass.business.models.business.SharedBusiness;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Business } from '../../../models/business';
 import { CardType } from '../../../shared/types';
-import { FormBuilder} from '@angular/forms';
-import { Router } from '@angular/router';
 import { BusinessService } from 'src/app/service/business/business.service';
 import { lastValueFrom  } from 'rxjs';
 import { User } from 'src/app/models/user';
@@ -17,7 +15,8 @@ export class OwnBusinessComponent implements OnInit {
   listOwnBusiness: Business[] = [];
   userData: User | null = null;
 
-  constructor(private router: Router,private businessService: BusinessService,private userService: UserService) {
+  constructor(
+	private businessService: BusinessService,private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -28,20 +27,24 @@ export class OwnBusinessComponent implements OnInit {
   }
 
   
-  async getBusiness() {
-      try {
+	async getBusiness() {
+		try {
+			if (!this.userData?.uuid) {
+			console.error('No se pudo obtener el UUID del usuario');
+			return;
+			}
 
-        
-        if (!this.userData?.uuid) {
-          console.error('No se pudo obtener el UUID del usuario');
-          return;
-        }
-          const businesses: Business[] = await lastValueFrom(this.businessService.getAllBusinesses(this.userData.uuid));
-          this.listOwnBusiness = businesses;
-      } catch (error) {
-          console.error('Error fetching businesses', error);
-      }
-  }
+			const response = await lastValueFrom(this.businessService.getBusinesses(this.userData.uuid))
+
+			if (response.status !== 200) {
+				throw new Error(response.message)
+			}
+
+			this.listOwnBusiness = response.result;
+		} catch (error) {
+			console.error('Error fetching businesses:', error);
+		}
+  	}
 
   handleBusinessDeleted(id: string) {
       this.listOwnBusiness = this.listOwnBusiness.filter(business => business.uuid !== id);
