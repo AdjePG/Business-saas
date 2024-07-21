@@ -1,9 +1,10 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
+import { User } from 'src/app/models/user';
 import { AppService } from 'src/app/service/app.service';
 import { AuthService } from 'src/app/service/auth/auth.service';
 import { showAlert } from 'src/app/shared/alerts';
@@ -20,13 +21,24 @@ import { ToastType } from 'src/app/shared/types';
     ],
 })
 export class CoverLoginComponent {
-    email: string = '';
-    password: string = '';
+    loginForm: FormGroup;
+
     store: any;
     currYear: number = new Date().getFullYear();
 
-    constructor(private authService: AuthService, public translate: TranslateService, public storeData: Store<any>, public router: Router, private appSetting: AppService) {
+    constructor(
+		private formBuilder: FormBuilder, 
+        private authService: AuthService, 
+        public translate: TranslateService, 
+        public storeData: Store<any>, 
+        public router: Router, 
+        private appSetting: AppService
+    ) {
         this.initStore();
+        this.loginForm = this.formBuilder.group({
+			email: ['', [Validators.required, Validators.email]],
+			password: ['', Validators.required],
+		});
     }
 
     async initStore() {
@@ -48,20 +60,21 @@ export class CoverLoginComponent {
         window.location.reload();
     }
 
-    signIn(form: NgForm) {
-        if (form.invalid) {
+    signIn() {
+        if (this.loginForm.invalid) {
             return;
         }
 
-        const userData = {
-            email: this.email,
-            password: this.password
+        const userData : User = {
+			...this.loginForm.value
         };
 
         this.authService.logIn(userData).subscribe({
             next: (response) => {
                 localStorage.setItem("user-auth", response.result)
-                this.router.navigate(['/']);
+                this.router.navigate(['/']).then(() => {
+                    window.location.reload();
+                });
             },
             error: (error) => {
                 showAlert({

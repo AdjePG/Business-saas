@@ -6,7 +6,7 @@
                 <a routerLink="/" class="main-logo flex shrink-0 items-center">
                     <img class="ml-[5px] w-8 flex-none" src="/assets/images/logo.svg" alt="" />
                     <span
-                        class="align-middle text-2xl font-semibold ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light lg:inline">VRISTO</span>
+                        class="align-middle text-2xl font-semibold ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light lg:inline">FactuLink</span>
                 </a>
                 <a href="javascript:;"
                     class="collapse-icon flex h-8 w-8 items-center rounded-full transition duration-300 hover:bg-gray-500/10 hover:text-primary rtl:rotate-180 dark:text-white-light dark:hover:bg-dark-light/10"
@@ -25,7 +25,7 @@
 
                         <ul>
                             <ng-container *ngFor="let navLink of item.navLinks">
-                                <app-sidebar-nav-link [navLink]="navLink"></app-sidebar-nav-link>
+                                <sidebar-nav-link [navLink]="navLink"></sidebar-nav-link>
                             </ng-container>
                         </ul>
                     </ng-container>
@@ -46,8 +46,7 @@
                                 <icon-menu-pages class="shrink-0 group-hover:!text-primary" />
 
                                 <span
-                                    class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{
-                                    'pages' | translate }}</span>
+                                    class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">Pages</span>
                             </div>
                             <div
                                 [ngClass]="{ 'rtl:rotate-90 -rotate-90': !activeDropdown.includes('pages') && !activeDropdown.includes('error')}">
@@ -57,15 +56,13 @@
                         <div [@slideDownUp]="!activeDropdown.includes('pages')" class="accordion-content ancestor">
                             <ul class="sub-menu text-gray-500">
                                 <li routerLinkActive="active" (click)="toggleMobileMenu()">
-                                    <a routerLink="/pages/coming-soon-cover" target="_blank">{{ 'coming_soon_cover'
-                                        |
-                                        translate }}</a>
+                                    <a routerLink="/pages/coming-soon-cover" target="_blank">Coming soon</a>
                                 </li>
                                 <li class="accordion menu nav-item">
                                     <button type="button"
                                         class="w-full before:h-[5px] before:w-[5px] before:rounded before:bg-gray-300 hover:bg-gray-100 ltr:before:mr-2 rtl:before:ml-2 dark:text-[#888ea8] dark:hover:bg-gray-900"
                                         (click)="toggleAccordion('error', 'pages')">
-                                        {{ 'error' | translate }}
+                                        Error
                                         <div class="ltr:ml-auto rtl:mr-auto"
                                             [ngClass]="{ 'rtl:rotate-90 -rotate-90': !activeDropdown.includes('error') }">
                                             <icon-carets-down [fill]="true" class="h-4 w-4" />
@@ -76,16 +73,13 @@
                                         class="accordion-content">
                                         <ul class="sub-menu text-gray-500">
                                             <li routerLinkActive="active" (click)="toggleMobileMenu()">
-                                                <a routerLink="/pages/error404" target="_blank">{{ '404' | translate
-                                                    }}</a>
+                                                <a routerLink="/pages/error404" target="_blank">404</a>
                                             </li>
                                             <li routerLinkActive="active" (click)="toggleMobileMenu()">
-                                                <a routerLink="/pages/error500" target="_blank">{{ '500' | translate
-                                                    }}</a>
+                                                <a routerLink="/pages/error500" target="_blank">500</a>
                                             </li>
                                             <li routerLinkActive="active" (click)="toggleMobileMenu()">
-                                                <a routerLink="/pages/error503" target="_blank">{{ '503' | translate
-                                                    }}</a>
+                                                <a routerLink="/pages/error503" target="_blank">503</a>
                                             </li>
                                         </ul>
                                     </div>

@@ -1,27 +1,86 @@
 <div>
-<!-- Sección Visualización de Negocios -->
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; background: linear-gradient(to top left, var(--bg-start), var(--bg-end)); padding: 40px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); transition: background 0.3s ease;" class="md:flex-row theme-dark">
-  <div style="flex: 1; text-align: center; transition: color 0.3s ease;" class="md:text-left">
-      <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 20px; transition: color 0.3s ease;">Explora los Negocios en Nuestra Plataforma</h3>
-      <p style="font-size: 16px; margin-bottom: 20px; transition: color 0.3s ease;">Descubre la diversidad de negocios, con opciones desde startups hasta grandes corporaciones. Cada perfil ofrece una visión detallada de la empresa.</p>
-      <button style="margin-top: 20px; padding: 10px 20px; background-color: var(--button-bg); color: var(--button-text); border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s, color 0.3s;" onmouseover="this.style.backgroundColor='var(--button-hover)'" onmouseout="this.style.backgroundColor='var(--button-bg)'">Ver Negocios</button>
-  </div>
-</div>
+	<!-- Sección Visualización de Negocios -->
+	<!-- <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between; background: linear-gradient(to top left, var(--bg-start), var(--bg-end)); padding: 40px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); transition: background 0.3s ease;" class="md:flex-row theme-dark">
+		<div style="flex: 1; text-align: center; transition: color 0.3s ease;" class="md:text-left">
+			<h3 style="font-size: 24px; font-weight: bold; margin-bottom: 20px; transition: color 0.3s ease;">Explora los Negocios en Nuestra Plataforma</h3>
+			<p style="font-size: 16px; margin-bottom: 20px; transition: color 0.3s ease;">Descubre la diversidad de negocios, con opciones desde startups hasta grandes corporaciones. Cada perfil ofrece una visión detallada de la empresa.</p>
+			<button style="margin-top: 20px; padding: 10px 20px; background-color: var(--button-bg); color: var(--button-text); border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s, color 0.3s;" onmouseover="this.style.backgroundColor='var(--button-hover)'" onmouseout="this.style.backgroundColor='var(--button-bg)'">Ver Negocios</button>
+		</div>
+	</div> -->
 
-  <!-- Sección Mis Negocios -->
-  <div class="mt-10">
-      <h3 class="text-xl md:text-3xl font-bold text-gray-800 dark:text-white">Mis negocios</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-5">
+	<p>Inicio / Mis negocios</p>
 
-        <ng-container>
-            <card [cardType]="cardType.ADD" (addEvent)="handleBusinessAdded($event)"
-            ></card>
-        </ng-container>
+	<div class="flex flex-col md:flex-row justify-between items-center my-5">
+		<h3 class="text-xl font-bold md:text-3xl">Mis negocios</h3>
+	</div>
 
-        <ng-container *ngFor="let business of listOwnBusiness">
-            <card [business]="business"  [isOwnBusiness]="true" (deleteEvent)="handleBusinessDeleted($event)"  (updateEvent)="handleBusinessUpdate($event)"></card>
-        </ng-container>
-      </div>
-  </div>
+	<div class="flex mt-5 justify-end gap-3">
+		<div>
+			<button
+				type="button"
+				class="btn btn-outline-primary p-1"
+				[ngClass]="{'bg-primary text-white': display === displayType.LIST}"
+				(click)="display = displayType.LIST"
+			>
+				<icon-list-check />
+			</button>
+		</div>
+		<div>
+			<button
+				type="button"
+				class="btn btn-outline-primary p-1"
+				[ngClass]="{'bg-primary text-white': display === displayType.GRID}"
+				(click)="display = displayType.GRID"
+			>
+				<icon-layout-grid />
+			</button>
+		</div>
+	</div>
+	
+	<ng-container *ngIf="display === displayType.LIST; then list; else grid"></ng-container>
 
+	<ng-template #list>
+		<div class="mt-5">
+			<table class="shadow-sm">
+				<thead>
+					<tr>
+						<th class="min-w-12 rounded-tl-md"></th>
+						<th class="max-w-[200px] truncate">Título</th>
+						<th class="w-full hidden sm:block">Descripción</th>
+						<th class="rounded-tr-md text-right">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="cursor-pointer w-full bg-white select-none hover:bg-[#eaf1ff] dark:bg-[#0e1726] dark:hover:bg-[#1b2e4b]" *ngFor="let business of businesses" business-row [business]="business" (click)="goToBusiness(business.uuid)">
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr class="dark:bg-[#0e1726]">
+						<th colSpan=4 class="min-w-12 rounded-b-md"></th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</ng-template>
+
+	<ng-template #grid>
+		<div class="mt-5">
+			<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mt-5">
+				<card 
+					[businessElement]="businessElementType.ADD" 
+					(addEvent)="handleBusinessAdded($event)"
+				/>
+
+				<ng-container *ngFor="let business of businesses">
+					<card 
+						[business]="business"
+						(deleteEvent)="handleBusinessDeleted($event)"
+						(updateEvent)="handleBusinessUpdated($event)"
+					/>
+				</ng-container>
+			</div>
+		</div>
+	</ng-template>
+
+	<app-pagination/>
 </div>

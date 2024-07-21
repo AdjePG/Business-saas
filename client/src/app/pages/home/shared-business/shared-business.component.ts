@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Business } from '../../../models/business';
-import { CardType } from '../../../shared/types';
-import { Router } from '@angular/router';
+import { BusinessElementType, DisplayType } from '../../../shared/types';
 import { BusinessService } from 'src/app/service/business/business.service';
 import { lastValueFrom  } from 'rxjs';
 import { User } from 'src/app/models/user';
@@ -12,12 +11,13 @@ import { UserService } from 'src/app/service/user/user.service';
 	templateUrl: './shared-business.component.html'
 })
 export class SharedBusinessComponent implements OnInit {
+	cardType: typeof BusinessElementType = BusinessElementType;
+	DisplayType = DisplayType;
+	displayType: DisplayType = DisplayType.LIST;
+	businesses: Business[] = [];
 	userData: User | null = null;
-	cardType: typeof CardType = CardType;
-	listSharedBusiness: Business[] = [];
 
 	constructor(
-		private router: Router,
 		private businessService: BusinessService,
 		private userService: UserService) {
 	}
@@ -35,9 +35,13 @@ export class SharedBusinessComponent implements OnInit {
 				return;
 			}
 			
-			this.listSharedBusiness = (await lastValueFrom(this.businessService.getBusinesses(this.userData.uuid, true))).result;
+			this.businesses = (await lastValueFrom(this.businessService.getBusinesses(this.userData.uuid, true))).result;
 		} catch (error) {
 			console.error('Error fetching businesses', error);
 		}
+	}
+
+	handleBusinessDeleted(business : { uuid: string }) {
+		this.businesses = this.businesses.filter(ownBusiness => ownBusiness.uuid !== business.uuid);
 	}
 }

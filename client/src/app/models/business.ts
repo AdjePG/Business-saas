@@ -3,4 +3,5 @@ export interface Business {
   name: string,
   description: string,
   imagePath: string | ""
+  isOwnBusiness: boolean; 
 }

@@ -1,10 +1,10 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
-import { AuthService } from '../service/auth/auth.service';
-import { InvitationService } from '../service/invitation/invitation.service';
-import { ApiResponse } from '../models/api-response.model';
+import { ApiResponse } from 'src/app/models/api-response.model';
+import { AuthService } from 'src/app/service/auth/auth.service';
+import { InvitationService } from 'src/app/service/invitation/invitation.service';
 
-export const userGuard: CanActivateFn = async (
+export const userLoginGuard: CanActivateFn = async (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ) => {
@@ -12,7 +12,7 @@ export const userGuard: CanActivateFn = async (
   const authService = inject(AuthService)
   const invitationService = inject(InvitationService)
 
-  const isLogged = await new Promise<boolean>((resolve, reject) => {
+  const isLogged = await new Promise<boolean>((resolve) => {
     authService.isLoggedIn().subscribe({
       next: isLoggedIn => {
         if (state.url === '/' && !isLoggedIn) {
@@ -28,9 +28,9 @@ export const userGuard: CanActivateFn = async (
       error: error => {
         if (state.url !== '/auth/login' && state.url !== '/auth/signup' && state.url !== '/auth/lockscreen' && state.url !== '/auth/reset-password') {
           router.navigate(['/auth/login']);
-          reject(false);
+          resolve(false);
         } else {
-          reject(true);
+          resolve(true);
         }
       }
     });
@@ -40,13 +40,13 @@ export const userGuard: CanActivateFn = async (
     const invitationToken = localStorage.getItem("invitation-token")
 
     if (invitationToken) {
-      const response = await new Promise<ApiResponse<void>>((resolve, reject) => {
+      const response = await new Promise<ApiResponse<void>>((resolve) => {
         invitationService.businessInvitationAccepted(invitationToken).subscribe({
           next: response => {
             resolve(response)
           },
           error: error => {
-            reject(error.error)
+            resolve(error.error)
           }
         });
       });

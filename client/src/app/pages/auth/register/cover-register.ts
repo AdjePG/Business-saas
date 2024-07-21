@@ -5,9 +5,10 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from 'src/app/service/app.service';
 import { AuthService } from 'src/app/service/auth/auth.service';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { showAlert } from 'src/app/shared/alerts';
 import { ToastType } from 'src/app/shared/types';
+import { User } from 'src/app/models/user';
 
 @Component({
     moduleId: module.id,
@@ -20,43 +21,44 @@ import { ToastType } from 'src/app/shared/types';
     ],
 })
 export class CoverRegisterComponent {
-    name: string = '';
-    email: string = '';
-    password: string = '';
-    isLoading = false; 
+    signUpForm: FormGroup;
+
     store: any;
     currYear: number = new Date().getFullYear();
 
     passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";  // 8 Caracteer , 1 Mayuscula 1 Simbolo 1 Numero
 
-
-    constructor(private authService: AuthService,public translate: TranslateService, public storeData: Store<any>, public router: Router, private appSetting: AppService) {
+    constructor(
+		private formBuilder: FormBuilder, 
+        private authService: AuthService,
+        public translate: TranslateService, 
+        public storeData: Store<any>, 
+        public router: Router, 
+        private appSetting: AppService
+    ) {
         this.initStore();
+        this.signUpForm = this.formBuilder.group({
+			name: ['', Validators.required],
+			email: ['', [Validators.required, Validators.email]],
+			password: ['', [Validators.required, Validators.pattern(this.passwordPattern), Validators.minLength(8)]]
+		});
     }
 
-    signUp(form: NgForm) {
-        if (form.invalid) {
+    signUp() {
+        if (this.signUpForm.invalid) {
             return;  // No hacer nada si el formulario es inválido
         }
 
-        this.isLoading = true;  // Iniciar la carga
-        const userData = {
-            name: this.name,
-            email: this.email,
-            password: this.password
+        const userData : User = {
+			...this.signUpForm.value
         };
 
         this.authService.signUp(userData).subscribe({
             next: () => {
-                this.isLoading = false;
                 this.router.navigate(['/']);
             },
             error: (error) => {
-                this.isLoading = false;
                 const errorMessage = this.translate.instant('auth.signUp.error.'+error.error.message);
-
-                console.log(error.error.message);
-                console.log(errorMessage);
 
                 showAlert({
                     toastType: ToastType.ERROR,

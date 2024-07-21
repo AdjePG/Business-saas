@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 
@@ -45,7 +45,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes), CommonModule, MenuModule, IconModule, FormsModule,
+    imports: [
+        RouterModule.forChild(routes), 
+        CommonModule, 
+        MenuModule, 
+        IconModule, 
+        FormsModule,
+        ReactiveFormsModule,
         TranslateModule.forChild({
             loader: {
                 provide: TranslateLoader,

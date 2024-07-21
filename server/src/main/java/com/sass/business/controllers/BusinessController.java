@@ -105,9 +105,10 @@ public class BusinessController {
     @DeleteMapping("/{uuid}")
     public ResponseEntity<APIResponse<Void>> deleteBusiness(
             @PathVariable UUID uuid,
+            @RequestParam(required = false) boolean shared,
             @RequestHeader("Authorization") String authorization
     ) {
-        APIResponse<Void> apiResponse = businessService.deleteBusiness(uuid, authorization.substring(7));
+        APIResponse<Void> apiResponse = businessService.deleteBusiness(uuid, shared, authorization.substring(7));
         return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatus()));
     }
     // endregion

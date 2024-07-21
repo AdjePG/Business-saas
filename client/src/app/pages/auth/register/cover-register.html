@@ -82,58 +82,56 @@
                             {{ 'auth.signUp.title' | translate }}</h1>
                         <p class="text-base font-bold leading-normal text-white-dark">{{ 'auth.signUp.subtitle' | translate }}</p>
                     </div>
-                    <form class="space-y-5 dark:text-white" (submit)="signUp(form)" #form="ngForm" novalidate>
+                    <form class="space-y-5 dark:text-white" [formGroup]="signUpForm" (ngSubmit)="signUp()">
                         <div>
-                            <label for="Name">{{ 'auth.signUp.fields.field_1' | translate }}</label>
+                            <label for="name">{{ 'auth.signUp.fields.field_1' | translate }}</label>
                             <div class="relative text-white-dark">
-                                <input id="Name" type="text" [(ngModel)]="name" name="name" required placeholder="{{ 'auth.signUp.fields.field_1_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #nameField="ngModel">
+                                <input class="form-input ps-10 placeholder:text-white-dark" id="name" type="text" name="name" placeholder="{{ 'auth.signUp.fields.field_1_placeholder' | translate }}" formControlName="name">
                                 <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                     <icon-user [fill]="true" />
                                 </span>
                             </div>
-                            <div *ngIf="nameField.errors?.['required'] && nameField.touched" class="text-red-500">
+                            <div *ngIf="signUpForm.controls['name'].errors?.['required'] && signUpForm.controls['name'].touched" class="text-red-500">
                                 {{ 'auth.signUp.fields.field_1_error_1' | translate }}
                             </div>
                         </div>
                         <div>
-                            <label for="Email">{{ 'auth.signUp.fields.field_2' | translate }}</label>
+                            <label for="email">{{ 'auth.signUp.fields.field_2' | translate }}</label>
                             <div class="relative text-white-dark">
-                                <input id="Email" type="email" [(ngModel)]="email" name="email" required email placeholder="{{ 'auth.signUp.fields.field_2_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #emailField="ngModel">
+                                <input class="form-input ps-10 placeholder:text-white-dark" id="email" type="email" name="email" placeholder="{{ 'auth.signUp.fields.field_2_placeholder' | translate }}" formControlName="email">
                                 <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                     <icon-mail [fill]="true" />
                                 </span>
                             </div>
-                            <div *ngIf="emailField.errors?.['required'] && emailField.touched" class="text-red-500">
+                            <div *ngIf="signUpForm.controls['email'].errors?.['required'] && signUpForm.controls['email'].touched" class="text-red-500">
                                 {{ 'auth.signUp.fields.field_2_error_1' | translate }}
                             </div>
-                            <div *ngIf="emailField.errors?.['email'] && emailField.touched" class="text-red-500">
+                            <div *ngIf="signUpForm.controls['email'].errors?.['email'] && signUpForm.controls['email'].touched" class="text-red-500">
                                 {{ 'auth.signUp.fields.field_2_error_2' | translate }}
                             </div>
                         </div>
                         
                         <div>
-                            <label for="Password">{{ 'auth.signUp.fields.field_3' | translate }}</label>
+                            <label for="password">{{ 'auth.signUp.fields.field_3' | translate }}</label>
                             <div class="relative text-white-dark">
-                                <input id="Password" type="password" [(ngModel)]="password" name="password" required [pattern]="passwordPattern" minlength="8" placeholder="{{ 'auth.signUp.fields.field_3_placeholder' | translate }}" class="form-input ps-10 placeholder:text-white-dark" #passwordField="ngModel">
+                                <input class="form-input ps-10 placeholder:text-white-dark" id="password" type="password" name="password" placeholder="{{ 'auth.signUp.fields.field_3_placeholder' | translate }}" formControlName="password">
                                 <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                     <icon-lock-dots [fill]="true" />
                                 </span>
                             </div>
-                            <div *ngIf="passwordField.errors?.['required']  && passwordField.touched" class="text-red-500">
+                            <div *ngIf="signUpForm.controls['password'].errors?.['required']  && signUpForm.controls['password'].touched" class="text-red-500">
                                 {{ 'auth.signUp.fields.field_3_error_1' | translate }}
                             </div>
-                            <div *ngIf="passwordField.errors?.['pattern'] && passwordField.touched" class="text-red-500">
+                            <div *ngIf="signUpForm.controls['password'].errors?.['pattern'] && signUpForm.controls['password'].touched" class="text-red-500">
                                 {{ 'auth.signUp.fields.field_3_error_2' | translate }}
                             </div>
-                            <div *ngIf="passwordField.errors?.['minlength'] && passwordField.touched" class="text-red-500">
+                            <div *ngIf="signUpForm.controls['password'].errors?.['minlength'] && signUpForm.controls['password'].touched" class="text-red-500">
                                 {{ 'auth.signUp.fields.field_3_error_3' | translate }}
                             </div>
                         </div>
-                        <button type="submit" [disabled]="form.invalid" class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">Sign Up</button>
+                        <button type="submit" [disabled]="signUpForm.invalid" class="btn btn-gradient !mt-6 w-full border-1 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">Sign Up</button>
                     </form>
                     
-                    
-
                     <div class="relative my-7 text-center md:mb-9">
                         <span class="absolute inset-x-0 top-1/2 h-px w-full -translate-y-1/2 bg-white-light dark:bg-white-dark"></span>
                         <span class="relative bg-white px-2 font-bold uppercase text-white-dark dark:bg-dark dark:text-white-light">or</span>
@@ -158,7 +156,7 @@
                         </a>
                     </div>
                 </div>
-                <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ currYear }}.Nose que poner.</p>
+                <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ currYear }} - FactuLink</p>
             </div>
         </div>
     </div>

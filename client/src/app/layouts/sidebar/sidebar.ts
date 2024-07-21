@@ -32,6 +32,7 @@ export class SidebarComponent {
     ) {
         this.initStore();
     }
+    
     async initStore() {
         this.storeData
             .select((d) => d.index)
@@ -131,14 +132,14 @@ export class SidebarComponent {
                             component: IconMenuComponentsComponent
                         },
                         name: "Mis negocios",
-                        route: `/own-business`
+                        route: `/own-businesses`
                     },
                     {
                         icon: {
                             component: IconMenuUsersComponent
                         },
                         name: "Negocios compartidos",
-                        route: `/shared-business`
+                        route: `/shared-businesses`
                     }
                 ]
             }

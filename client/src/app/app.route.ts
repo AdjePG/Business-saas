@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 import { AppLayout } from './layouts/app-layout/app-layout';
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
-import { userGuard } from './shared/user-guard';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { InvitationComponent } from './pages/invitation/invitation.component';
+import { userLoginGuard } from './shared/guards/user-login-guard';
 
 export const routes: Routes = [
     {
@@ -24,7 +24,7 @@ export const routes: Routes = [
                 component: CalendarComponent 
             }
         ],
-        canActivate: [userGuard]
+        canActivate: [userLoginGuard]
     },
     {
         path: 'auth',
@@ -35,7 +35,7 @@ export const routes: Routes = [
                 loadChildren: () => import('./pages/auth/auth.module').then((d) => d.AuthModule) 
             },
         ],
-        canActivate: [userGuard]
+        canActivate: [userLoginGuard]
     },
     {
         path: 'invitation/:id',
@@ -50,7 +50,7 @@ export const routes: Routes = [
                 loadChildren: () => import('./pages/dashboard/dashboard.module').then((d) => d.DashboardModule) 
             }
         ],
-        canActivate: [userGuard]
+        canActivate: [userLoginGuard]
     },
     {
         path: '**',

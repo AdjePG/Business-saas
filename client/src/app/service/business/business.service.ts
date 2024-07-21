@@ -71,14 +71,20 @@ export class BusinessService {
 		);
 	}
 
-	deleteBusiness(uuid: string): Observable<ApiResponse<void>> {
+	deleteBusiness(uuid: string, shared: boolean = false): Observable<ApiResponse<void>> {
+		let url = `${this.apiUrl}${uuid}`;
+		
+		if (shared) {
+			url += `?shared=${shared}`;
+		}
+
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json',
 			'Authorization': `Bearer ${localStorage.getItem("user-auth")}`
 		});
 
 		return this.http.delete<ApiResponse<void>>(
-			`${this.apiUrl}${uuid}`, 
+			url, 
 			{ 
 				headers 
 			}

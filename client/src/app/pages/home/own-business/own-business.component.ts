@@ -1,37 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { Business } from '../../../models/business';
-import { CardType } from '../../../shared/types';
+import { BusinessElementType, DisplayType } from '../../../shared/types';
 import { BusinessService } from 'src/app/service/business/business.service';
 import { lastValueFrom  } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/service/user/user.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-own-business',
-  templateUrl: './own-business.component.html'
+	selector: 'app-own-business',
+	templateUrl: './own-business.component.html'
 })
 export class OwnBusinessComponent implements OnInit {
-  cardType: typeof CardType = CardType;
-  listOwnBusiness: Business[] = [];
-  userData: User | null = null;
+	businessElementType: typeof BusinessElementType = BusinessElementType;
+	displayType: typeof DisplayType = DisplayType;
+	display: DisplayType = DisplayType.LIST;
+	businesses: Business[] = [];
+	userData: User | null = null;
 
-  constructor(
-	private businessService: BusinessService,private userService: UserService) {
-  }
+	constructor(
+		private router: Router,
+		private businessService: BusinessService,
+		private userService: UserService
+	) {
 
-  ngOnInit(): void {
-    this.userService.getUserData().subscribe(userData => {
-      this.userData = userData;
-    });
-    this.getBusiness();
-  }
+	}
 
-  
+	ngOnInit(): void {
+		this.userService.getUserData().subscribe(userData => this.userData = userData);
+		this.getBusiness();
+	}
+	
 	async getBusiness() {
 		try {
 			if (!this.userData?.uuid) {
-			console.error('No se pudo obtener el UUID del usuario');
-			return;
+				console.error('No se pudo obtener el UUID del usuario');
+				return;
 			}
 
 			const response = await lastValueFrom(this.businessService.getBusinesses(this.userData.uuid))
@@ -40,31 +44,33 @@ export class OwnBusinessComponent implements OnInit {
 				throw new Error(response.message)
 			}
 
-			this.listOwnBusiness = response.result;
+			this.businesses = response.result;
 		} catch (error) {
 			console.error('Error fetching businesses:', error);
 		}
   	}
 
-  handleBusinessDeleted(id: string) {
-      this.listOwnBusiness = this.listOwnBusiness.filter(business => business.uuid !== id);
-  }
+	handleBusinessAdded(business: Business) {
+		this.businesses.push(business);
+	}
 
-  handleBusinessAdded(business: Business) {
-    this.listOwnBusiness.push(business);
-  }
+	handleBusinessUpdated(business : Business) {
+		let index;
 
-  handleBusinessUpdate(updatedBusiness: Business) {
-    console.log(updatedBusiness);
-    console.log(this.listOwnBusiness);
+		index = this.businesses.findIndex(ownBusiness => ownBusiness.uuid === business.uuid);
 
-    const index = this.listOwnBusiness.findIndex(b => b.uuid === updatedBusiness.uuid);
-    console.log(index);
+		if (index !== -1) {
+			this.businesses[index] = business
+		}
+	}
+	
+	handleBusinessDeleted(business : { uuid: string }) {
+		this.businesses = this.businesses.filter(ownBusiness => ownBusiness.uuid !== business.uuid);
+	}
 
-    if (index !== -1) {
-      this.listOwnBusiness[index] = updatedBusiness;
-    }
-  }
-
- 
+	goToBusiness(uuid: string) {
+		this.router.navigate([`/${uuid}`]).then(() => {
+			window.location.reload();
+		});;
+	}
 }

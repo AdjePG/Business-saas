@@ -27,6 +27,7 @@ public class BusinessMapper {
         businessDTO.setDescription(business.getDescription());
         businessDTO.setImagePath(business.getImagePath());
         businessDTO.setUserUuid(uuidConverterUtil.binaryToUuid(business.getUser().getUuid()));
+
         return businessDTO;
     }
 
@@ -36,6 +37,16 @@ public class BusinessMapper {
         business.setDescription(dto.getDescription());
         business.setImagePath(dto.getImagePath());
         business.setUser(user);
+
         return business;
+    }
+
+    public Business toModel(Business originalBusiness, BusinessDTO dto, User user) {
+        originalBusiness.setName(dto.getName());
+        originalBusiness.setDescription(dto.getDescription());
+        originalBusiness.setImagePath(dto.getImagePath());
+        originalBusiness.setUser(user);
+
+        return originalBusiness;
     }
 }

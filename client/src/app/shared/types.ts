@@ -5,12 +5,17 @@ export enum ToastType {
   INFO = "info"
 }
 
-export enum CardType {
+export enum BusinessElementType {
   INFO = "info",
   ADD = "add"
 }
 
-export enum CardModalType {
+export enum DisplayType {
+  LIST = "list",
+  GRID = "grid"
+}
+
+export enum BusinessModalType {
   ADD = "add",
   UPDATE = "update",
   SHARE = "share",

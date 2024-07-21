@@ -1,23 +1,22 @@
-import { Component, EventEmitter, Input, Output,ViewChild, OnInit } from '@angular/core';
-import { BusinessModalType, BusinessElementType } from 'src/app/shared/types';
-import { BusinessService } from 'src/app/service/business/business.service';
-import { Business } from '../../models/business';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalComponent } from 'angular-custom-modal';
-import { firstValueFrom  } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+import { Business } from 'src/app/models/business';
+import { BusinessInvitation } from 'src/app/models/business-invitation';
 import { User } from 'src/app/models/user';
+import { BusinessService } from 'src/app/service/business/business.service';
+import { InvitationService } from 'src/app/service/invitation/invitation.service';
 import { UserService } from 'src/app/service/user/user.service';
 import { showAlert } from 'src/app/shared/alerts';
-import { ToastType } from 'src/app/shared/types';
-import { BusinessInvitation } from 'src/app/models/business-invitation';
-import { InvitationService } from 'src/app/service/invitation/invitation.service';
+import { BusinessModalType, BusinessElementType, ToastType } from 'src/app/shared/types';
 
 @Component({
-  	selector: 'card',
-  	templateUrl: './business-card.component.html'
+  selector: '[business-row]',
+  templateUrl: './business-row.component.html'
 })
-export class BusinessCardComponent implements OnInit {
+export class BusinessRowComponent implements OnInit {
 	@ViewChild('businessModal') businessModal!: ModalComponent;
 	@ViewChild('deleteBusinessModal') deleteBusinessModal!: ModalComponent;
 	@ViewChild('shareBusinessModal') shareBusinessModal!: ModalComponent;
@@ -65,7 +64,7 @@ export class BusinessCardComponent implements OnInit {
 			this.userData = userData;
 		});
 	}
-	
+
 	goToBusiness(uuid: string) {
 		this.router.navigate([`/${uuid}`]).then(() => {
 			window.location.reload();

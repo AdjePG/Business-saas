@@ -1,0 +1,53 @@
+<div>
+    <p>Inicio</p>
+    
+    <div class="flex flex-col-reverse items-center justify-between gap-5 rounded-md bg-[#eaf1ff] px-6 py-2.5 mt-5 dark:bg-[#0e1726] md:flex-row lg:mt-0 xl:px-16" *ngIf="ownBusinesses.length <= 0 && sharedBusinesses.length <= 0">
+        <div class="flex-1 py-3.5 text-center md:text-start">
+            <h3 class="mb-2 text-xl font-bold dark:text-white md:text-2xl">¿Listo para emprender o unirte a un negocio?
+            </h3>
+            <div class="text-lg font-medium text-white-dark">
+                Explora las opciones para iniciar tu propia empresa con estructura de SAS o integra tu esfuerzo a un proyecto ya en marcha. Encuentra todas las herramientas y apoyo necesarios para hacer realidad tu visión empresarial.
+            </div>
+            <div class="mt-8 flex justify-center gap-5 md:justify-start lg:mt-16">
+                <a class="btn btn-primary" routerLink="/own-businesses">Mis negocios</a>
+                <a class="btn btn-primary" routerLink="/shared-businesses">Negocios compartidos</a>
+            </div>
+        </div>
+        <div class="w-52 max-w-xs lg:w-full">
+            <img src="/assets/images/knowledge/find-solution.svg" alt="find-solution"
+                class="w-full object-cover rtl:rotate-y-180 dark:brightness-[2.59] dark:grayscale-[83%]" />
+        </div>
+    </div>
+
+    <div class="mt-5" *ngIf="ownBusinesses.length > 0">
+        <div class="flex justify-center mb-5 md:justify-between">
+            <h3 class="text-xl font-bold md:text-3xl">Mis negocios</h3>
+        </div>
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            <ng-container *ngFor="let business of ownBusinesses | slice:0:4">
+                <card 
+                    [business]="business"
+                    (deleteEvent)="handleBusinessDeleted($event)"
+                    (updateEvent)="handleBusinessUpdated($event)"
+                />
+            </ng-container>
+        </div>
+    </div>
+
+    <div class="mt-5" *ngIf="sharedBusinesses.length > 0">
+        <div class="flex justify-center mb-5 md:justify-between">
+            <h3 class="text-xl font-bold md:text-3xl">Negocios compartidos</h3>
+        </div>
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            <ng-container *ngFor="let business of sharedBusinesses | slice:0:4">
+                <card 
+                    [business]="business" 
+                    [isOwnBusiness]="false" 
+                    (deleteEvent)="handleBusinessDeleted($event)"
+                />
+            </ng-container>
+        </div>
+    </div>
+
+    <faqs [faqs]="faqsList"></faqs>
+</div>

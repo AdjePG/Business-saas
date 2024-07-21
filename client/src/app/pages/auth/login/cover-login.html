@@ -64,92 +64,46 @@
                     <div class="mb-10">
                         <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">
                             {{ 'auth.login.title' | translate }}
-
                         </h1>
-                        <!-- <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to
-                            login</p> -->
                     </div>
-                    <form class="space-y-5 dark:text-white" (submit)="signIn(form)" #form="ngForm">
+                    <form class="space-y-5 dark:text-white" [formGroup]="loginForm" (ngSubmit)="signIn()">
                         <div>
-                            <label for="Email">
+                            <label for="email">
                                 {{ 'auth.login.fields.field_1' | translate }}
                                 </label>
                             <div class="relative text-white-dark">
-                                <input id="Email" type="email" placeholder="{{ 'auth.login.fields.field_1_placeholder' | translate }}" name="email"
-                                    class="form-input ps-10 placeholder:text-white-dark" [(ngModel)]="email"
-                                    #emailField="ngModel" required email />
+                                <input class="form-input ps-10 placeholder:text-white-dark" id="email" type="email" placeholder="{{ 'auth.login.fields.field_1_placeholder' | translate }}" name="email" formControlName="email" />
                                 <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                     <icon-mail [fill]="true" />
                                 </span>
                             </div>
-                            <div *ngIf="emailField.errors?.['required'] && emailField.touched" class="text-red-500">
+                            <div *ngIf="loginForm.controls['email'].errors?.['required'] && loginForm.controls['email'].touched" class="text-red-500">
                                 {{ 'auth.login.fields.field_1_error_1' | translate }}
                             </div>
-                            <div *ngIf="emailField.errors?.['email'] && emailField.touched" class="text-red-500">
+                            <div *ngIf="loginForm.controls['email'].errors?.['email'] && loginForm.controls['email'].touched" class="text-red-500">
                                 {{ 'auth.login.fields.field_1_error_2' | translate }}
                             </div>
                         </div>
                         <div>
-                            <label for="Password">
+                            <label for="password">
                                 {{ 'auth.login.fields.field_2' | translate }}
                             </label>
                             <div class="relative text-white-dark">
-                                <input id="Password" type="password" placeholder="{{ 'auth.login.fields.field_2_placeholder' | translate }}" name="password"
-                                    class=" form-input ps-10 placeholder:text-white-dark" [(ngModel)]="password"
-                                    #passwordField="ngModel" minlength="8" required />
+                                <input class=" form-input ps-10 placeholder:text-white-dark" id="password" type="password" placeholder="{{ 'auth.login.fields.field_2_placeholder' | translate }}" name="password" formControlName="password"/>
                                 <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                     <icon-lock-dots [fill]="true" />
                                 </span>
                             </div>
-                            <div *ngIf="passwordField.errors?.['required'] && passwordField.touched"
+                            <div *ngIf="loginForm.controls['password'].errors?.['required'] && loginForm.controls['password'].dirty"
                                 class="text-red-500">
                                 {{ 'auth.login.fields.field_2_error_1' | translate }}
                             </div>
                         </div>
-                        <button type="submit" [disabled]="form.invalid"
+                        <button type="submit" [disabled]="loginForm.invalid"
                             class="btn btn-gradient my-6 w-full border-1 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                             {{ 'auth.login.actions.submit' | translate }}
                         </button>
                     </form>
-
-                    <!-- <div class="relative my-7 text-center md:mb-9">
-                        <span
-                            class="absolute inset-x-0 top-1/2 h-px w-full -translate-y-1/2 bg-white-light dark:bg-white-dark"></span>
-                        <span
-                            class="relative bg-white px-2 font-bold uppercase text-white-dark dark:bg-dark dark:text-white-light">or</span>
-                    </div> -->
-                    <!-- <div class="mb-10 md:mb-[60px]">
-                        <ul class="flex justify-center gap-3.5 text-white">
-                            <li>
-                                <a href="javascript:"
-                                    class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                    style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)">
-                                    <icon-instagram />
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:"
-                                    class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                    style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)">
-                                    <icon-facebook-circle />
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:"
-                                    class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                    style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)">
-                                    <icon-twitter [fill]="true" />
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:"
-                                    class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                    style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)">
-                                    <icon-google />
-                                </a>
-                            </li>
-                        </ul>
-                    </div> -->
                     <div class="text-center dark:text-white mt-6">
                         {{ 'auth.login.footer.have_account' | translate }}
                         <a routerLink="/auth/signup"
@@ -157,15 +111,8 @@
                             {{ 'auth.login.footer.signIn' | translate }}
                         </a>
                     </div>
-                    <!-- <div class="text-center dark:text-white mt-6">
-                        Forgot your password ?
-                        <a routerLink="/auth/cover-register"
-                            class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                            Reset password
-                        </a>
-                    </div> -->
                 </div>
-                <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ currYear }} - Nose que poner
+                <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ currYear }} - FactuLink
                 </p>
             </div>
         </div>

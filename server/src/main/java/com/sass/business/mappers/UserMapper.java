@@ -37,4 +37,19 @@ public class UserMapper {
 
         return user;
     }
+
+    public User toModel(User originalUser, UserDTO userDTO) {
+        originalUser.setEmail(userDTO.getEmail());
+        originalUser.setName(userDTO.getName());
+        originalUser.setFirstSurname(userDTO.getFirstSurname());
+        originalUser.setLastSurname(userDTO.getLastSurname());
+        originalUser.setPhoto(userDTO.getPhoto());
+        originalUser.setCountry(userDTO.getCountry());
+        originalUser.setLocation(userDTO.getLocation());
+        originalUser.setAddress(userDTO.getAddress());
+        originalUser.setPhone(userDTO.getPhone());
+        originalUser.setContactEmail(userDTO.getContactEmail());
+
+        return originalUser;
+    }
 }

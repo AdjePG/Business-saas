@@ -1,28 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { OwnBusinessComponent } from './own-business/own-business.component';
-import { SharedBusinessComponent } from './shared-business/shared-business.component';
-import { IndexComponent } from 'src/app';
-import { BusinessCardComponent } from '../../components/business-card/business-card.component';
+import { OwnBusinessComponent as OwnBusinessesComponent } from './own-business/own-business.component';
+import { SharedBusinessComponent as SharedBusinessesComponent } from './shared-business/shared-business.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconModule } from 'src/app/shared/icon/icon.module';
 import { ModalModule } from 'angular-custom-modal';
+import { HomeComponent } from './home/home.component';
+import { BusinessCardComponent } from 'src/app/components/business-card/business-card.component';
+import { BusinessRowComponent } from 'src/app/components/business-row/business-row.component';
+import { SharedComponentsModule } from 'src/app/shared/shared-components.module';
 
 const routes: Routes = [
   { 
     path: '', 
-    component: IndexComponent, 
+    component: HomeComponent, 
     title: 'Inicio' 
   },
   { 
-    path: 'own-business', 
-    component: OwnBusinessComponent, 
+    path: 'own-businesses', 
+    component: OwnBusinessesComponent, 
     title: 'Mis negocios' 
   },
   { 
-    path: 'shared-business', 
-    component: SharedBusinessComponent, 
+    path: 'shared-businesses', 
+    component: SharedBusinessesComponent, 
     title: 'Negocios compartidos' 
   }
 ];
@@ -34,13 +36,15 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     FormsModule,
     IconModule,
+    SharedComponentsModule,
     ModalModule
   ],
   declarations: [
-    IndexComponent,
-    OwnBusinessComponent,
-    SharedBusinessComponent,
-    BusinessCardComponent
+    OwnBusinessesComponent,
+    SharedBusinessesComponent,
+    HomeComponent,
+    BusinessCardComponent,
+    BusinessRowComponent
   ]
 })
 export class HomeModule { }

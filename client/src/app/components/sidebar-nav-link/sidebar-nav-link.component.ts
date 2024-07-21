@@ -1,7 +1,7 @@
 import { Component, ComponentRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 
 @Component({
-  selector: 'app-sidebar-nav-link',
+  selector: 'sidebar-nav-link',
   templateUrl: './sidebar-nav-link.component.html'
 })
 export class SidebarNavLinkComponent implements OnInit {

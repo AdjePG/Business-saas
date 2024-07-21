@@ -470,7 +470,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
     }
     table thead tr,
     table tfoot tr {
-        @apply border-b-0 !bg-[#f6f8fa]  dark:!bg-[#1a2941];
+        @apply border-b-0 !bg-[#eaf1ff] dark:!bg-[#1b2e4b];
     }
     table thead tr th,
     table tfoot tr th,
@@ -482,7 +482,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         @apply font-semibold;
     }
     table tbody tr {
-        @apply border-b !border-white-light/40 dark:!border-[#191e3a];
+        @apply border-b !border-[#eaf1ff] dark:!border-[#1b2e4b];
     }
     table.table-hover tbody tr {
         @apply hover:!bg-white-light/20 dark:hover:!bg-[#1a2941]/40;

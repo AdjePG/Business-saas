@@ -1,0 +1,102 @@
+
+<ng-container class="cursor-pointer w-full bg-white hover:bg-[#eaf1ff] dark:bg-[#0e1726] dark:hover:bg-[#1b2e4b]" (click)="goToBusiness(business.uuid)">
+  <td class="whitespace-nowrap">
+    <img class="rounded-md object-cover min-w-12 h-9 " [src]="business.imagePath" alt="">
+  </td>
+  <td class="min-w-[200px]">{{business.name}}</td>
+  <td class="w-full hidden sm:table-cell">{{business.description}}</td>
+  <td class="text-right">
+    <div class="flex items-center justify-end gap-2">
+      <button type="button" class="text-red-600 hover:text-red-800 hover:bg-[#cbcbcb15] rounded-full transition duration-300 w-7 h-7">
+        <icon-trash-lines class="w-5 h-5 m-auto"/>
+      </button>
+      <button type="button" class="group text-blue-500 hover:text-blue-700 hover:bg-[#cbcbcb15] rounded-full transition duration-300 w-7 h-7">
+        <icon-pencil class="w-4.5 h-4.5 m-auto"/>
+      </button>
+      <button type="button" class="group text-blue-500 hover:text-blue-700 hover:bg-[#cbcbcb15] rounded-full transition duration-300 w-7 h-7">
+        <icon-share class="w-5 h-5 m-auto"/>
+      </button>
+      <button (click)="$event.stopPropagation()" type="button" class="group text-yellow-500 hover:text-yellow-700 hover:bg-[#cbcbcb15] rounded-full transition duration-300 w-7 h-7">
+        <icon-star class="w-4.5 h-4.5 m-auto" [ngClass]="{'fill-warning': true}"/>
+      </button>
+    </div>
+  </td>
+</ng-container>
+
+<ng-template #addRow>
+  <tr>
+    <!-- Contenido para agregar un nuevo negocio -->
+  </tr>
+</ng-template>
+
+<modal #businessModal class="no-footer modal-top large-modal">
+    <ng-template #modalHeader>
+      <div class="!font-medium">{{ isEditMode ? 'Editar empresa' : 'Crear empresa' }}</div>
+    </ng-template>
+    <ng-template #modalBody>
+      <form [formGroup]="businessModalForm" class="text-sm" (ngSubmit)="saveBusinessData()">
+        <div class="mb-5">
+          <label for="name">Nombre del negocio</label>
+          <input id="name" type="text" placeholder="Introduce un nombre" class="form-input" formControlName="name" />
+          <div *ngIf="(businessModalForm.controls['name'].invalid && businessModalForm.controls['name'].dirty) || isSubmitted" class="text-red-500">
+            Tienes que poner un nombre.
+          </div>
+        </div>
+        <div class="mb-5">
+          <label for="imagePath">Ruta de la imagen</label>
+          <input id="imagePath" type="text" placeholder="Introduce la ruta de la imagen" class="form-input" formControlName="imagePath" />
+        </div>
+        <div class="mb-5">
+          <label for="description">Descripción</label>
+          <textarea id="description" placeholder="Introduce una descripción" class="form-input" formControlName="description"></textarea>
+        </div>
+
+        <input id="uuid" type="hidden" formControlName="uuid" />
+        <div class="mt-8 flex items-center justify-end">
+          <button type="button" class="btn btn-outline-danger" (click)="closeModal(businessModal, businessModalForm)">Cancelar</button>
+          <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">{{ isEditMode ? 'Guardar' : 'Crear' }}</button>
+        </div>
+      </form>
+    </ng-template>
+</modal>
+  
+<modal #deleteBusinessModal class="modal-top large-modal">
+    <ng-template #modalHeader>
+      <div class="!font-medium">Eliminar empresa</div>
+    </ng-template>
+    <ng-template #modalBody>
+      <p>
+        ¿Está seguro de que quiere eliminar este negocio? Tendrá un máximo de 48 para recuperarlo contactando con soporte, si no, se eliminará de forma permanente y no se podrá recuperar.
+      </p>
+    </ng-template>
+    <ng-template #modalFooter>
+        <button type="button" (click)="deleteBusinessModal.close()" class="btn btn-outline-primary">Cancelar</button>
+        <button type="button" (click)="deleteBusiness()" class="btn btn-danger ltr:ml-4 rtl:mr-4">Eliminar</button>
+    </ng-template>
+  </modal>
+  
+<modal #shareBusinessModal class="no-footer modal-top large-modal">
+    <ng-template #modalHeader>
+        <div class="!font-medium">Enviar invitación</div>
+    </ng-template>
+    <ng-template #modalBody>
+        <p class="mb-5"> Escribe el correo electrónico del destinatario para enviar la solicitud de invitación al negocio.</p>
+        <form [formGroup]="shareBusinessForm" class="text-sm" (ngSubmit)="shareBusiness()">
+            <div class="mb-5">
+            <label for="email">Correo electrónico destinatario</label>
+            <input id="email" type="email" placeholder="Introduce el correo electrónico del destinatario" class="form-input" formControlName="email" email/>
+            <ng-container *ngIf="shareBusinessForm.controls['email'].invalid && isSubmitted">
+                <div *ngIf="shareBusinessForm.controls['email'].errors?.['required']" class="text-red-500">
+                    Debes introducir correo electrónico.
+                </div>
+                <div *ngIf="!shareBusinessForm.controls['email'].errors?.['required'] && shareBusinessForm.controls['email'].errors?.['email']" class="text-red-500">
+                    Debes poner un correo electrónico válido.
+                </div>
+            </ng-container>
+            </div>
+            <div class="mt-8 flex items-center justify-end">
+            <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Enviar invitación</button>
+            </div>
+        </form>
+    </ng-template>
+</modal>

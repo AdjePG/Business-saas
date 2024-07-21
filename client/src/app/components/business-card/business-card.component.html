@@ -1,38 +1,37 @@
-<ng-container *ngIf="getType(); then infoCard; else addCard"></ng-container>
+<ng-container *ngIf="businessElement === businessElementType.INFO; then infoCard; else addCard"></ng-container>
 
 <ng-template #infoCard>
-  <div 
-    class="space-y-5 rounded-md bg-white p-5 transform transition duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer dark:bg-[#0e1726]" (click)="goToBusiness(business.uuid)"
-    >
-    <div class="max-h-56 overflow-hidden rounded-md">
+  <div class="space-y-4 rounded-md bg-white p-3 transform duration-300 cursor-pointer shadow-sm hover:shadow-lg min-h-[360px] transition-[transform,box-shadow] hover:-translate-y-1 dark:bg-[#0e1726]" (click)="goToBusiness(business.uuid)">
+    <div class="overflow-hidden rounded-md">
       <!-- Imagen de un espacio de coworking -->
       <img draggable="false" *ngIf="business.imagePath; else emptyImage" [src]='business.imagePath' [alt]="'Portrait of \'' + business.name + '\''"
-        class="w-full object-cover h-48" />
+        class="w-full object-cover h-60" />
       <ng-template #emptyImage>
-        <div class="flex items-center justify-center w-full h-48 bg-blue-100 dark:bg-gray-700">
+        <div class="flex items-center justify-center w-full h-60 bg-blue-100 dark:bg-gray-700">
           <icon-box class="h-24 w-24 stroke-blue-600 dark:stroke-blue-300"/>
         </div>
       </ng-template>
     </div>
-    <h5 class="text-xl font-bold text-gray-900 dark:text-white select-none">{{business.name}}</h5>
-    <h6 class="text-sm text-gray-700 dark:text-gray-300 select-none">{{business.description}}</h6>
-
-    <div class="mt-2 flex items-center justify-between">
+    <div class="min-h-12">
+      <h5 class="text-xl font-bold text-gray-900 dark:text-white select-none">{{business.name}}</h5>
+      <h6 class="text-sm text-gray-700 dark:text-gray-300 select-none">{{business.description}}</h6>  
+    </div>
+    <div class="h-7 flex items-center justify-between">
       <!-- Botón de eliminar -->
-      <button (click)="openModal($event, cardModalType.DELETE)" type="button" class="text-red-600 hover:text-red-800">
-        <icon-trash-lines class="w-5 h-5"/>
+      <button (click)="openModal($event, businessModalType.DELETE)" type="button" class="text-red-600 hover:text-red-800 hover:bg-[#cbcbcb15] rounded-full transition duration-300 w-7 h-7">
+        <icon-trash-lines class="w-5 h-5 m-auto"/>
       </button>
       <div class="flex items-center gap-x-2">
-        <button (click)="$event.stopPropagation()" type="button" class="group text-yellow-500 hover:text-yellow-700">
-          <icon-star [class]="'w-4.5 h-4.5'" [ngClass]="{'fill-warning': true}"/>
-        </button>
-        <!-- Botón de editar -->
-        <button *ngIf="isOwnBusiness" (click)="openModal($event, cardModalType.UPDATE, business)" type="button" class="group text-blue-500 hover:text-blue-700">
-          <icon-pencil class="w-4.5 h-4.5" />
+        <button *ngIf="isOwnBusiness" (click)="openModal($event, businessModalType.UPDATE, business)" type="button" class="group text-blue-500 hover:text-blue-700 hover:bg-[#cbcbcb15] rounded-full transition duration-300 w-7 h-7">
+          <icon-pencil class="w-4.5 h-4.5 m-auto"/>
         </button>
 
-        <button *ngIf="isOwnBusiness" (click)="openModal($event, cardModalType.SHARE)" type="button" class="group text-blue-500 hover:text-blue-700">
-          <icon-share class="w-5 h-5" />
+        <button *ngIf="isOwnBusiness" (click)="openModal($event, businessModalType.SHARE)" type="button" class="group text-blue-500 hover:text-blue-700 hover:bg-[#cbcbcb15] rounded-full transition duration-300 w-7 h-7">
+          <icon-share class="w-5 h-5 m-auto"/>
+        </button>
+
+        <button (click)="$event.stopPropagation()" type="button" class="group text-yellow-500 hover:text-yellow-700 hover:bg-[#cbcbcb15] rounded-full transition duration-300 w-7 h-7">
+          <icon-star class="w-4.5 h-4.5 m-auto" [ngClass]="{'fill-warning': true}"/>
         </button>
       </div>
     </div>
@@ -41,12 +40,12 @@
 
 <ng-template #addCard>
   <div
-    class="flex items-center justify-center flex-col space-y-5 rounded-lg bg-gradient-to-br from-blue-100 to-blue-300 dark:from-gray-700 dark:to-gray-900 p-6 transform transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer h-full"
-    (click)="openModal($event, cardModalType.ADD)">
+    class="flex items-center justify-center flex-col space-y-4 rounded-lg bg-gradient-to-br from-blue-100 to-blue-300 dark:from-gray-700 dark:to-gray-900 p-3 transform transition-[transform,box-shadow] duration-300 cursor-pointer min-h-[360px] h-full shadow-sm hover:shadow-lg hover:-translate-y-1 "
+    (click)="openModal($event, businessModalType.ADD)">
     <div class="flex items-center justify-center w-24 h-24 bg-white dark:bg-gray-800 rounded-full shadow-inner">
       <icon-plus class="h-12 w-12 stroke-blue-500 dark:stroke-blue-300"/>
     </div>
-    <h5 class="text-lg font-semibold text-gray-800 dark:text-white select-none drag-none transition duration-300 hover:text-blue-600 dark:hover:text-blue-400">Añadir negocio</h5>
+    <h5 class="text-lg font-semibold text-gray-800 dark:text-white select-none drag-none hover:text-blue-600 dark:hover:text-blue-400">Añadir negocio</h5>
   </div>
 </ng-template>
 
@@ -55,7 +54,7 @@
     <div class="!font-medium">{{ isEditMode ? 'Editar empresa' : 'Crear empresa' }}</div>
   </ng-template>
   <ng-template #modalBody>
-    <form [formGroup]="businessModalForm" class="text-sm" (ngSubmit)="saveBusinessData()">
+    <form class="text-sm" [formGroup]="businessModalForm" (ngSubmit)="saveBusinessData()">
       <div class="mb-5">
         <label for="name">Nombre del negocio</label>
         <input id="name" type="text" placeholder="Introduce un nombre" class="form-input" formControlName="name" />

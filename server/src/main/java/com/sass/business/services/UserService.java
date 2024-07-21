@@ -153,11 +153,10 @@ public class UserService {
         try {
             uuid = UUID.fromString(authUtil.extractClaim(token, "uuid"));
             userById = userRepository.findById(uuidConverterUtil.uuidToBytes(uuid));
+            userDTO.setEmail(userById.get().getEmail());
+            userDTO.setPassword(userById.get().getPassword());
 
-            user = userMapper.toModel(userDTO);
-            user.setUuid(userById.get().getUuid());
-            user.setEmail(userById.get().getEmail());
-            user.setPassword(userById.get().getPassword());
+            user = userMapper.toModel(userById.get(), userDTO);
             userRepository.save(user);
 
             apiResponse = new APIResponse<>(

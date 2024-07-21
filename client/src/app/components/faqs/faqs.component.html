@@ -1,0 +1,24 @@
+<div class="mt-5 rounded-md bg-white shadow-sm dark:bg-black">
+    <div class="border-b border-white-light p-6 text-[18px] font-bold dark:border-dark dark:text-white">Preguntas frecuentes</div>
+
+    <div class="divide-y divide-white-light px-6 py-4.5 dark:divide-dark">
+        <div *ngFor="let faq of faqs; let i = index">
+            <div class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
+                [ngClass]="{'bg-primary-light dark:bg-[#1B2E4B] !text-primary': activeFaq === i}"
+                (click)="activeFaq === i ? (activeFaq = null) : (activeFaq = i)">
+                <span>{{faq.question}}</span>
+                <span class="shrink-0">
+                    <icon-plus-circle *ngIf="activeFaq !== i" [duotone]="false" />
+                    <icon-minus-circle *ngIf="activeFaq === i" [fill]="true" />
+                </span>
+            </div>
+            <div [@slideDownUp]="activeFaq !== i" class="accordion-content">
+                <div class="px-1 py-3 font-semibold text-white-dark text-justify">
+                    <p>
+                        {{faq.answer}}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

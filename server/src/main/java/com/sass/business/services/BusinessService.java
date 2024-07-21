@@ -7,6 +7,7 @@ import com.sass.business.mappers.BusinessMapper;
 import com.sass.business.models.business.Business;
 import com.sass.business.models.business.SharedBusiness;
 import com.sass.business.models.User;
+import com.sass.business.models.pks.UserBusinessPK;
 import com.sass.business.others.AuthUtil;
 import com.sass.business.others.UuidConverterUtil;
 import com.sass.business.repositories.BusinessRepository;
@@ -61,7 +62,7 @@ public class BusinessService {
             } else {
                 if (shared) {
                     businessesStream = sharedBusinessRepository.findByUserUuid(uuidConverterUtil.uuidToBytes(userUuid)).stream()
-                            .map(SharedBusiness::getBusiness);;
+                            .map(SharedBusiness::getBusiness);
                 } else {
                     businessesStream = businessRepository.findByUserUuid(uuidConverterUtil.uuidToBytes(userUuid)).stream();
                 }
@@ -179,8 +180,7 @@ public class BusinessService {
                 throw new APIResponseException("Invalid user", HttpStatus.UNAUTHORIZED.value());
             }
 
-            business = businessMapper.toModel(businessDTO, user);
-            business.setUuid(businessById.get().getUuid());
+            business = businessMapper.toModel(businessById.get(), businessDTO, user);
             business = businessRepository.save(business);
 
             apiResponse = new APIResponse<>(
@@ -203,10 +203,13 @@ public class BusinessService {
         return apiResponse;
     }
 
-    public APIResponse<Void> deleteBusiness(UUID uuid, String token) {
+    public APIResponse<Void> deleteBusiness(UUID uuid, boolean shared, String token) {
         APIResponse<Void> apiResponse;
         Optional<Business> businessById;
+        Optional<SharedBusiness> sharedBusinessById;
+        Business business;
         User user;
+        UserBusinessPK userBusinessPK;
         UUID authUserUUID;
 
         try {
@@ -216,14 +219,28 @@ public class BusinessService {
                 throw new APIResponseException("Business not found", HttpStatus.NOT_FOUND.value());
             }
 
-            user = businessById.get().getUser();
+            business = businessById.get();
             authUserUUID = UUID.fromString(authUtil.extractClaim(token, "uuid"));
 
-            if (!Arrays.equals(user.getUuid(), uuidConverterUtil.uuidToBytes(authUserUUID))) {
-                throw new APIResponseException("Invalid user", HttpStatus.UNAUTHORIZED.value());
-            }
+            if (shared) {
+                user = userRepository.findById(uuidConverterUtil.uuidToBytes(authUserUUID)).get();
 
-            businessRepository.deleteById(uuidConverterUtil.uuidToBytes(uuid));
+                userBusinessPK = new UserBusinessPK(user, business);
+                sharedBusinessById = sharedBusinessRepository.findById(userBusinessPK);
+                if (sharedBusinessById.isEmpty()) {
+                    throw new APIResponseException("This business wasn't shared for this user", HttpStatus.NOT_FOUND.value());
+                }
+
+                sharedBusinessRepository.deleteById(userBusinessPK);
+            } else {
+                user = business.getUser();
+
+                if (!Arrays.equals(user.getUuid(), uuidConverterUtil.uuidToBytes(authUserUUID))) {
+                    throw new APIResponseException("Invalid user", HttpStatus.UNAUTHORIZED.value());
+                }
+
+                businessRepository.deleteById(uuidConverterUtil.uuidToBytes(uuid));
+            }
 
             apiResponse = new APIResponse<>(
                     HttpStatus.OK.value(),
