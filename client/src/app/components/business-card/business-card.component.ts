@@ -30,6 +30,11 @@ export class BusinessCardComponent implements OnInit {
 	@Output() addEvent: EventEmitter<Business> = new EventEmitter<Business>();
 	@Output() updateEvent: EventEmitter<Business> = new EventEmitter<Business>();
 
+	// @Output() addEvent: EventEmitter<void> = new EventEmitter<void>();
+	// @Output() updateEvent: EventEmitter<Business> = new EventEmitter<Business>();
+	// @Output() shareEvent: EventEmitter<Business> = new EventEmitter<Business>();
+	// @Output() deleteEvent: EventEmitter<{uuid: string, isOwnBusiness: boolean}> = new EventEmitter<{uuid: string, isOwnBusiness: boolean}>();
+
 	businessModalForm: FormGroup;
 	shareBusinessForm: FormGroup;
 
@@ -72,20 +77,20 @@ export class BusinessCardComponent implements OnInit {
 		});;
 	}
 
-	openModal(event: Event, modal: BusinessModalType, business?: Business) {
+	openModal(event: Event, modal: BusinessModalType) {
 		this.isSubmitted = false
 
 		if (modal === BusinessModalType.ADD) {
 			this.isEditMode = false;
 			this.businessModalForm.reset();
 			this.businessModal.open();
-		} else if (modal === BusinessModalType.UPDATE && business) {
+		} else if (modal === BusinessModalType.UPDATE) {
 			this.isEditMode = true;
 			this.businessModalForm.setValue({
-				name: business.name,
-				imagePath: business.imagePath,
-				description: business.description,
-				uuid: business.uuid
+				name: this.business.name,
+				imagePath: this.business.imagePath,
+				description: this.business.description,
+				uuid: this.business.uuid
 			});
 			this.businessModal.open();
 		} else if (modal === BusinessModalType.DELETE) {
@@ -94,6 +99,19 @@ export class BusinessCardComponent implements OnInit {
 			this.shareBusinessForm.reset();
 			this.shareBusinessModal.open();
 		}
+
+		// if (modal === BusinessModalType.ADD) {
+		// 	this.addEvent.emit();
+		// } else if (modal === BusinessModalType.UPDATE) {
+		// 	this.updateEvent.emit(this.business);
+		// } else if (modal === BusinessModalType.DELETE) {
+		// 	this.deleteEvent.emit({
+		// 		uuid: this.business.uuid, 
+		// 		isOwnBusiness: this.isOwnBusiness
+		// 	});
+		// } else if (modal === BusinessModalType.SHARE) {
+		// 	this.shareEvent.emit(this.business);
+		// }
 
 		event.stopPropagation();
 	}
